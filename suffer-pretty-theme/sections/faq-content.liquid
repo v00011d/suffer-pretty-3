@@ -1,0 +1,167 @@
+<section class="faq-section" data-section-id="{{ section.id }}">
+  <div class="section-container">
+    <div class="faq-wrapper">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'category' -%}
+          <div class="faq-category" {{ block.shopify_attributes }}>
+            <h2 class="faq-category-title">{{ block.settings.title }}</h2>
+          </div>
+        {%- elsif block.type == 'faq' -%}
+          <details class="faq-item" {{ block.shopify_attributes }}>
+            <summary class="faq-question">
+              {{ block.settings.question }}
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              {{ block.settings.answer }}
+            </div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .faq-section {
+    padding: 4rem 0;
+  }
+
+  .faq-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-category {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .faq-category:first-child {
+    margin-top: 0;
+  }
+
+  .faq-category-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .faq-item {
+    background-color: var(--color-background-dark);
+    border: 1px solid var(--color-border);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--color-foreground-muted);
+    line-height: 1.6;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ Content",
+  "blocks": [
+    {
+      "type": "category",
+      "name": "FAQ Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title",
+          "default": "General Questions"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Your answer here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Content",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Tattoo Questions"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How long does a tattoo session take?",
+            "answer": "Session lengths vary based on the complexity and size of your design. We offer 1-hour, 2-hour, half-day, and full-day sessions."
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Booking & Pricing"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I book an appointment?",
+            "answer": "Use our online booking form to submit a request. We'll review your request and get back to you within 24 hours to confirm availability."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

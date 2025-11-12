@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "page-header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "FAQ"
+      }
+    },
+    "faq-content": {
+      "type": "faq-content",
+      "settings": {}
+    }
+  },
+  "order": [
+    "page-header",
+    "faq-content"
+  ]
+}

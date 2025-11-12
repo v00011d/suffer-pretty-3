@@ -1,0 +1,53 @@
+<section class="collection-header">
+  <div class="section-container">
+    <h1 class="collection-title">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="collection-description">{{ collection.description }}</div>
+    {%- endif -%}
+    <div class="collection-meta">
+      <span class="product-count">{{ collection.all_products_count }} products</span>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .collection-header {
+    padding: 3rem 0 2rem;
+    text-align: center;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .collection-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .collection-description {
+    color: var(--color-foreground-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 1rem;
+  }
+
+  .product-count {
+    color: var(--color-foreground-muted);
+    font-size: 0.95rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Header",
+  "presets": [
+    {
+      "name": "Collection Header"
+    }
+  ]
+}
+{% endschema %}

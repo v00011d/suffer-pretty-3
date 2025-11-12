@@ -1,0 +1,178 @@
+<section class="blog-section" data-section-id="{{ section.id }}">
+  <div class="section-container">
+    <div class="blog-grid">
+      {%- for article in blog.articles -%}
+        <article class="blog-card">
+          {%- if article.image -%}
+            <a href="{{ article.url }}" class="blog-image-link">
+              <img src="{{ article.image | image_url: width: 600 }}"
+                   alt="{{ article.title | escape }}"
+                   class="blog-image"
+                   loading="lazy">
+            </a>
+          {%- endif -%}
+
+          <div class="blog-content">
+            <div class="blog-meta">
+              <span class="blog-date">{{ article.published_at | date: '%B %d, %Y' }}</span>
+              {%- if article.tags.size > 0 -%}
+                <span class="blog-tags">
+                  {%- for tag in article.tags limit: 2 -%}
+                    <span class="tag">{{ tag }}</span>
+                  {%- endfor -%}
+                </span>
+              {%- endif -%}
+            </div>
+
+            <h2 class="blog-title">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h2>
+
+            {%- if article.excerpt != blank -%}
+              <p class="blog-excerpt">{{ article.excerpt | strip_html | truncate: 150 }}</p>
+            {%- endif -%}
+
+            <a href="{{ article.url }}" class="read-more">Read More →</a>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      <div class="pagination">
+        {%- if paginate.previous -%}
+          <a href="{{ paginate.previous.url }}" class="pagination-link">← Previous</a>
+        {%- endif -%}
+        {%- for part in paginate.parts -%}
+          {%- if part.is_link -%}
+            <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+          {%- else -%}
+            <span class="pagination-current">{{ part.title }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if paginate.next -%}
+          <a href="{{ paginate.next.url }}" class="pagination-link">Next →</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .blog-section {
+    padding: 3rem 0;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .blog-card {
+    background-color: var(--color-background-dark);
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .blog-image-link {
+    display: block;
+    overflow: hidden;
+  }
+
+  .blog-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .blog-card:hover .blog-image {
+    transform: scale(1.05);
+  }
+
+  .blog-content {
+    padding: 1.5rem;
+  }
+
+  .blog-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .blog-date {
+    color: var(--color-foreground-muted);
+    font-size: 0.85rem;
+  }
+
+  .blog-tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .blog-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .blog-title a {
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .blog-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .blog-excerpt {
+    color: var(--color-foreground-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .read-more {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  .read-more:hover {
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 768px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog",
+  "presets": [
+    {
+      "name": "Blog"
+    }
+  ]
+}
+{% endschema %}

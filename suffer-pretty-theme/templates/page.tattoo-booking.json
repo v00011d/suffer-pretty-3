@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "page-header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "Tattoo Booking"
+      }
+    },
+    "booking-form": {
+      "type": "booking-form",
+      "settings": {
+        "form_type": "tattoo"
+      }
+    },
+    "portfolio-gallery": {
+      "type": "portfolio-gallery",
+      "settings": {
+        "heading": "Tattoo Portfolio",
+        "gallery_type": "tattoos"
+      }
+    }
+  },
+  "order": [
+    "page-header",
+    "booking-form",
+    "portfolio-gallery"
+  ]
+}

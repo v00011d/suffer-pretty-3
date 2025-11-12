@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+
+    <style>
+      /* Custom Checkout Styling - Suffer Pretty Dark Theme */
+      :root {
+        --color-background: #0a0a0a;
+        --color-foreground: #e0e0e0;
+        --color-accent: #8b7355;
+        --color-border: #2a2a2a;
+      }
+
+      body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+      }
+
+      .main {
+        background-color: var(--color-background);
+      }
+
+      .section {
+        background-color: #121212;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+      }
+
+      .btn {
+        background-color: var(--color-accent);
+        color: var(--color-foreground);
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #9d8566;
+        transform: translateY(-2px);
+      }
+
+      input, select, textarea {
+        background-color: #1a1a1a;
+        border: 1px solid var(--color-border);
+        color: var(--color-foreground);
+      }
+
+      input:focus, select:focus, textarea:focus {
+        border-color: var(--color-accent);
+        outline: none;
+      }
+
+      .order-summary {
+        background-color: #121212;
+        border: 1px solid var(--color-border);
+      }
+
+      .total-line {
+        color: var(--color-accent);
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    {{ content_for_layout }}
+  </body>
+</html>

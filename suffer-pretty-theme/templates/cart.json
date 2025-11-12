@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "page-header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "Your Cart"
+      }
+    },
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    }
+  },
+  "order": [
+    "page-header",
+    "main"
+  ]
+}
