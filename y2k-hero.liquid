@@ -1,0 +1,279 @@
+{% style %}
+  .y2k-hero {
+    position: relative;
+    min-height: 80vh;
+    overflow: hidden;
+    background: {{ section.settings.background_color }};
+  }
+
+  .y2k-hero__container {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 80vh;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 1rem;
+  }
+
+  /* Main image - takes up asymmetric space */
+  .y2k-hero__image-main {
+    grid-column: 1 / 8;
+    grid-row: 1 / 5;
+    position: relative;
+    overflow: hidden;
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    transform: rotate({{ section.settings.main_image_rotation }}deg);
+    z-index: 2;
+  }
+
+  .y2k-hero__image-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Secondary image - overlaps */
+  .y2k-hero__image-secondary {
+    grid-column: 7 / 13;
+    grid-row: 2 / 6;
+    position: relative;
+    overflow: hidden;
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    z-index: 1;
+  }
+
+  .y2k-hero__image-secondary img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Text content box - overlays images */
+  .y2k-hero__content {
+    grid-column: 4 / 10;
+    grid-row: 4 / 7;
+    background: {{ section.settings.content_bg_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    padding: 2rem;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .y2k-hero__title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: {{ section.settings.text_color }};
+    margin: 0;
+  }
+
+  .y2k-hero__subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: {{ section.settings.text_color }};
+    opacity: 0.8;
+  }
+
+  .y2k-hero__button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+    width: fit-content;
+  }
+
+  .y2k-hero__button:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 3px 3px 0 {{ section.settings.border_color }};
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .y2k-hero__container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 1rem;
+      min-height: auto;
+    }
+
+    .y2k-hero__image-main {
+      grid-column: 1;
+      grid-row: 1;
+      min-height: 300px;
+      transform: rotate(0deg);
+    }
+
+    .y2k-hero__image-secondary {
+      grid-column: 1;
+      grid-row: 2;
+      min-height: 250px;
+    }
+
+    .y2k-hero__content {
+      grid-column: 1;
+      grid-row: 3;
+      padding: 1.5rem;
+    }
+  }
+{% endstyle %}
+
+<section class="y2k-hero">
+  <div class="y2k-hero__container">
+    {% if section.settings.image_main %}
+      <div class="y2k-hero__image-main">
+        <img 
+          src="{{ section.settings.image_main | image_url: width: 1200 }}"
+          alt="{{ section.settings.image_main.alt | escape }}"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+
+    {% if section.settings.image_secondary %}
+      <div class="y2k-hero__image-secondary">
+        <img 
+          src="{{ section.settings.image_secondary | image_url: width: 1200 }}"
+          alt="{{ section.settings.image_secondary.alt | escape }}"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+
+    <div class="y2k-hero__content">
+      {% if section.settings.title %}
+        <h1 class="y2k-hero__title">{{ section.settings.title }}</h1>
+      {% endif %}
+      
+      {% if section.settings.subtitle %}
+        <p class="y2k-hero__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+
+      {% if section.settings.button_label and section.settings.button_link %}
+        <a href="{{ section.settings.button_link }}" class="y2k-hero__button">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Y2K Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_main",
+      "label": "Main Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_secondary",
+      "label": "Secondary Image"
+    },
+    {
+      "type": "range",
+      "id": "main_image_rotation",
+      "min": -5,
+      "max": 5,
+      "step": 1,
+      "default": -2,
+      "label": "Main Image Rotation (degrees)"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "SUFFER PRETTY"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Y2K aesthetic clothing store"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "content_bg_color",
+      "label": "Content Box Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 2,
+      "label": "Border Width"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Y2K Hero"
+    }
+  ]
+}
+{% endschema %}

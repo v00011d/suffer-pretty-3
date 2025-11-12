@@ -1,0 +1,349 @@
+{% style %}
+  .y2k-stacked {
+    padding: 4rem 2rem;
+    background: {{ section.settings.background_color }};
+    overflow-x: hidden;
+  }
+
+  .y2k-stacked__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .y2k-stacked__panel {
+    position: relative;
+    margin-bottom: 3rem;
+    transform-style: preserve-3d;
+  }
+
+  /* Alternating layouts */
+  .y2k-stacked__panel:nth-child(odd) {
+    margin-left: 0;
+    margin-right: 5%;
+  }
+
+  .y2k-stacked__panel:nth-child(even) {
+    margin-left: 5%;
+    margin-right: 0;
+  }
+
+  .y2k-stacked__panel-inner {
+    position: relative;
+    background: {{ section.settings.panel_bg_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    padding: 2rem;
+    transition: transform 0.3s ease;
+  }
+
+  .y2k-stacked__panel:hover .y2k-stacked__panel-inner {
+    transform: translateZ(10px) translateY(-5px);
+  }
+
+  /* Background layer effect */
+  .y2k-stacked__panel-bg {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: -10px;
+    bottom: -10px;
+    background: {{ section.settings.accent_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    z-index: -1;
+  }
+
+  .y2k-stacked__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  /* Reverse every other panel */
+  .y2k-stacked__panel:nth-child(even) .y2k-stacked__grid {
+    direction: rtl;
+  }
+
+  .y2k-stacked__panel:nth-child(even) .y2k-stacked__content {
+    direction: ltr;
+  }
+
+  .y2k-stacked__image-wrapper {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+  }
+
+  .y2k-stacked__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .y2k-stacked__panel:hover .y2k-stacked__image {
+    transform: scale(1.1) rotate(2deg);
+  }
+
+  .y2k-stacked__content {
+    padding: 1rem;
+  }
+
+  .y2k-stacked__label {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: {{ section.settings.label_bg_color }};
+    color: {{ section.settings.label_text_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .y2k-stacked__title {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: {{ section.settings.text_color }};
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .y2k-stacked__text {
+    font-size: 1rem;
+    color: {{ section.settings.text_color }};
+    opacity: 0.85;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .y2k-stacked__button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .y2k-stacked__button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: {{ section.settings.accent_color }};
+    transform: translate(4px, 4px);
+    z-index: -1;
+    transition: transform 0.2s ease;
+  }
+
+  .y2k-stacked__button:hover::before {
+    transform: translate(6px, 6px);
+  }
+
+  @media (max-width: 768px) {
+    .y2k-stacked__panel:nth-child(odd),
+    .y2k-stacked__panel:nth-child(even) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .y2k-stacked__grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .y2k-stacked__panel:nth-child(even) .y2k-stacked__grid {
+      direction: ltr;
+    }
+
+    .y2k-stacked__panel-inner {
+      padding: 1.5rem;
+    }
+
+    .y2k-stacked__content {
+      padding: 0;
+    }
+  }
+{% endstyle %}
+
+<section class="y2k-stacked">
+  <div class="y2k-stacked__container">
+    {% for block in section.blocks %}
+      <div class="y2k-stacked__panel">
+        <div class="y2k-stacked__panel-bg"></div>
+        <div class="y2k-stacked__panel-inner">
+          <div class="y2k-stacked__grid">
+            {% if block.settings.image %}
+              <div class="y2k-stacked__image-wrapper">
+                <img 
+                  class="y2k-stacked__image"
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.image.alt | escape }}"
+                  loading="lazy"
+                >
+              </div>
+            {% endif %}
+
+            <div class="y2k-stacked__content">
+              {% if block.settings.label %}
+                <span class="y2k-stacked__label">{{ block.settings.label }}</span>
+              {% endif %}
+
+              {% if block.settings.title %}
+                <h3 class="y2k-stacked__title">{{ block.settings.title }}</h3>
+              {% endif %}
+
+              {% if block.settings.text %}
+                <div class="y2k-stacked__text">{{ block.settings.text }}</div>
+              {% endif %}
+
+              {% if block.settings.button_text and block.settings.button_url %}
+                <a href="{{ block.settings.button_url }}" class="y2k-stacked__button">
+                  {{ block.settings.button_text }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Y2K Stacked Panels",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "panel_bg_color",
+      "label": "Panel Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "label_bg_color",
+      "label": "Label Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "label_text_color",
+      "label": "Label Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2,
+      "label": "Border Width"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Panel",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "NEW ARRIVAL"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Panel Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add your content here. Make it engaging and descriptive.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Y2K Stacked Panels",
+      "blocks": [
+        {
+          "type": "panel"
+        },
+        {
+          "type": "panel"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

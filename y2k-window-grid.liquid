@@ -1,0 +1,328 @@
+{% style %}
+  .y2k-window-grid {
+    padding: 4rem 2rem;
+    background: {{ section.settings.background_color }};
+  }
+
+  .y2k-window-grid__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .y2k-window-grid__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: {{ section.settings.text_color }};
+    margin-bottom: 1rem;
+  }
+
+  .y2k-window-grid__subtitle {
+    font-size: 1.2rem;
+    color: {{ section.settings.text_color }};
+    opacity: 0.7;
+  }
+
+  .y2k-window-grid__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .y2k-window {
+    position: relative;
+    background: {{ section.settings.window_bg_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .y2k-window:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Window title bar - Y2K style */
+  .y2k-window__titlebar {
+    background: {{ section.settings.titlebar_bg_color }};
+    padding: 0.5rem 1rem;
+    border-bottom: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .y2k-window__dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .y2k-window__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+  }
+
+  .y2k-window__dot--close { background: #ff5f56; }
+  .y2k-window__dot--minimize { background: #ffbd2e; }
+  .y2k-window__dot--maximize { background: #27c93f; }
+
+  .y2k-window__title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: {{ section.settings.text_color }};
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Window content */
+  .y2k-window__content {
+    aspect-ratio: 3/4;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .y2k-window__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .y2k-window:hover .y2k-window__image {
+    transform: scale(1.05);
+  }
+
+  .y2k-window__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 1.5rem 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .y2k-window:hover .y2k-window__overlay {
+    transform: translateY(0);
+  }
+
+  .y2k-window__product-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .y2k-window__price {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .y2k-window__footer {
+    padding: 1rem;
+    background: {{ section.settings.window_bg_color }};
+    border-top: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    text-align: center;
+  }
+
+  .y2k-window__button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .y2k-window__button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 2px 2px 0 {{ section.settings.border_color }};
+  }
+
+  @media (max-width: 768px) {
+    .y2k-window-grid__container {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+{% endstyle %}
+
+<section class="y2k-window-grid">
+  {% if section.settings.title or section.settings.subtitle %}
+    <div class="y2k-window-grid__header">
+      {% if section.settings.title %}
+        <h2 class="y2k-window-grid__title">{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.subtitle %}
+        <p class="y2k-window-grid__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="y2k-window-grid__container">
+    {% if section.settings.collection %}
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.products_to_show %}
+        <a href="{{ product.url }}" class="y2k-window">
+          <div class="y2k-window__titlebar">
+            <div class="y2k-window__dots">
+              <span class="y2k-window__dot y2k-window__dot--close"></span>
+              <span class="y2k-window__dot y2k-window__dot--minimize"></span>
+              <span class="y2k-window__dot y2k-window__dot--maximize"></span>
+            </div>
+            <span class="y2k-window__title">{{ product.title | truncate: 20 }}</span>
+          </div>
+          
+          <div class="y2k-window__content">
+            {% if product.featured_image %}
+              <img 
+                class="y2k-window__image"
+                src="{{ product.featured_image | image_url: width: 600 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                loading="lazy"
+              >
+            {% endif %}
+            
+            <div class="y2k-window__overlay">
+              <h3 class="y2k-window__product-title">{{ product.title }}</h3>
+              <div class="y2k-window__price">{{ product.price | money }}</div>
+            </div>
+          </div>
+
+          <div class="y2k-window__footer">
+            <span class="y2k-window__button">View Product</span>
+          </div>
+        </a>
+      {% endfor %}
+    {% else %}
+      {% comment %} Placeholder windows if no collection {% endcomment %}
+      {% for i in (1..6) %}
+        <div class="y2k-window">
+          <div class="y2k-window__titlebar">
+            <div class="y2k-window__dots">
+              <span class="y2k-window__dot y2k-window__dot--close"></span>
+              <span class="y2k-window__dot y2k-window__dot--minimize"></span>
+              <span class="y2k-window__dot y2k-window__dot--maximize"></span>
+            </div>
+            <span class="y2k-window__title">Product {{ i }}</span>
+          </div>
+          
+          <div class="y2k-window__content">
+            <div style="width: 100%; height: 100%; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+              <p style="color: #999;">Add products</p>
+            </div>
+          </div>
+
+          <div class="y2k-window__footer">
+            <span class="y2k-window__button">View Product</span>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Y2K Window Grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Latest Drops"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Check out our newest pieces"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Products to show"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "window_bg_color",
+      "label": "Window Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "titlebar_bg_color",
+      "label": "Titlebar Background",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2,
+      "label": "Border Width"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Y2K Window Grid"
+    }
+  ]
+}
+{% endschema %}

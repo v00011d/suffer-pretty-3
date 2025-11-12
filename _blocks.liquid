@@ -1,207 +1,15 @@
 
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div
-  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
->
-  <div
-    class="border-style"
-    style="{% render 'border-override', settings: section.settings %}"
-  >
-    {% render 'background-media',
-      background_media: section.settings.background_media,
-      background_video: section.settings.video,
-      background_video_position: section.settings.video_position,
-      background_image: section.settings.background_image,
-      background_image_position: section.settings.background_image_position
-    %}
+{% capture children %}
+  {% content_for 'blocks' %}
+{% endcapture %}
 
-    <div
-      class="
-        spacing-style
-        layout-panel-flex
-        layout-panel-flex--{{ section.settings.content_direction }}
-        section-content-wrapper
-        {% if section.settings.vertical_on_mobile %} mobile-column{% endif %}
-      "
-      style="
-        {% render 'layout-panel-style', settings: section.settings %}
-        {%  render 'spacing-style', settings: section.settings %}
-      "
-      data-testid="section-content"
-    >
-      {% content_for 'blocks' %}
-    </div>
-  </div>
-</div>
-
-{% stylesheet %}
-  .section-password {
-    flex-grow: 1;
-    display: flex;
-  }
-
-  .password-main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .password-enter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--gap-sm);
-    padding-block: var(--padding-xl);
-  }
-
-  .password-enter__powered-by {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: var(--padding-xs);
-    height: 1em;
-
-    a {
-      display: flex;
-    }
-
-    svg {
-      display: inline;
-      height: 1.3em;
-      color: var(--color-foreground);
-    }
-  }
-
-  .password-enter__links {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-2xl);
-
-    @media screen and (max-width: 749px) {
-      flex-direction: column;
-      gap: var(--gap-sm);
-    }
-  }
-
-  .password-enter__admin-link {
-    margin: 0;
-  }
-
-  .password-enter__button {
-    height: var(--minimum-touch-target);
-    background-color: transparent;
-    color: var(--color-primary);
-    cursor: pointer;
-    text-decoration: underline;
-
-    &:hover {
-      color: var(--color-primary-hover);
-      text-decoration: none;
-    }
-  }
-
-  .password-dialog {
-    max-width: 100vw;
-    max-height: 100svh;
-    width: 100vw;
-    height: 100svh;
-    border: none;
-    transition: opacity var(--animation-values), display var(--animation-speed) allow-discrete,
-      overlay var(--animation-speed) allow-discrete;
-
-    &::backdrop {
-      display: none;
-    }
-  }
-
-  .password-dialog[open] {
-    opacity: 1;
-    top: 0;
-    left: 0;
-  }
-
-  @starting-style {
-    .password-dialog[open] {
-      opacity: 0;
-    }
-  }
-
-  .password-dialog:not([open]) {
-    opacity: 0;
-  }
-
-  @starting-style {
-    .password-dialog:not([open]) {
-      opacity: 1;
-    }
-  }
-
-  .password-dialog__close-button {
-    cursor: pointer;
-  }
-
-  .password-dialog__header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: var(--padding-lg);
-    z-index: var(--layer-raised);
-  }
-
-  .password-dialog__content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: var(--padding-lg);
-    height: 100%;
-    transition: transform var(--animation-values);
-  }
-
-  .password-dialog__content .email-signup__message {
-    padding-block-start: var(--padding-xl);
-  }
-
-  .password-dialog[open] .password-dialog__content {
-    transform: translateY(0);
-  }
-
-  @starting-style {
-    .password-dialog[open] .password-dialog__content {
-      transform: translateY(1em);
-    }
-  }
-
-  .password-dialog:not([open]) .password-dialog__content {
-    transform: translateY(1em);
-  }
-
-  @starting-style {
-    .password-dialog:not([open]) .password-dialog__content {
-      transform: translateY(0);
-    }
-  }
-
-  .storefront-password-form {
-    max-width: 400px;
-    width: 100%;
-  }
-
-  .email-signup__input-group,
-  .password-dialog__submit-button {
-    width: 100%;
-
-    @media screen and (min-width: 750px) {
-      width: auto;
-    }
-  }
-{% endstylesheet %}
+{% render 'section', section: section, children: children %}
 
 {% schema %}
 {
   "name": "t:names.section",
-  "class": "section-wrapper section-password",
+  "class": "section-wrapper",
   "blocks": [
     {
       "type": "@theme"
@@ -213,9 +21,6 @@
       "type": "_divider"
     }
   ],
-  "disabled_on": {
-    "groups": ["header"]
-  },
   "settings": [
     {
       "type": "header",
@@ -374,6 +179,49 @@
       "default": "page-width"
     },
     {
+      "type": "select",
+      "id": "section_height",
+      "label": "t:settings.height",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.auto"
+        },
+        {
+          "value": "small",
+          "label": "t:options.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:options.large"
+        },
+        {
+          "value": "full-screen",
+          "label": "t:options.full_screen"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "range",
+      "id": "section_height_custom",
+      "label": "t:settings.custom_height",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "%",
+      "visible_if": "{{ section.settings.section_height == 'custom' }}"
+    },
+    {
       "type": "header",
       "content": "t:content.appearance"
     },
@@ -498,6 +346,53 @@
       "default": 0
     },
     {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "t:settings.background_overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "t:settings.overlay_color",
+      "alpha": true,
+      "default": "#00000026",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "t:settings.overlay_style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "t:options.solid"
+        },
+        {
+          "value": "gradient",
+          "label": "t:options.gradient"
+        }
+      ],
+      "default": "solid",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "gradient_direction",
+      "label": "t:settings.gradient_direction",
+      "options": [
+        {
+          "value": "to top",
+          "label": "t:options.up"
+        },
+        {
+          "value": "to bottom",
+          "label": "t:options.down"
+        }
+      ],
+      "default": "to top",
+      "visible_if": "{{ section.settings.toggle_overlay and section.settings.overlay_style == 'gradient' }}"
+    },
+    {
       "type": "header",
       "content": "t:content.padding"
     },
@@ -520,6 +415,12 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.custom_section",
+      "category": "t:categories.layout"
     }
   ]
 }
