@@ -1,0 +1,984 @@
+---
+title: Build an admin action UI extension
+description: Learn how to create UI extensions that display actions in Shopify admin.
+source_url:
+  html: 'https://shopify.dev/docs/apps/build/admin/actions-blocks/build-admin-action'
+  md: >-
+    https://shopify.dev/docs/apps/build/admin/actions-blocks/build-admin-action.md
+---
+
+# Build an admin action UI extension
+
+This guide is the first part of a five-part tutorial series that describes how to build UI extensions that display as actions and blocks in Shopify admin. It demonstrates how to build a UI extension for an action that enables users to log trackable, resolvable issues on products.
+
+![The issue tracker action over a modal. The action has input fields for a title and description.](https://shopify.dev/assets/assets/admin/admin-actions-and-block/build-an-admin-action/opened-action-BgrhvQ6k.png)
+
+## What you'll learn
+
+In this tutorial, you'll learn how to do the following tasks:
+
+* Create a UI extension for an action that displays on the product details page in Shopify admin.
+* Configure metafield definitions using TOML declarative custom data definitions.
+* Fetch information to populate the UI extension's initial state.
+* Create an interface for the UI extension, allowing it to gather input from merchants.
+* Update the data using GraphQL based on merchant input.
+* Run the UI extension locally and test it on a dev store.
+
+## Requirements
+
+[Create a Partner account](https://www.shopify.com/partners)
+
+[Create a dev store](https://shopify.dev/docs/apps/tools/development-stores#create-a-development-store-to-test-your-app)
+
+[Scaffold an app](https://shopify.dev/docs/apps/build/scaffold-app)
+
+Scaffold an app with the `write_products` access scope that uses [Shopify CLI 3.78 or higher](https://shopify.dev/docs/api/shopify-cli#upgrade).
+
+* If you created a React Router app, then the `write_products` access scope is automatically granted to your app.
+* If you created an extension-only app, then you need to explicitly grant the `write_products` access scope to your [custom app](https://shopify.dev/docs/apps/auth/access-token-types/admin-app-access-tokens#changing-api-scopes).
+* Add a product to your dev store. The product shouldn't have any custom variants at the start of this tutorial.
+
+## Project
+
+[View on GitHub](https://github.com/Shopify/example-admin-action-and-block-preact)
+
+## Create a new UI extension
+
+Use Shopify CLI to [generate starter code](https://shopify.dev/docs/api/shopify-cli/app/app-generate-extension) for your UI extension.
+
+Navigate to your app directory:
+
+## Terminal
+
+```bash
+cd <directory>
+```
+
+Run the following command to create a new admin action UI extension:
+
+## Terminal
+
+```bash
+shopify app generate extension --template admin_action --name issue-tracker-action
+```
+
+The command creates a new UI extension template in your app's `extensions` directory with the following structure:
+
+## Admin action structure
+
+```text
+extensions/issue-tracker-action
+  ├── README.md
+  ├── locales
+  │   ├── en.default.json // The default locale for the extension
+  │   └── fr.json // The French language translations for the extension
+  ├── package.json
+  ├── shopify.extension.toml // The config file for the extension
+  ├── tsconfig.json
+  ├── shopify.d.ts // Provides types for components and APIs available to the extension
+  └── src
+      └── AdminAction.jsx // The code that defines the action's UI and behavior
+```
+
+## Configure the metafield definition
+
+Add a [declarative custom data definition](https://shopify.dev/docs/apps/build/custom-data/declarative-custom-data-definitions) to define the metafield that will store issue tracker data. This allows your extension to persistently store issue tracking data for products.
+
+## /shopify.app.toml
+
+```toml
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+
+client_id = "1a07dcc482fc60f45a4cc669a88438ea"
+name = "2025-04-09-app-ui-project"
+handle = "2025-04-09-app-ui-project"
+application_url = "https://example.com/"
+embedded = true
+
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+
+[webhooks]
+api_version = "2025-04"
+
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products,read_orders"
+
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
+
+
+[pos]
+embedded = false
+
+
+[product.metafields.app.issues]
+type = "json"
+name = "Issue Tracker"
+description = "Tracks issues logged for this product"
+access.admin = "merchant_read_write"
+```
+
+## Create an interface for the UI extension
+
+To create an interface for the UI extension, complete the following steps:
+
+### Review the configuration
+
+The UI extension's static configuration is stored in its `.toml` file. To display the issue tracker on product detail pages, validate that the `target` is set to `admin.product-details.action.render`.
+
+[admin.product-details.action.render](https://shopify.dev/docs/api/admin-extensions/latest/extension-targets?accordionItem=admin-action-locations-product-details#admin-action-locations-product-details)
+
+## /extensions/issue-tracker-action/shopify.extension.toml
+
+```toml
+api_version = "2025-10"
+
+
+[[extensions]]
+# Change the merchant-facing name of the extension in locales/en.default.json
+name = "t:name"
+handle = "issue-tracker-action"
+uid = "799a1dec-3979-a563-117b-d4e5cd6b9808fbc17d0d"
+type = "ui_extension"
+
+
+# Only 1 target can be specified for each Admin action extension
+[[extensions.targeting]]
+module = "./src/ActionExtension.jsx"
+target = "admin.product-details.action.render"
+```
+
+### Update title
+
+To update the name that displays when merchants select the action from the menu, edit the `name` value in the locale files. To localize strings, an admin action UI extension uses the [i18n API](https://shopify.dev/docs/api/admin-extensions/api/action-extension-api#actionextensionapi-propertydetail-i18n). This API gives you access to strings stored in locale files, and automatically chooses the correct string for the current user's locale.
+
+### Translate title
+
+Optionally translate your title to French.
+
+### Note the export
+
+You can view the source of your extension in the `src/ActionExtension.jsx` file. This file defines an `extension` function that calls the `render` method from Preact. You can create the extension's body by using the Polaris web components that are automatically provided.
+
+Admin UI extensions are rendered using [Remote DOM](https://github.com/Shopify/remote-dom/tree/remote-dom), which is a fast and secure remote-rendering framework. Because Shopify renders the UI remotely, components used in the extensions must comply with a contract in the Shopify host. We provide these components automatically to the extension.
+
+## /extensions/issue-tracker-action/src/ActionExtension.jsx
+
+```jsx
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import { getIssues, updateIssues } from "./utils";
+
+
+export default async () => {
+  {
+    render(<Extension />, document.body);
+  }
+
+
+  function generateId(allIssues) {
+    return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+  }
+
+
+  function validateForm({ title, description }) {
+    return {
+      isValid: Boolean(title) && Boolean(description),
+      errors: {
+        title: !title,
+        description: !description,
+      },
+    };
+  }
+
+
+  function Extension() {
+    const { close, data, i18n } = shopify;
+    const [issue, setIssue] = useState({ title: "", description: "" });
+    const [allIssues, setAllIssues] = useState([]);
+    const [formErrors, setFormErrors] = useState(null);
+    const { title, description } = issue;
+
+
+    useEffect(() => {
+      getIssues(data.selected[0].id).then((issues) =>
+        setAllIssues(issues || []),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    const onSubmit = useCallback(async () => {
+      const { isValid, errors } = validateForm(issue);
+      setFormErrors(errors);
+
+
+      if (isValid) {
+        // Commit changes to the database
+        await updateIssues(data.selected[0].id, [
+          ...allIssues,
+          {
+            id: generateId(allIssues),
+            completed: false,
+            ...issue,
+          },
+        ]);
+        // Close the modal using the 'close' API
+        close();
+      }
+    }, [issue, data.selected, allIssues, close]);
+
+
+    return (
+      <s-admin-action heading={i18n.translate("name")}>
+        <s-button slot="primaryAction" onClick={onSubmit}>
+          {i18n.translate("issue-create-button")}
+        </s-button>
+        <s-button slot="secondaryActions" onClick={close}>
+          {i18n.translate("issue-cancel-button")}
+        </s-button>
+        <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("issue-title-error") : undefined
+          }
+          onChange={(event) =>
+            setIssue((prev) => ({ ...prev, title: event.target.value }))
+          }
+          label={i18n.translate("issue-title-label")}
+          maxLength={50}
+        />
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={description}
+            error={
+              formErrors?.description
+                ? i18n.translate("issue-description-error")
+                : undefined
+            }
+            onChange={(event) =>
+              setIssue((prev) => ({ ...prev, description: event.target.value }))
+            }
+            label={i18n.translate("issue-description-label")}
+            max-length={300}
+          />
+        </s-box>
+      </s-admin-action>
+    );
+  }
+};
+```
+
+### Render a UI
+
+To build your action's UX, return some components from `src/ActionExtension.jsx`.
+
+## /extensions/issue-tracker-action/src/ActionExtension.jsx
+
+```jsx
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import { getIssues, updateIssues } from "./utils";
+
+
+export default async () => {
+  {
+    render(<Extension />, document.body);
+  }
+
+
+  function generateId(allIssues) {
+    return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+  }
+
+
+  function validateForm({ title, description }) {
+    return {
+      isValid: Boolean(title) && Boolean(description),
+      errors: {
+        title: !title,
+        description: !description,
+      },
+    };
+  }
+
+
+  function Extension() {
+    const { close, data, i18n } = shopify;
+    const [issue, setIssue] = useState({ title: "", description: "" });
+    const [allIssues, setAllIssues] = useState([]);
+    const [formErrors, setFormErrors] = useState(null);
+    const { title, description } = issue;
+
+
+    useEffect(() => {
+      getIssues(data.selected[0].id).then((issues) =>
+        setAllIssues(issues || []),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    const onSubmit = useCallback(async () => {
+      const { isValid, errors } = validateForm(issue);
+      setFormErrors(errors);
+
+
+      if (isValid) {
+        // Commit changes to the database
+        await updateIssues(data.selected[0].id, [
+          ...allIssues,
+          {
+            id: generateId(allIssues),
+            completed: false,
+            ...issue,
+          },
+        ]);
+        // Close the modal using the 'close' API
+        close();
+      }
+    }, [issue, data.selected, allIssues, close]);
+
+
+    return (
+      <s-admin-action heading={i18n.translate("name")}>
+        <s-button slot="primaryAction" onClick={onSubmit}>
+          {i18n.translate("issue-create-button")}
+        </s-button>
+        <s-button slot="secondaryActions" onClick={close}>
+          {i18n.translate("issue-cancel-button")}
+        </s-button>
+        <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("issue-title-error") : undefined
+          }
+          onChange={(event) =>
+            setIssue((prev) => ({ ...prev, title: event.target.value }))
+          }
+          label={i18n.translate("issue-title-label")}
+          maxLength={50}
+        />
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={description}
+            error={
+              formErrors?.description
+                ? i18n.translate("issue-description-error")
+                : undefined
+            }
+            onChange={(event) =>
+              setIssue((prev) => ({ ...prev, description: event.target.value }))
+            }
+            label={i18n.translate("issue-description-label")}
+            max-length={300}
+          />
+        </s-box>
+      </s-admin-action>
+    );
+  }
+};
+```
+
+
+
+Tip
+
+At this point, you can use the Dev Console to [run your app's server and preview your UI extension](#test-the-ui-extension). As you preview the UI extension, changes to its code automatically cause it to reload.
+
+## Write the UI extension's logic and connect to the Graph​QL Admin API
+
+After you've configured the metafield definition and defined the extension's UI, use standard Preact tooling to write the logic that controls it.
+
+When you're writing UI extensions, you don't need proxy calls to the [GraphQL Admin API](https://shopify.dev/docs/api/admin-graphql) through your app's backend. Instead, your UI extension can use [direct API access](https://shopify.dev/docs/api/admin-extensions#directapiaccess) to create requests directly using `fetch`. For merchants, this makes UI extensions more performant and responsive.
+
+In this step, you'll create a utility file to contain GraphQL queries that the UI extension uses to read and write data to the metafield API.
+
+Your app can also get data from the extension APIs, which includes data on the current resource from the `data` API.
+
+Add new file at `./src/utils.js`. This file contains the GraphQL queries that the extension uses to read and write metafield data (the metafield definition is handled by TOML).
+
+[metafields​Set](https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldsSet)
+
+Import the `getIssues` utility method and use it to update the extension state.
+
+## /extensions/issue-tracker-action/src/ActionExtension.jsx
+
+```jsx
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import { getIssues, updateIssues } from "./utils";
+
+
+export default async () => {
+  {
+    render(<Extension />, document.body);
+  }
+
+
+  function generateId(allIssues) {
+    return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+  }
+
+
+  function validateForm({ title, description }) {
+    return {
+      isValid: Boolean(title) && Boolean(description),
+      errors: {
+        title: !title,
+        description: !description,
+      },
+    };
+  }
+
+
+  function Extension() {
+    const { close, data, i18n } = shopify;
+    const [issue, setIssue] = useState({ title: "", description: "" });
+    const [allIssues, setAllIssues] = useState([]);
+    const [formErrors, setFormErrors] = useState(null);
+    const { title, description } = issue;
+
+
+    useEffect(() => {
+      getIssues(data.selected[0].id).then((issues) =>
+        setAllIssues(issues || []),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    const onSubmit = useCallback(async () => {
+      const { isValid, errors } = validateForm(issue);
+      setFormErrors(errors);
+
+
+      if (isValid) {
+        // Commit changes to the database
+        await updateIssues(data.selected[0].id, [
+          ...allIssues,
+          {
+            id: generateId(allIssues),
+            completed: false,
+            ...issue,
+          },
+        ]);
+        // Close the modal using the 'close' API
+        close();
+      }
+    }, [issue, data.selected, allIssues, close]);
+
+
+    return (
+      <s-admin-action heading={i18n.translate("name")}>
+        <s-button slot="primaryAction" onClick={onSubmit}>
+          {i18n.translate("issue-create-button")}
+        </s-button>
+        <s-button slot="secondaryActions" onClick={close}>
+          {i18n.translate("issue-cancel-button")}
+        </s-button>
+        <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("issue-title-error") : undefined
+          }
+          onChange={(event) =>
+            setIssue((prev) => ({ ...prev, title: event.target.value }))
+          }
+          label={i18n.translate("issue-title-label")}
+          maxLength={50}
+        />
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={description}
+            error={
+              formErrors?.description
+                ? i18n.translate("issue-description-error")
+                : undefined
+            }
+            onChange={(event) =>
+              setIssue((prev) => ({ ...prev, description: event.target.value }))
+            }
+            label={i18n.translate("issue-description-label")}
+            max-length={300}
+          />
+        </s-box>
+      </s-admin-action>
+    );
+  }
+};
+```
+
+Call the `updateIssues` utility method when the form is submitted.
+
+## /extensions/issue-tracker-action/src/ActionExtension.jsx
+
+```jsx
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import { getIssues, updateIssues } from "./utils";
+
+
+export default async () => {
+  {
+    render(<Extension />, document.body);
+  }
+
+
+  function generateId(allIssues) {
+    return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+  }
+
+
+  function validateForm({ title, description }) {
+    return {
+      isValid: Boolean(title) && Boolean(description),
+      errors: {
+        title: !title,
+        description: !description,
+      },
+    };
+  }
+
+
+  function Extension() {
+    const { close, data, i18n } = shopify;
+    const [issue, setIssue] = useState({ title: "", description: "" });
+    const [allIssues, setAllIssues] = useState([]);
+    const [formErrors, setFormErrors] = useState(null);
+    const { title, description } = issue;
+
+
+    useEffect(() => {
+      getIssues(data.selected[0].id).then((issues) =>
+        setAllIssues(issues || []),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    const onSubmit = useCallback(async () => {
+      const { isValid, errors } = validateForm(issue);
+      setFormErrors(errors);
+
+
+      if (isValid) {
+        // Commit changes to the database
+        await updateIssues(data.selected[0].id, [
+          ...allIssues,
+          {
+            id: generateId(allIssues),
+            completed: false,
+            ...issue,
+          },
+        ]);
+        // Close the modal using the 'close' API
+        close();
+      }
+    }, [issue, data.selected, allIssues, close]);
+
+
+    return (
+      <s-admin-action heading={i18n.translate("name")}>
+        <s-button slot="primaryAction" onClick={onSubmit}>
+          {i18n.translate("issue-create-button")}
+        </s-button>
+        <s-button slot="secondaryActions" onClick={close}>
+          {i18n.translate("issue-cancel-button")}
+        </s-button>
+        <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("issue-title-error") : undefined
+          }
+          onChange={(event) =>
+            setIssue((prev) => ({ ...prev, title: event.target.value }))
+          }
+          label={i18n.translate("issue-title-label")}
+          maxLength={50}
+        />
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={description}
+            error={
+              formErrors?.description
+                ? i18n.translate("issue-description-error")
+                : undefined
+            }
+            onChange={(event) =>
+              setIssue((prev) => ({ ...prev, description: event.target.value }))
+            }
+            label={i18n.translate("issue-description-label")}
+            max-length={300}
+          />
+        </s-box>
+      </s-admin-action>
+    );
+  }
+};
+```
+
+## Test the UI extension
+
+After you've built the UI extension, test it with the following steps:
+
+1. Navigate to your app directory:
+
+   ## Terminal
+
+   ```bash
+   cd <directory>
+   ```
+
+2. To build and preview your app, either start or restart your server with the following command:
+
+   ## Terminal
+
+   ```bash
+   shopify app dev
+   ```
+
+3. Press `p` to open the Dev Console.
+
+4. In the Dev Console, click on the preview link for the issue tracker extension.
+
+5. The product details page opens. If you don't have a product in your store, then you need to create one.
+
+6. To launch your extension, select it from the **More actions** menu found at the top-right of the page.
+
+7. Fill out the modal and click **Create**.
+
+8. Validate that the metafield is created and populated with your issue text, by navigating to the metafields card at the bottom of the page, and select **Show all**.
+
+Update your code to the control the form and write the data to the admin metafield API using the methods from `./src/utils.js`.
+
+## /shopify.app.toml
+
+```toml
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+
+client_id = "1a07dcc482fc60f45a4cc669a88438ea"
+name = "2025-04-09-app-ui-project"
+handle = "2025-04-09-app-ui-project"
+application_url = "https://example.com/"
+embedded = true
+
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+
+[webhooks]
+api_version = "2025-04"
+
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products,read_orders"
+
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
+
+
+[pos]
+embedded = false
+
+
+[product.metafields.app.issues]
+type = "json"
+name = "Issue Tracker"
+description = "Tracks issues logged for this product"
+access.admin = "merchant_read_write"
+```
+
+## /extensions/issue-tracker-action/shopify.extension.toml
+
+```toml
+api_version = "2025-10"
+
+
+[[extensions]]
+# Change the merchant-facing name of the extension in locales/en.default.json
+name = "t:name"
+handle = "issue-tracker-action"
+uid = "799a1dec-3979-a563-117b-d4e5cd6b9808fbc17d0d"
+type = "ui_extension"
+
+
+# Only 1 target can be specified for each Admin action extension
+[[extensions.targeting]]
+module = "./src/ActionExtension.jsx"
+target = "admin.product-details.action.render"
+```
+
+## /extensions/issue-tracker-action/locales/en.default.json
+
+```json
+{
+  "name": "Create an issue",
+  "create-issue-heading": "Create an issue",
+  "edit-issue-heading": "Edit your issue",
+  "issue-description-label": "Description",
+  "issue-description-error": "Please enter a description",
+  "issue-title-label": "Title",
+  "issue-title-error": "Please enter a title",
+  "issue-create-button": "Create",
+  "issue-cancel-button": "Cancel",
+  "issue-save-button": "Save",
+  "issue-edit-button": "Edit",
+  "issue-generate-button": "Generate issue",
+  "issue-generate-banner-text": "Automatically fill the issue based on past customer feedback"
+}
+```
+
+## /extensions/issue-tracker-action/locales/fr.json
+
+```json
+{
+  "name": "Créer un problème",
+  "create-issue-heading": "Créer un problème",
+  "edit-issue-heading": "Modifier votre problème",
+  "issue-description-label": "Description",
+  "issue-description-error": "Veuillez entrer une description",
+  "issue-title-label": "Titre",
+  "issue-title-error": "Veuillez entrer un titre",
+  "issue-create-button": "Create",
+  "issue-cancel-button": "Annuler",
+  "issue-save-button": "Enregistrer",
+  "issue-edit-button": "Modifier",
+  "issue-generate-button": "Générer un problème",
+  "issue-generate-banner-text": "Remplir automatiquement le problème en fonction des retours clients passés"
+}
+```
+
+## /extensions/issue-tracker-action/src/ActionExtension.jsx
+
+```jsx
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import { getIssues, updateIssues } from "./utils";
+
+
+export default async () => {
+  {
+    render(<Extension />, document.body);
+  }
+
+
+  function generateId(allIssues) {
+    return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+  }
+
+
+  function validateForm({ title, description }) {
+    return {
+      isValid: Boolean(title) && Boolean(description),
+      errors: {
+        title: !title,
+        description: !description,
+      },
+    };
+  }
+
+
+  function Extension() {
+    const { close, data, i18n } = shopify;
+    const [issue, setIssue] = useState({ title: "", description: "" });
+    const [allIssues, setAllIssues] = useState([]);
+    const [formErrors, setFormErrors] = useState(null);
+    const { title, description } = issue;
+
+
+    useEffect(() => {
+      getIssues(data.selected[0].id).then((issues) =>
+        setAllIssues(issues || []),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    const onSubmit = useCallback(async () => {
+      const { isValid, errors } = validateForm(issue);
+      setFormErrors(errors);
+
+
+      if (isValid) {
+        // Commit changes to the database
+        await updateIssues(data.selected[0].id, [
+          ...allIssues,
+          {
+            id: generateId(allIssues),
+            completed: false,
+            ...issue,
+          },
+        ]);
+        // Close the modal using the 'close' API
+        close();
+      }
+    }, [issue, data.selected, allIssues, close]);
+
+
+    return (
+      <s-admin-action heading={i18n.translate("name")}>
+        <s-button slot="primaryAction" onClick={onSubmit}>
+          {i18n.translate("issue-create-button")}
+        </s-button>
+        <s-button slot="secondaryActions" onClick={close}>
+          {i18n.translate("issue-cancel-button")}
+        </s-button>
+        <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("issue-title-error") : undefined
+          }
+          onChange={(event) =>
+            setIssue((prev) => ({ ...prev, title: event.target.value }))
+          }
+          label={i18n.translate("issue-title-label")}
+          maxLength={50}
+        />
+        <s-box padding-block-start="large">
+          <s-text-area
+            value={description}
+            error={
+              formErrors?.description
+                ? i18n.translate("issue-description-error")
+                : undefined
+            }
+            onChange={(event) =>
+              setIssue((prev) => ({ ...prev, description: event.target.value }))
+            }
+            label={i18n.translate("issue-description-label")}
+            max-length={300}
+          />
+        </s-box>
+      </s-admin-action>
+    );
+  }
+};
+```
+
+## /extensions/issue-tracker-action/src/utils.js
+
+```javascript
+export async function updateIssues(id, newIssues) {
+  // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
+  return await makeGraphQLQuery(
+    `mutation SetMetafield($ownerId: ID!, $namespace: String!, $key: String!, $type: String!, $value: String!) {
+      metafieldsSet(metafields: [{ownerId: $ownerId, namespace: $namespace, key: $key, type: $type, value: $value}]) {
+        metafields {
+          id
+          namespace
+          key
+          jsonValue
+        }
+        userErrors {
+          field
+          message
+          code
+        }
+      }
+    }`,
+    {
+      ownerId: id,
+      namespace: "$app",
+      key: "issues", 
+      type: "json",
+      value: JSON.stringify(newIssues),
+    },
+  );
+}
+
+
+export async function getIssues(productId) {
+  // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
+  const res = await makeGraphQLQuery(
+    `query Product($id: ID!) {
+      product(id: $id) {
+        metafield(namespace: "$app", key: "issues") {
+          value
+        }
+      }
+    }`,
+    { id: productId },
+  );
+
+
+  if (res?.data?.product?.metafield?.value) {
+    return JSON.parse(res.data.product.metafield.value);
+  }
+}
+
+
+async function makeGraphQLQuery(query, variables) {
+  const graphQLQuery = {
+    query,
+    variables,
+  };
+
+
+  const res = await fetch("shopify:admin/api/graphql.json", {
+    method: "POST",
+    body: JSON.stringify(graphQLQuery),
+  });
+
+
+  if (!res.ok) {
+    console.error("Network error");
+  }
+
+
+  return await res.json();
+}
+```
+
+### Next steps
+
+[Admin block UI extension\
+\
+](https://shopify.dev/docs/apps/admin/admin-actions-and-blocks/build-an-admin-block)
+
+[In the next tutorial in this series, you'll build a UI extension that lists the issues created by your action extension. This new extension will display as a block in Shopify admin.](https://shopify.dev/docs/apps/admin/admin-actions-and-blocks/build-an-admin-block)
+
+[Extension targets\
+\
+](https://shopify.dev/docs/api/admin-extensions/extension-targets)
+
+[Learn about the various places in Shopify admin where UI extensions can be displayed.](https://shopify.dev/docs/api/admin-extensions/extension-targets)
+
+[Components\
+\
+](https://shopify.dev/docs/api/admin-extensions/components)
+
+[Learn about the full set of available components for writing admin UI extensions.](https://shopify.dev/docs/api/admin-extensions/components)

@@ -1,0 +1,71 @@
+---
+title: AdminAction
+description: Use `s-admin-action` to configure a primary and secondary action and title. Use of this component is required in order to use Admin action extensions.
+api_version: 2025-10
+api_name: admin-extensions
+source_url:
+  html: https://shopify.dev/docs/api/admin-extensions/latest/polaris-web-components/other/adminaction
+  md: https://shopify.dev/docs/api/admin-extensions/latest/polaris-web-components/other/adminaction.md
+---
+
+# Admin​Action
+
+Use `s-admin-action` to configure a primary and secondary action and title. Use of this component is required in order to use Admin action extensions.
+
+## Properties
+
+* heading
+
+  string
+
+  The text to use as the Action modal’s title. If not provided, the name of the extension will be used.
+
+* loading
+
+  boolean
+
+  Default: false
+
+  Whether the action is in a loading state, such as initial page load or action opening. When true, the action could be in an inert state, which prevents user interaction.
+
+## Slots
+
+* primary-action
+
+  HTMLElement
+
+  The primary action to display in the admin action.
+
+* secondary-actions
+
+  HTMLElement
+
+  The secondary actions to display in the admin action.
+
+### Examples
+
+* ####
+
+  ##### jsx
+
+  ```jsx
+  <s-admin-action title="My App Action">
+    Modal content
+    <s-button
+      slot="primary-action"
+      onClick={() => console.log('pressed primary action')}
+    >
+      Primary
+    </s-button>
+    <s-button
+      slot="secondary-actions"
+      onClick={() => console.log('pressed secondary action')}
+    >
+      Secondary
+    </s-button>
+  </s-admin-action>;
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin/components/adminaction-example.png)

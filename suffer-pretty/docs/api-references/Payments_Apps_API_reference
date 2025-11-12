@@ -1,0 +1,335 @@
+---
+title: Payments Apps API reference
+description: Provides access to the Payments Apps over GraphQL.
+api_version: 2025-10
+api_name: payments-apps
+source_url:
+  html: https://shopify.dev/docs/api/payments-apps/latest
+  md: https://shopify.dev/docs/api/payments-apps/latest.md
+---
+
+# Payments Apps API
+
+The Payments Apps API enables you to programmatically access your payments app's configuration data. You can use the Payments Apps API to resolve, pend, or reject payments sessions. You can also use the Payments Apps API to reject or resolve captures, refunds, and void sessions.
+
+## Authentication
+
+All Payments Apps API requests require a valid Shopify access token.
+
+Public and custom apps created in the Partner Dashboard generate tokens using [OAuth](https://shopify.dev/apps/auth/oauth). Include your token as a `X-Shopify-Access-Token` header on all API requests.
+
+To keep the platform secure, payments apps need to request specific [access scopes](https://shopify.dev/api/usage/access-scopes) during the install process. Only request as much data access as your app needs to work.
+
+All requests to the Payments Apps API must be authenticated. Learn more about [getting started with authentication](https://shopify.dev/apps/auth) and [building payments apps](https://shopify.dev/apps/payments).
+
+## cURL
+
+```bash
+curl -X POST \
+https://{shop}.myshopify.com/payments_apps/api/2025-10/graphql.json \
+  -H 'Content-Type: application/json' \
+  -H 'X-Shopify-Access-Token: {password}' \
+  -d '{
+    "query": "{your_query}"
+  }'
+```
+
+***
+
+## Graph​QL endpoint
+
+The Payments Apps API is available at a single GraphQL `POST` endpoint:
+
+`https://{shop_domain}/payments_apps/api/2025-10/graphql.json`
+
+You can access the Payments Apps API using curl or any HTTP client.
+
+### Versioning
+
+The Payments Apps API is a [versioned API](https://shopify.dev/api/usage/versioning). Updates are released quarterly. To keep your app stable, make sure that you specify a supported version in the URL.
+
+### Usage limitations
+
+* The Payments Apps API is available only to [approved Payments Partners](https://shopify.dev/docs/apps/payments/payments-extension-review).
+* All apps and services connecting to the Payments Apps API are subject to Shopify's [API Terms of Service](https://www.shopify.com/legal/api-terms).
+* The Payments Apps API doesn't support sending additional information back to Shopify.
+
+POST
+
+## https://{shop\_domain}/payments\_apps/api/2025-10/graphql.json
+
+```bash
+# Get the handles for all public API versions
+curl -X POST \
+https://{store_name}.myshopify.com/payments_apps/api/2025-10/graphql.json \
+  -H 'Content-Type: application/json' \
+  -H 'X-Shopify-Access-Token: {access_token}' \
+  -d '{
+    "query": "{
+      publicApiVersions {
+        handle
+      }
+    }"
+  }'
+```
+
+***
+
+## Rate limits
+
+The Payments Apps API enforces [rate limits](https://shopify.dev/api/usage/limits#rate-limits) on all requests.
+
+{}
+
+## Request
+
+```graphql
+{
+  products(first: 1) {
+    edges {
+      node {
+        title
+      }
+    }
+  }
+}
+```
+
+{}
+
+## Response
+
+```json
+{
+  "data": {
+    "products": {
+      "edges": [
+        {
+          "node": {
+            "title": "Hiking backpack"
+          }
+        }
+      ]
+    }
+  },
+  "extensions": {
+    "cost": {
+      "requestedQueryCost": 3,
+      "actualQueryCost": 3,
+      "throttleStatus": {
+        "maximumAvailable": 1000.0,
+        "currentlyAvailable": 997,
+        "restoreRate": 50.0
+      }
+    }
+  }
+}
+```
+
+***
+
+## Status and error codes
+
+All API queries return HTTP status codes that contain more information about the response.
+
+### 200 OK
+
+GraphQL HTTP status codes are different from REST API status codes. Most importantly, the GraphQL API can return a `200 OK` response code in cases that would typically produce 4xx or 5xx errors in REST.
+
+### Error handling
+
+The response for the errors object contains additional detail to help you debug your operation.
+
+The response for mutations contains additional detail to help debug your query. To access this, you must request `userErrors`.
+
+#### Properties
+
+* errorsarray
+
+A list of all errors returned
+
+* errors\[n].​messagestring
+
+Contains details about the error(s).
+
+* errors\[n].​extensionsobject
+
+Provides more information about the error(s) including properties and metadata.
+
+* extensions.​codestring
+
+Shows error codes common to Shopify. Additional error codes may also be shown.
+
+* THROTTLED
+
+The client has exceeded the [rate limit](#rate-limits). Similar to 429 Too Many Requests.
+
+* ACCESS\_​DENIED
+
+The client doesn’t have correct [authentication](#authentication) credentials. Similar to 401 Unauthorized.
+
+* SHOP\_​INACTIVE
+
+The shop is not active. This can happen when stores repeatedly exceed API rate limits or due to fraud risk.
+
+* INTERNAL\_​SERVER\_​ERROR
+
+Shopify experienced an internal error while processing the request. This error is returned instead of 500 Internal Server Error in most circumstances.
+
+***
+
+{}
+
+## Sample 200 error responses
+
+##### Throttled
+
+```json
+{
+  "errors": [
+    {
+      "message": "Query cost is 2003, which exceeds the single query max cost limit (1000).
+
+See https://shopify.dev/concepts/about-apis/rate-limits for more information on how the
+cost of a query is calculated.
+
+To query larger amounts of data with fewer limits, bulk operations should be used instead.
+See https://shopify.dev/tutorials/perform-bulk-operations-with-admin-api for usage details.
+",
+      "extensions": {
+        "code": "MAX_COST_EXCEEDED",
+        "cost": 2003,
+        "maxCost": 1000,
+        "documentation": "https://shopify.dev/api/usage/limits#rate-limits"
+      }
+    }
+  ]
+}
+```
+
+##### Internal
+
+```json
+{
+  "errors": [
+    {
+      "message": "Internal error. Looks like something went wrong on our end.
+Request ID: 1b355a21-7117-44c5-8d8b-8948082f40a8 (include this in support requests).",
+      "extensions": {
+        "code": "INTERNAL_SERVER_ERROR",
+        "requestId": "1b355a21-7117-44c5-8d8b-8948082f40a8"
+      }
+    }
+  ]
+}
+```
+
+### 4xx and 5xx status codes
+
+The 4xx and 5xx errors occur infrequently. They are often related to network communications, your account, or an issue with Shopify’s services.
+
+Many errors that would typically return a 4xx or 5xx status code, return an HTTP 200 errors response instead. Refer to the [200 OK section](#200-ok) above for details.
+
+***
+
+#### 400 Bad Request
+
+The server will not process the request.
+
+***
+
+#### 402 Payment Required
+
+The shop is frozen. The shop owner will need to pay the outstanding balance to [unfreeze](https://help.shopify.com/en/manual/your-account/pause-close-store#unfreeze-your-shopify-store) the shop.
+
+***
+
+#### 403 Forbidden
+
+The shop is forbidden. Returned if the store has been marked as fraudulent.
+
+***
+
+#### 404 Not Found
+
+The resource isn’t available. This is often caused by querying for something that’s been deleted.
+
+***
+
+#### 423 Locked
+
+The shop isn’t available. This can happen when stores repeatedly exceed API rate limits or due to fraud risk.
+
+***
+
+#### 5xx Errors
+
+An internal error occurred in Shopify. Check out the [Shopify status page](https://www.shopifystatus.com) for more information.
+
+***
+
+Info
+
+Didn’t find the status code you’re looking for? View the complete list of [API status response and error codes](https://shopify.dev/api/usage/response-codes).
+
+{}
+
+## Sample error codes
+
+##### 400
+
+```
+HTTP/1.1 400 Bad Request
+{
+  "errors": {
+    "query": "Required parameter missing or invalid"
+  }
+}
+```
+
+##### 402
+
+```
+HTTP/1.1 402 Payment Required
+{
+  "errors": "This shop's plan does not have access to this feature"
+}
+```
+
+##### 403
+
+```
+HTTP/1.1 403 Forbidden
+{
+  "errors": "Unavailable Shop"
+}
+```
+
+##### 404
+
+```
+HTTP/1.1 404 Not Found
+{
+  "errors": "Not Found"
+}
+```
+
+##### 423
+
+```
+HTTP/1.1 423 Locked
+{
+  "errors": "This shop is unavailable"
+}
+```
+
+##### 500
+
+```
+HTTP/1.1 500 Internal Server Error
+{
+  "errors": "An unexpected error occurred"
+}
+```
+
+***

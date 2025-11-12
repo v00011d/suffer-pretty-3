@@ -1,0 +1,222 @@
+---
+title: Badge
+description: >-
+  Use this component to inform merchants of the status of an object or of an
+  action that’s been taken.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/titles-and-text/badge
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/titles-and-text/badge.md
+---
+
+# Badge
+
+Use this component to inform merchants of the status of an object or of an action that’s been taken.
+
+## BadgeProps
+
+`BadgeBaseProps & (BadgeIconProps | BadgeNoIconProps)`
+
+### BadgeBaseProps
+
+* accessibilityLabel
+
+  string
+
+  A label that describes the purpose or contents of the element. When set, it will be announced to users using assistive technologies and will provide them with more context. When set, any children or `label` supplied will not be announced to screen readers.
+
+* size
+
+  Extract\<SizeScale, 'small-100' | 'base'>
+
+  Adjusts the size of the badge.
+
+* tone
+
+  Tone
+
+  Adjusts the color of the badge.
+
+### BadgeIconProps
+
+* icon
+
+  IconName
+
+  required
+
+  Adds an icon to the badge.
+
+* iconPosition
+
+  'start' | 'end'
+
+  Default: 'start'
+
+  Adjusts the position of the icon within the badge. Requires `icon` to be set.
+
+### BadgeNoIconProps
+
+* icon
+
+  never
+
+* iconPosition
+
+  never
+
+### BadgeBaseProps
+
+* accessibilityLabel
+
+  A label that describes the purpose or contents of the element. When set, it will be announced to users using assistive technologies and will provide them with more context. When set, any children or \`label\` supplied will not be announced to screen readers.
+
+  ```ts
+  string
+  ```
+
+* size
+
+  Adjusts the size of the badge.
+
+  ```ts
+  Extract<SizeScale, 'small-100' | 'base'>
+  ```
+
+* tone
+
+  Adjusts the color of the badge.
+
+  ```ts
+  Tone
+  ```
+
+```ts
+interface BadgeBaseProps extends AccessibilityLabelProps {
+  /**
+   * Adjusts the color of the badge.
+   */
+  tone?: Tone;
+  /**
+   * Adjusts the size of the badge.
+   */
+  size?: Extract<SizeScale, 'small-100' | 'base'>;
+}
+```
+
+### SizeScale
+
+```ts
+'small-300' | 'small-200' | 'small-100' | 'base' | 'large-100' | 'large-200' | 'large-300'
+```
+
+### Tone
+
+```ts
+'info' | 'success' | 'warning' | 'critical'
+```
+
+### BadgeIconProps
+
+* icon
+
+  Adds an icon to the badge.
+
+  ```ts
+  IconName
+  ```
+
+* iconPosition
+
+  Adjusts the position of the icon within the badge. Requires \`icon\` to be set.
+
+  ```ts
+  'start' | 'end'
+  ```
+
+```ts
+interface BadgeIconProps {
+  /**
+   * Adds an icon to the badge.
+   */
+  icon: IconName;
+  /**
+   * Adjusts the position of the icon within the badge. Requires `icon` to be set.
+   *
+   * @defaultValue 'start'
+   */
+  iconPosition?: 'start' | 'end';
+}
+```
+
+### IconName
+
+```ts
+'AbandonedCartFilledMajor' | 'AbandonedCartMajor' | 'AccessibilityMajor' | 'ActivitiesMajor' | 'AddCodeMajor' | 'AddImageMajor' | 'AddMajor' | 'AddNoteMajor' | 'AddProductMajor' | 'AdjustMinor' | 'AffiliateMajor' | 'AlertMinor' | 'AnalyticsBarHorizontalMinor' | 'AnalyticsBarStackedMinor' | 'AnalyticsCohortMinor' | 'AnalyticsDonutMinor' | 'AnalyticsFilledMinor' | 'AnalyticsFunnelMinor' | 'AnalyticsLineMinor' | 'AnalyticsMajor' | 'AnalyticsMinor' | 'AnalyticsTableMinor' | 'AnyClickModelMinor' | 'AppExtensionMinor' | 'AppsFilledMajor' | 'AppsMajor' | 'AppsMinor' | 'ArchiveMajor' | 'ArchiveMinor' | 'ArrowDownMinor' | 'ArrowLeftMinor' | 'ArrowRightMinor' | 'ArrowUpMinor' | 'AttachmentFilledMajor' | 'AttachmentMajor' | 'AutomationFilledMajor' | 'AutomationMajor' | 'BackspaceMajor' | 'BalanceFilledMajor' | 'BalanceMajor' | 'BankFilledMajor' | 'BankMajor' | 'BarcodeMajor' | 'BehaviorFilledMajor' | 'BehaviorMajor' | 'BehaviorMinor' | 'BillingStatementDollarFilledMajor' | 'BillingStatementDollarMajor' | 'BillingStatementEuroFilledMajor' | 'BillingStatementEuroMajor' | 'BillingStatementPoundFilledMajor' | 'BillingStatementPoundMajor' | 'BillingStatementRupeeFilledMajor' | 'BillingStatementRupeeMajor' | 'BillingStatementYenFilledMajor' | 'BillingStatementYenMajor' | 'BlockMinor' | 'BlockquoteMajor' | 'BlogMajor' | 'BoldMajor' | 'BoldMinor' | 'BugMajor' | 'ButtonCornerPillMajor' | 'ButtonCornerRoundedMajor' | 'ButtonCornerSquareMajor' | 'ButtonMinor' | 'BuyButtonButtonLayoutMajor' | 'BuyButtonHorizontalLayoutMajor' | 'BuyButtonMajor' | 'BuyButtonVerticalLayoutMajor' | 'CalendarMajor' | 'CalendarMinor' | 'CalendarTickMajor' | 'CalendarTimeMinor' | 'CameraMajor' | 'CancelMajor' | 'CancelMinor' | 'CancelSmallMinor' | 'CapitalFilledMajor' | 'CapitalMajor' | 'CapturePaymentMinor' | 'CardReaderChipMajor' | 'CardReaderMajor' | 'CardReaderTapMajor' | 'CaretDownMinor' | 'CaretUpMinor' | 'CartDownFilledMajor' | 'CartDownMajor' | 'CartFilledMajor' | 'CartMajor' | 'CartUpMajor' | 'CashDollarFilledMajor' | 'CashDollarMajor' | 'CashDollarMinor' | 'CashEuroMajor' | 'CashPoundMajor' | 'CashRupeeMajor' | 'CashYenMajor' | 'CategoriesMajor' | 'ChannelsMajor' | 'ChatMajor' | 'ChecklistAlternateMajor' | 'ChecklistMajor' | 'CheckoutMajor' | 'ChevronDownMinor' | 'ChevronLeftMinor' | 'ChevronRightMinor' | 'ChevronUpMinor' | 'CircleAlertMajor' | 'CircleCancelMajor' | 'CircleCancelMinor' | 'CircleChevronDownMinor' | 'CircleChevronLeftMinor' | 'CircleChevronRightMinor' | 'CircleChevronUpMinor' | 'CircleDisableMinor' | 'CircleDisabledMajor' | 'CircleDotsMajor' | 'CircleDownMajor' | 'CircleInformationMajor' | 'CircleLeftMajor' | 'CircleMinusMajor' | 'CircleMinusMinor' | 'CircleMinusOutlineMinor' | 'CirclePlusMajor' | 'CirclePlusMinor' | 'CirclePlusOutlineMinor' | 'CircleRightMajor' | 'CircleTickMajor' | 'CircleTickMinor' | 'CircleTickOutlineMinor' | 'CircleUpMajor' | 'ClipboardMinor' | 'ClockMajor' | 'ClockMinor' | 'CodeMajor' | 'CodeMinor' | 'CollectionReferenceMinor' | 'CollectionsFilledMajor' | 'CollectionsMajor' | 'ColorNoneMinor' | 'ColorsMajor' | 'Column1Major' | 'ColumnWithTextMajor' | 'Columns2Major' | 'Columns3Major' | 'Columns3Minor' | 'ComposeMajor' | 'ConfettiMajor' | 'ConnectMinor' | 'ContentFilledMinor' | 'ContentMinor' | 'ConversationMinor' | 'CreditCardCancelMajor' | 'CreditCardMajor' | 'CreditCardPercentMajor' | 'CreditCardSecureMajor' | 'CurrencyConvertMinor' | 'CustomerMinusMajor' | 'CustomerPlusMajor' | 'CustomersFilledMinor' | 'CustomersMajor' | 'CustomersMinor' | 'DataDrivenModelMinor' | 'DataVisualizationMajor' | 'DecimalMinor' | 'DeleteMajor' | 'DeleteMinor' | 'DesktopMajor' | 'DetailedPopUpMajor' | 'DiamondAlertMajor' | 'DiamondAlertMinor' | 'DigitalMediaReceiverMajor' | 'DiscountAutomaticMajor' | 'DiscountCodeMajor' | 'DiscountsFilledMinor' | 'DiscountsMajor' | 'DiscountsMinor' | 'DisputeMinor' | 'DnsSettingsMajor' | 'DockFloatingMajor' | 'DockSideMajor' | 'DomainNewMajor' | 'DomainRedirectMinor' | 'DomainsFilledMajor' | 'DomainsMajor' | 'DraftOrdersFilledMajor' | 'DraftOrdersMajor' | 'DragDropMajor' | 'DragHandleMinor' | 'DropdownMinor' | 'DuplicateMinor' | 'DynamicSourceMajor' | 'DynamicSourceMinor' | 'EditMajor' | 'EditMinor' | 'EmailMajor' | 'EmailNewsletterMajor' | 'EmbedMinor' | 'EnableSelectionMinor' | 'EnterMajor' | 'EnvelopeMajor' | 'ExchangeMajor' | 'ExistingInventoryMajor' | 'ExitMajor' | 'ExploreImagesMajor' | 'ExportMinor' | 'ExtendMajor' | 'ExtendMinor' | 'ExternalMinor' | 'ExternalSmallMinor' | 'EyeDropperMinor' | 'FaviconMajor' | 'FavoriteMajor' | 'FeaturedCollectionMajor' | 'FeaturedContentMajor' | 'FileFilledMinor' | 'FileMinor' | 'FilterMajor' | 'FilterMinor' | 'FinancesMajor' | 'FinancesMinor' | 'FirstClickModelMinor' | 'FirstOrderMajor' | 'FirstVisitMajor' | 'FlagMajor' | 'FlipCameraMajor' | 'FolderDownMajor' | 'FolderMajor' | 'FolderMinusMajor' | 'FolderPlusMajor' | 'FolderUpMajor' | 'FollowUpEmailMajor' | 'FoodMajor' | 'FooterMajor' | 'FormsMajor' | 'FraudProtectMajor' | 'FraudProtectMinor' | 'FraudProtectPendingMajor' | 'FraudProtectPendingMinor' | 'FraudProtectUnprotectedMajor' | 'FraudProtectUnprotectedMinor' | 'FulfillmentFulfilledMajor' | 'FulfillmentOnHoldMajor' | 'GamesConsoleMajor' | 'GaugeMajor' | 'GaugeMinor' | 'GiftCardFilledMinor' | 'GiftCardMajor' | 'GiftCardMinor' | 'GlobeMajor' | 'GlobeMinor' | 'GrammarMajor' | 'HashtagMajor' | 'HashtagMinor' | 'HeaderMajor' | 'HeartMajor' | 'HideKeyboardMajor' | 'HideMinor' | 'HintMajor' | 'HomeFilledMinor' | 'HomeMajor' | 'HomeMinor' | 'HorizontalDotsMinor' | 'IconNameSet' | 'IconsFilledMajor' | 'IconsMajor' | 'IdentityCardFilledMajor' | 'IdentityCardMajor' | 'IllustrationMajor' | 'ImageAltMajor' | 'ImageAltMinor' | 'ImageMajor' | 'ImageWithTextMajor' | 'ImageWithTextOverlayMajor' | 'ImagesMajor' | 'ImportMinor' | 'ImportStoreMajor' | 'InactiveLocationMajor' | 'InactiveLocationMinor' | 'IncomingMajor' | 'IndentMajor' | 'IndentMinor' | 'InfoMinor' | 'InsertDynamicSourceMajor' | 'InsertDynamicSourceMinor' | 'InstallMinor' | 'InventoryFilledMajor' | 'InventoryMajor' | 'InviteMinor' | 'IqMajor' | 'ItalicMajor' | 'ItalicMinor' | 'JobsFilledMajor' | 'JobsMajor' | 'KeyMajor' | 'KeyboardMajor' | 'KeyboardMinor' | 'LabelPrinterMajor' | 'LandingPageMajor' | 'LanguageFilledMinor' | 'LanguageMinor' | 'LastClickModelMinor' | 'LastNonDirectClickModelMinor' | 'LegalFilledMajor' | 'LegalMajor' | 'LinearModelMinor' | 'LinkMinor' | 'ListFilledMajor' | 'ListMajor' | 'ListMinor' | 'LiveViewFilledMajor' | 'LiveViewMajor' | 'LocationFilledMajor' | 'LocationMajor' | 'LocationsMinor' | 'LockFilledMajor' | 'LockMajor' | 'LockMinor' | 'LogOutMinor' | 'LogoBlockMajor' | 'MagicMajor' | 'MagicMinor' | 'ManagedStoreMajor' | 'MarkFulfilledMinor' | 'MarkPaidMinor' | 'MarketingFilledMinor' | 'MarketingMajor' | 'MarketingMinor' | 'MarketsFilledMajor' | 'MarketsMajor' | 'MaximizeMajor' | 'MaximizeMinor' | 'MeasurementMinor' | 'MentionMajor' | 'MergeMinor' | 'MetafieldsFilledMinor' | 'MetafieldsMajor' | 'MetafieldsMinor' | 'MetaobjectMinor' | 'MetaobjectReferenceMinor' | 'MicrophoneMajor' | 'MinimizeMajor' | 'MinimizeMinor' | 'MinusMajor' | 'MinusMinor' | 'MobileAcceptMajor' | 'MobileBackArrowMajor' | 'MobileCancelMajor' | 'MobileChevronMajor' | 'MobileHamburgerMajor' | 'MobileHorizontalDotsMajor' | 'MobileMajor' | 'MobilePlusMajor' | 'MobileVerticalDotsMajor' | 'MonerisMajor' | 'MoneyFilledMinor' | 'MoneyMinor' | 'NatureMajor' | 'NavigationMajor' | 'NoteMajor' | 'NoteMinor' | 'NotificationFilledMajor' | 'NotificationMajor' | 'OnlineStoreMajor' | 'OnlineStoreMinor' | 'OrderStatusMinor' | 'OrderedListMajor' | 'OrderedListMinor' | 'OrdersFilledMinor' | 'OrdersMajor' | 'OrdersMinor' | 'OrganizationMajor' | 'OutdentMajor' | 'OutdentMinor' | 'OutgoingMajor' | 'PackageFilledMajor' | 'PackageMajor' | 'PageDownMajor' | 'PageMajor' | 'PageMinusMajor' | 'PagePlusMajor' | 'PageReferenceMinor' | 'PageUpMajor' | 'PaginationEndMinor' | 'PaginationStartMinor' | 'PaintBrushMajor' | 'PaperCheckMajor' | 'PaperCheckMinor' | 'PasskeyFilledMinor' | 'PasskeyMajor' | 'PasskeyMinor' | 'PauseCircleMajor' | 'PauseMajor' | 'PauseMinor' | 'PaymentsFilledMajor' | 'PaymentsMajor' | 'PersonalizedTextMajor' | 'PhoneInMajor' | 'PhoneMajor' | 'PhoneOutMajor' | 'PinMajor' | 'PinMinor' | 'PinUnfilledMajor' | 'PinUnfilledMinor' | 'PlanFilledMinor' | 'PlanMajor' | 'PlanMinor' | 'PlayCircleMajor' | 'PlayMajor' | 'PlayMinor' | 'PlusMinor' | 'PointOfSaleMajor' | 'PopularMajor' | 'PositionBasedModelMinor' | 'PriceLookupMinor' | 'PrintMajor' | 'PrintMinor' | 'ProductCostMajor' | 'ProductReferenceMinor' | 'ProductReturnsMinor' | 'ProductsFilledMinor' | 'ProductsMajor' | 'ProductsMinor' | 'ProfileMajor' | 'ProfileMinor' | 'PromoteFilledMinor' | 'PromoteMinor' | 'QuestionMarkInverseMajor' | 'QuestionMarkInverseMinor' | 'QuestionMarkMajor' | 'QuestionMarkMinor' | 'QuickSaleMajor' | 'ReadTimeMinor' | 'ReceiptMajor' | 'RecentSearchesMajor' | 'RedoMajor' | 'ReferralCodeMajor' | 'ReferralMajor' | 'RefreshMajor' | 'RefreshMinor' | 'RefundMajor' | 'RefundMinor' | 'RemoveProductMajor' | 'RepeatOrderMajor' | 'ReplaceMajor' | 'ReplayMinor' | 'ReportFilledMinor' | 'ReportMinor' | 'ReportsMajor' | 'ResetMinor' | 'ResourcesMajor' | 'ReturnMinor' | 'ReturnsMajor' | 'RichTextMinor' | 'RiskMajor' | 'RiskMinor' | 'Rows2Major' | 'SandboxMajor' | 'SaveMinor' | 'SearchMajor' | 'SearchMinor' | 'SectionMajor' | 'SecureMajor' | 'SelectMinor' | 'SendMajor' | 'SettingsFilledMinor' | 'SettingsMajor' | 'SettingsMinor' | 'ShareIosMinor' | 'ShareMinor' | 'ShipmentFilledMajor' | 'ShipmentMajor' | 'ShopcodesMajor' | 'SidebarLeftMajor' | 'SidebarRightMajor' | 'SimplifyMajor' | 'SimplifyMinor' | 'SlideshowMajor' | 'SmileyHappyMajor' | 'SmileyJoyMajor' | 'SmileyNeutralMajor' | 'SmileySadMajor' | 'SocialAdMajor' | 'SocialPostMajor' | 'SoftPackMajor' | 'SortAscendingMajor' | 'SortDescendingMajor' | 'SortMinor' | 'SoundMajor' | 'StarFilledMinor' | 'StarOutlineMinor' | 'StatusActiveMajor' | 'StopMajor' | 'StoreDetailsFilledMinor' | 'StoreDetailsMinor' | 'StoreFilledMinor' | 'StoreMajor' | 'StoreMinor' | 'StoreStatusMajor' | 'TabletMajor' | 'TapChipMajor' | 'TaxFilledMajor' | 'TaxMajor' | 'TeamMajor' | 'TemplateMajor' | 'TemplateMinor' | 'TextAlignmentCenterMajor' | 'TextAlignmentLeftMajor' | 'TextAlignmentRightMajor' | 'TextBlockMajor' | 'TextColorMajor' | 'TextColorMinor' | 'TextMajor' | 'ThemeEditMajor' | 'ThemeStoreMajor' | 'ThemesMajor' | 'ThumbsDownMajor' | 'ThumbsDownMinor' | 'ThumbsUpMajor' | 'ThumbsUpMinor' | 'TickMinor' | 'TickSmallMinor' | 'TimeDecayModelMinor' | 'TimelineAttachmentMajor' | 'TipsMajor' | 'TitleMinor' | 'ToggleMinor' | 'ToolsMajor' | 'TransactionFeeDollarMajor' | 'TransactionFeeEuroMajor' | 'TransactionFeePoundMajor' | 'TransactionFeeRupeeMajor' | 'TransactionFeeYenMajor' | 'TransactionMajor' | 'TransferFilledMajor' | 'TransferInMajor' | 'TransferMajor' | 'TransferOutMajor' | 'TransferWithinShopifyMajor' | 'TransportMajor' | 'TroubleshootMajor' | 'TypeMajor' | 'TypeMinor' | 'UnderlineMajor' | 'UnderlineMinor' | 'UndoMajor' | 'UnfulfilledMajor' | 'UnknownDeviceMajor' | 'UpdateInventoryMajor' | 'UploadMajor' | 'VariantMajor' | 'ViewMajor' | 'ViewMinor' | 'ViewportNarrowMajor' | 'ViewportShortMajor' | 'ViewportTallMajor' | 'ViewportWideMajor' | 'VocabularyMajor' | 'VolumeMinor' | 'WandMajor' | 'WandMinor' | 'WearableMajor' | 'WeightMinor' | 'WholesaleMajor' | 'WifiMajor'
+```
+
+### BadgeNoIconProps
+
+* icon
+
+  ```ts
+  never
+  ```
+
+* iconPosition
+
+  ```ts
+  never
+  ```
+
+```ts
+interface BadgeNoIconProps {
+  icon?: never;
+  iconPosition?: never;
+}
+```
+
+### Examples
+
+* #### Simple Badge example
+
+  ##### React
+
+  ```tsx
+  import {render, Badge} from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return (
+      <Badge
+        tone="info"
+      >
+        Fulfilled
+      </Badge>
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {extend, Badge} from '@shopify/ui-extensions/admin';
+
+  extend('Playground', (root) => {
+    const badge = root.createComponent(
+      Badge,
+      {tone: 'info'},
+      'Fulfilled',
+    );
+
+    root.appendChild(badge);
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/badge-default.png)

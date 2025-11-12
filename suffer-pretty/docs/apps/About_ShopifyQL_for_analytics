@@ -1,0 +1,131 @@
+---
+title: About ShopifyQL for analytics
+description: Learn how to use the ShopifyQL syntax for querying store data.
+api_name: shopifyql
+source_url:
+  html: 'https://shopify.dev/docs/api/shopifyql'
+  md: 'https://shopify.dev/docs/api/shopifyql.md'
+---
+
+ExpandOn this page
+
+* [Access scopes](https://shopify.dev/docs/api/shopifyql.md#access-scopes)
+* [How it works](https://shopify.dev/docs/api/shopifyql.md#how-it-works)
+* [Segment query language](https://shopify.dev/docs/api/shopifyql.md#segment-query-language)
+* [Example](https://shopify.dev/docs/api/shopifyql.md#example)
+* [Next steps](https://shopify.dev/docs/api/shopifyql.md#next-steps)
+
+# About ShopifyQL for analytics
+
+You can use the GraphQL Admin API to query data from a merchant using ShopifyQL. The ShopifyQL API enables you to write analytical queries to find insights in merchants' store data.
+
+You can use the ShopifyQL API to create reporting apps that provide business insights for merchants. The ShopifyQL API also enables you to export data from a store, so you can import the data into data warehouses.
+
+For a complete reference of the ShopifyQL language, refer to the [ShopifyQL reference](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/shopifyql-editor/shopifyql-syntax).
+
+***
+
+## Access scopes
+
+To use ShopifyQL, you need to [request access to protected customer data](https://shopify.dev/docs/apps/launch/protected-customer-data#request-access-to-protected-customer-data) in the Partner Dashboard. Your app also needs to meet certain [requirements](https://shopify.dev/docs/apps/launch/protected-customer-data#requirements) to ensure customer privacy and security. You will need to request access for protected customer data including name, email, address, and phone fields.
+
+You also need to [request access to authenticated access scopes](https://shopify.dev/docs/api/usage/access-scopes#authenticated-access-scopes) for the `read_reports` access scope.
+
+***
+
+## How it works
+
+ShopifyQL, or Shopify Query Language, is Shopify's query language built for commerce. Query languages are used to request and retrieve data from databases. Your store's data is stored in database tables, structured in defined columns and rows. Refer to the documentation on [how to use ShopifyQL](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/shopifyql-editor).
+
+The GraphQL Admin API enables you to interact with store data using ShopifyQL. You can compose queries that sort and filter store data, so you can create interfaces or visuals that merchants can use to find patterns in their stores.
+
+***
+
+## Segment query language
+
+The segment query language is a different implementation of ShopifyQL that uses a subset of ShopifyQL. The segment query language only uses the `WHERE` clause from ShopifyQL to filter customers by their attributes.
+
+You can use the segment query language to create a collection of customers that are filtered out by specific criteria. Filtered customers in a collection are called "segment members", and the collections of filtered customers are called "segments". Merchants can create segments in the Shopify admin.
+
+For a complete reference of the segment query language, refer to the [segment query language reference](https://shopify.dev/docs/api/shopifyql/segment-query-language-reference).
+
+***
+
+## Example
+
+The following example shows how to use [`shopifyqlQuery`](https://shopify.dev/docs/api/admin-graphql/latest/queries/shopifyqlQuery) in the GraphQL Admin API to retrieve the total sales for the previous 3 months.
+
+## POST https://{shop}.myshopify.com/api/{api\_version}/graphql.json
+
+## GraphQL query
+
+```graphql
+{
+  # The example below sends a ShopifyQL query to the Admin GraphQL API.
+  shopifyqlQuery(query: "FROM sales SHOW total_sales GROUP BY month SINCE -3m ORDER BY month") {
+    tableData {
+      columns {
+        name
+        dataType
+        displayName
+      }
+      rows
+    }
+    # parseErrors specifies that you want errors returned, if there were any
+    parseErrors
+  }
+}
+```
+
+## JSON response
+
+```json
+{
+  "shopifyqlQuery": {
+    "tableData": {
+      "columns": [
+        {
+          "name": "month",
+          "dataType": "MONTH_TIMESTAMP",
+          "displayName": "Month"
+        },
+        {
+          "name": "total_sales",
+          "dataType": "MONEY",
+          "displayName": "Total sales"
+        }
+      ],
+      "rows": [
+        {
+          "month": "2025-01-01",
+          "total_sales": "123.456"
+        },
+         {
+          "month": "2025-01-03",
+          "total_sales": "55.44"
+        },
+         {
+          "month": "2025-01-04",
+          "total_sales": "99.87"
+        }
+      ]
+    },
+    "parseErrors": []
+  }
+}
+```
+
+***
+
+## Next steps
+
+* Access the language reference for [ShopifyQL](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/shopifyql-editor/shopifyql-syntax).
+* Access the language reference for Shopify's [segment query language](https://shopify.dev/docs/api/shopifyql/segment-query-language-reference).
+
+***
+
+* [Access scopes](https://shopify.dev/docs/api/shopifyql.md#access-scopes)
+* [How it works](https://shopify.dev/docs/api/shopifyql.md#how-it-works)
+* [Segment query language](https://shopify.dev/docs/api/shopifyql.md#segment-query-language)
+* [Example](https://shopify.dev/docs/api/shopifyql.md#example)
+* [Next steps](https://shopify.dev/docs/api/shopifyql.md#next-steps)

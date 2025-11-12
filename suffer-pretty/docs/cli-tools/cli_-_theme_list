@@ -1,0 +1,100 @@
+---
+title: theme list
+description: 'Lists the themes in your store, along with their IDs and statuses.'
+api_name: shopify-cli
+source_url:
+  html: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-list'
+  md: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-list.md'
+---
+
+# theme listcommand
+
+Lists the themes in your store, along with their IDs and statuses.
+
+## Flags
+
+The following flags are available for the `theme list` command:
+
+* \--id \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_ID
+
+  Only list theme with the given ID.
+
+* \--name \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_NAME
+
+  Only list themes that contain the given name.
+
+* \--no-color
+
+  env: SHOPIFY\_FLAG\_NO\_COLOR
+
+  Disable color output.
+
+* \--password \<value>
+
+  string
+
+  env: SHOPIFY\_CLI\_THEME\_TOKEN
+
+  Password generated from the Theme Access app.
+
+* \--path \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_PATH
+
+  The path where you want to run the command. Defaults to the current working directory.
+
+* \--role \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_ROLE
+
+  Only list themes with the given role.
+
+* \--verbose
+
+  env: SHOPIFY\_FLAG\_VERBOSE
+
+  Increase the verbosity of the output.
+
+* -e, --environment \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_ENVIRONMENT
+
+  The environment to apply to the current command.
+
+* -j, --json
+
+  env: SHOPIFY\_FLAG\_JSON
+
+  Output the result as JSON.
+
+* -s, --store \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_STORE
+
+  Store URL. It can be the store prefix (example) or the full myshopify.com URL (example.myshopify.com, <https://example.myshopify.com>).
+
+### Examples
+
+* #### theme list
+
+  ##### theme list
+
+  ```bash
+  shopify theme list [flags]
+  ```

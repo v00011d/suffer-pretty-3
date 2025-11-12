@@ -1,0 +1,399 @@
+---
+title: Image
+description: Use this when you want to display an image.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: 'https://shopify.dev/docs/api/admin-extensions/2025-07/components/media/image'
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/media/image.md
+---
+
+# Image
+
+Use this when you want to display an image.
+
+## ImageProps
+
+`(ImageAccessibilityLabelProp | ImageAltProp) & (ImageSourceProp | ImageSrcProp) & ImageBaseProps`
+
+### ImageAccessibilityLabelProp
+
+* accessibilityLabel
+
+  string
+
+  Default: \`''\`
+
+  required
+
+  An alternative text description that describe the image for the reader to understand what it is about. It is extremely useful for both users using assistive technology and sighted users. A well written `description` provides people with visual impairments the ability to participate in consuming non-text content. When a screen readers encounters an `Image`, the description is read and announced aloud. If an image fails to load, potentially due to a poor connection, the `description` is displayed on screen instead. This has the benefit of letting a sighted user know an image was meant to load here, but as an alternative, they’re still able to consume the text content. Read [considerations when writing alternative text](https://ux.shopify.com/considerations-when-writing-alt-text-a9c1985a8204) to learn more.
+
+  An `alt` property is available as an alias for this for compatibility with the HTML specification. When both are specified, `accessibilityLabel` takes precedence.
+
+* alt
+
+  never
+
+### ImageAltProp
+
+* alt
+
+  string
+
+  required
+
+  An alternative text description that describe the image for the reader to understand what it is about. It is extremely useful for both users using assistive technology and sighted users. A well written `description` provides people with visual impairments the ability to participate in consuming non-text content. When a screen readers encounters an `Image`, the description is read and announced aloud. If an image fails to load, potentially due to a poor connection, the `description` is displayed on screen instead. This has the benefit of letting a sighted user know an image was meant to load here, but as an alternative, they’re still able to consume the text content. Read [considerations when writing alternative text](https://ux.shopify.com/considerations-when-writing-alt-text-a9c1985a8204) to learn more.
+
+  This property is an alias for `accessibilityLabel` for compatibility with the HTML specification. When both are specified `accessibilityLabel` takes precedence.
+
+* accessibilityLabel
+
+  never
+
+### ImageBaseProps
+
+* accessibilityRole
+
+  Extract\<AccessibilityRole, 'decorative'>
+
+  Sets the semantic meaning of the component’s content. When set, the role will be used by assistive technologies to help users navigate the page.
+
+* id
+
+  string
+
+  Defines a unique identifier which must be unique in the whole document.
+
+* loading
+
+  'eager' | 'lazy'
+
+  Default: \`eager\`
+
+  Determines the loading behavior of the image:
+
+  * `eager`: Immediately loads the image, irrespective of its position within the visible viewport.
+  * `lazy`: Delays loading the image until it approaches a specified distance from the viewport.
+
+* onError
+
+  () => void
+
+  Invoked on load error.
+
+* onLoad
+
+  () => void
+
+  Invoked when load completes successfully.
+
+### ImageSourceProp
+
+* source
+
+  string
+
+  required
+
+  The image source (either a remote URL or a local file resource; blob URLs are not currently supported).
+
+  A `src` property is available as an alias for this for compatibility with the HTML specification. When both are specified, `source` takes precedence.
+
+* src
+
+  never
+
+### ImageSrcProp
+
+* src
+
+  string
+
+  required
+
+  The image source (either a remote URL or a local file resource; blob URLs are not currently supported).
+
+  This property is available as an alias for `source` for compatibility with the HTML specification. When both are specified, `source` takes precedence.
+
+* source
+
+  never
+
+### ImageAccessibilityLabelProp
+
+* accessibilityLabel
+
+  An alternative text description that describe the image for the reader to understand what it is about. It is extremely useful for both users using assistive technology and sighted users. A well written \`description\` provides people with visual impairments the ability to participate in consuming non-text content. When a screen readers encounters an \`Image\`, the description is read and announced aloud. If an image fails to load, potentially due to a poor connection, the \`description\` is displayed on screen instead. This has the benefit of letting a sighted user know an image was meant to load here, but as an alternative, they’re still able to consume the text content. Read \[considerations when writing alternative text]\(https://ux.shopify.com/considerations-when-writing-alt-text-a9c1985a8204) to learn more. An \`alt\` property is available as an alias for this for compatibility with the HTML specification. When both are specified, \`accessibilityLabel\` takes precedence.
+
+  ```ts
+  string
+  ```
+
+* alt
+
+  ```ts
+  never
+  ```
+
+```ts
+interface ImageAccessibilityLabelProp {
+  /**
+   * An alternative text description that describe the image for the reader to
+   * understand what it is about. It is extremely useful for both users using
+   * assistive technology and sighted users. A well written `description`
+   * provides people with visual impairments the ability to participate in
+   * consuming non-text content. When a screen readers encounters an `Image`,
+   * the description is read and announced aloud. If an image fails to load,
+   * potentially due to a poor connection, the `description` is displayed on
+   * screen instead. This has the benefit of letting a sighted user know an
+   * image was meant to load here, but as an alternative, they’re still able to
+   * consume the text content. Read
+   * [considerations when writing alternative text](https://ux.shopify.com/considerations-when-writing-alt-text-a9c1985a8204)
+   * to learn more.
+   *
+   * An `alt` property is available as an alias for this for compatibility with the HTML
+   * specification. When both are specified, `accessibilityLabel` takes precedence.
+   *
+   * @defaultValue `''`
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt
+   */
+  accessibilityLabel: string;
+  alt?: never;
+}
+```
+
+### ImageAltProp
+
+* accessibilityLabel
+
+  ```ts
+  never
+  ```
+
+* alt
+
+  An alternative text description that describe the image for the reader to understand what it is about. It is extremely useful for both users using assistive technology and sighted users. A well written \`description\` provides people with visual impairments the ability to participate in consuming non-text content. When a screen readers encounters an \`Image\`, the description is read and announced aloud. If an image fails to load, potentially due to a poor connection, the \`description\` is displayed on screen instead. This has the benefit of letting a sighted user know an image was meant to load here, but as an alternative, they’re still able to consume the text content. Read \[considerations when writing alternative text]\(https://ux.shopify.com/considerations-when-writing-alt-text-a9c1985a8204) to learn more. This property is an alias for \`accessibilityLabel\` for compatibility with the HTML specification. When both are specified \`accessibilityLabel\` takes precedence.
+
+  ```ts
+  string
+  ```
+
+```ts
+interface ImageAltProp {
+  /**
+   * An alternative text description that describe the image for the reader to
+   * understand what it is about. It is extremely useful for both users using
+   * assistive technology and sighted users. A well written `description`
+   * provides people with visual impairments the ability to participate in
+   * consuming non-text content. When a screen readers encounters an `Image`,
+   * the description is read and announced aloud. If an image fails to load,
+   * potentially due to a poor connection, the `description` is displayed on
+   * screen instead. This has the benefit of letting a sighted user know an
+   * image was meant to load here, but as an alternative, they’re still able to
+   * consume the text content. Read
+   * [considerations when writing alternative text](https://ux.shopify.com/considerations-when-writing-alt-text-a9c1985a8204)
+   * to learn more.
+   *
+   * This property is an alias for `accessibilityLabel` for compatibility with the HTML
+   * specification. When both are specified `accessibilityLabel` takes precedence.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt
+   */
+  alt: string;
+  accessibilityLabel?: never;
+}
+```
+
+### ImageSourceProp
+
+* source
+
+  The image source (either a remote URL or a local file resource; blob URLs are not currently supported). A \`src\` property is available as an alias for this for compatibility with the HTML specification. When both are specified, \`source\` takes precedence.
+
+  ```ts
+  string
+  ```
+
+* src
+
+  ```ts
+  never
+  ```
+
+```ts
+interface ImageSourceProp {
+  /**
+   * The image source (either a remote URL or a local file resource; blob URLs are not currently supported).
+   *
+   * A `src` property is available as an alias for this for compatibility with the HTML
+   * specification. When both are specified, `source` takes precedence.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#src
+   */
+  source: string;
+  src?: never;
+}
+```
+
+### ImageSrcProp
+
+* source
+
+  ```ts
+  never
+  ```
+
+* src
+
+  The image source (either a remote URL or a local file resource; blob URLs are not currently supported). This property is available as an alias for \`source\` for compatibility with the HTML specification. When both are specified, \`source\` takes precedence.
+
+  ```ts
+  string
+  ```
+
+```ts
+interface ImageSrcProp {
+  /**
+   * The image source (either a remote URL or a local file resource; blob URLs are not currently supported).
+   *
+   * This property is available as an alias for `source` for compatibility with the HTML
+   * specification. When both are specified, `source` takes precedence.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#src
+   */
+  src: string;
+  source?: never;
+}
+```
+
+### ImageBaseProps
+
+* accessibilityRole
+
+  Sets the semantic meaning of the component’s content. When set, the role will be used by assistive technologies to help users navigate the page.
+
+  ```ts
+  Extract<AccessibilityRole, 'decorative'>
+  ```
+
+* id
+
+  Defines a unique identifier which must be unique in the whole document.
+
+  ```ts
+  string
+  ```
+
+* loading
+
+  Determines the loading behavior of the image: - \`eager\`: Immediately loads the image, irrespective of its position within the visible viewport. - \`lazy\`: Delays loading the image until it approaches a specified distance from the viewport.
+
+  ```ts
+  'eager' | 'lazy'
+  ```
+
+* onError
+
+  Invoked on load error.
+
+  ```ts
+  () => void
+  ```
+
+* onLoad
+
+  Invoked when load completes successfully.
+
+  ```ts
+  () => void
+  ```
+
+```ts
+interface ImageBaseProps {
+  /**
+   * Sets the semantic meaning of the component’s content. When set,
+   * the role will be used by assistive technologies to help users
+   * navigate the page.
+   */
+  accessibilityRole?: Extract<AccessibilityRole, 'decorative'>;
+
+  /**
+   * Defines a unique identifier which must be unique in the whole document.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id
+   */
+  id?: string;
+
+  /**
+   * Determines the loading behavior of the image:
+   * - `eager`: Immediately loads the image, irrespective of its position within the visible viewport.
+   * - `lazy`: Delays loading the image until it approaches a specified distance from the viewport.
+   *
+   * @defaultValue `eager`
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading
+   */
+  loading?: 'eager' | 'lazy';
+
+  /**
+   * Invoked when load completes successfully.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onload
+   */
+  onLoad?(): void;
+
+  /**
+   * Invoked on load error.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror
+   */
+  onError?(): void;
+}
+```
+
+### AccessibilityRole
+
+```ts
+'main' | 'header' | 'footer' | 'section' | 'aside' | 'navigation' | 'ordered-list' | 'list-item' | 'list-item-separator' | 'unordered-list' | 'separator' | 'status' | 'alert' | 'generic'
+```
+
+### Examples
+
+* #### Simple Image example
+
+  ##### React
+
+  ```tsx
+  import {render, Image} from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return (
+      <Image alt="Pickaxe" source="/assets/icons/64/pickaxe-1.png" />
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {extend, Image} from '@shopify/ui-extensions/admin';
+
+  extend('Playground', (root) => {
+    const image = root.createComponent(Image, {
+      alt: 'Pickaxe',
+      source: '/assets/icons/64/pickaxe-1.png',
+    });
+
+    root.appendChild(image);
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/image-default.png)
+
+## Related
+
+[- Icon](https://shopify.dev/docs/api/admin-extensions/components/media/icon)

@@ -1,0 +1,109 @@
+---
+title: ColorPicker
+description: Use this component if you need to select a color.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/forms/colorpicker
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/forms/colorpicker.md
+---
+
+# Color​Picker
+
+Use this component if you need to select a color.
+
+## ColorPickerProps
+
+* allowAlpha
+
+  boolean
+
+  Default: false
+
+  Allow user to select an alpha value.
+
+* id
+
+  string
+
+  ID for the element.
+
+* onChange
+
+  (value: string) => void
+
+  The `onChange` handler will emit the value in hex. If the `allowAlpha` prop is `true`, `onChange` will emit an 8-value hex (#RRGGBBAA). If the `allowAlpha` prop is `false`, `onChange` will emit a 6-value hex (#RRGGBB).
+
+* value
+
+  string
+
+  The currently selected color.
+
+  Supported formats include:
+
+  * RGB @see <https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb>
+  * RGBA @see <https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb>
+  * Hex (3-value, 4-value, 6-value, 8-value) @see <https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color>
+
+  For RGB and RGBA, both the legacy syntax (comma-separated) and modern syntax (space-separate) are supported.
+
+### Examples
+
+* #### Simple ColorPicker example
+
+  ##### React
+
+  ```tsx
+  import {
+    render,
+    ColorPicker,
+  } from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return (
+      <ColorPicker
+        value="rgba(255 0 0 / 0.5)"
+        onChange={(value) => {
+          console.log({value});
+        }}
+      />
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {
+    extension,
+    ColorPicker,
+  } from '@shopify/ui-extensions/admin';
+
+  export default extension(
+    'Playground',
+    (root) => {
+      const blockStack = root.createComponent(
+        ColorPicker,
+        {
+          value: "rgba(255 0 0 / 0.5)",
+          label: ""
+        },
+      );
+
+      root.appendChild(blockStack);
+    },
+  );
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/colorpicker-default.png)
+
+## Related
+
+[- Select](https://shopify.dev/docs/api/admin-extensions/components/forms/select)

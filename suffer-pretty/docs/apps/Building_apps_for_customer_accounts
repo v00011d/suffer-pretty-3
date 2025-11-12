@@ -1,0 +1,133 @@
+---
+title: Building apps for customer accounts
+description: >-
+  Learn how you can customize customer accounts pages for viewing order history,
+  checking order statuses, and more.
+source_url:
+  html: 'https://shopify.dev/docs/apps/build/customer-accounts'
+  md: 'https://shopify.dev/docs/apps/build/customer-accounts.md'
+---
+
+ExpandOn this page
+
+* [How it works](https://shopify.dev/docs/apps/build/customer-accounts.md#how-it-works)
+* [Get started](https://shopify.dev/docs/apps/build/customer-accounts.md#get-started)
+* [Product roadmap](https://shopify.dev/docs/apps/build/customer-accounts.md#product-roadmap)
+* [Developer tools and resources](https://shopify.dev/docs/apps/build/customer-accounts.md#developer-tools-and-resources)
+
+# Building apps for customer accounts
+
+Merchants use customer accounts to enable their customers to view their order history, check order statuses, edit their profile, and take actions related to their order.
+
+Customer account UI extensions are only supported on the new version of customer accounts. Legacy customer accounts do not support customer account UI extensions. Learn more about [customer accounts](https://help.shopify.com/en/manual/customers/customer-accounts).
+
+Tip
+
+Determine the customer account version that a merchant's using by querying the [`CustomerAccountsV2`](https://shopify.dev/docs/api/admin-graphql/latest/objects/CustomerAccountsV2) object.
+
+***
+
+## How it works
+
+Customers can navigate to their account from the online store, from order notification emails, or any custom entrypoint placed by the merchant.
+
+If the customer is not already logged in, clicking a link from an order notification email to view their order will bring them to the pre-authenticated **Order status** page. From there, if the customer tries to navigate to another page in their account, or tries to take an action, they’ll be prompted to log in. After the customer logs in, they're fully authenticated and able to access all customer account pages. Learn more about [Order status page authentication states](https://shopify.dev/docs/apps/build/customer-accounts/order-status-page#authentication-states).
+
+Using customer account UI extensions, apps can extend the functionality of existing customer account pages, as well as, create new pages (full-page extensions).
+
+Note
+
+Customer account UI extensions can be built using [Polaris web components](https://shopify.dev/docs/api/customer-account-ui-extensions/polaris-web-components).
+
+![A diagram showing that a customer can navigate to their account from the online store, or from order notifications. Developers can build extensions for all customer account pages, and create full-page extensions to create new pages.](https://shopify.dev/assets/assets/images/apps/customer-accounts/how-it-works/how-it-works-UP21ZEVz.png)
+
+You can extend the following pages in customer accounts at defined [extension targets](https://shopify.dev/docs/api/customer-account-ui-extensions/latest/extension-targets-overview):
+
+| Page | Description | Example use cases |
+| - | - | - |
+| **Order index** | The page that customers land on when they log in to their account. Provides a list of all the customer’s orders, including draft orders that they’ve been invoiced for.Customers can take action on an order from this page, such as requesting a return. | Order actions, product suggestions based on order history, loyalty discount offers. |
+| **Order status** | The page where customers can view, track, and manage a specific order.Customers can take action on an order from this page, such as requesting a return. | Order actions, product reviews, surveys, order tracking, loyalty points earned. |
+| **Profile** | The page where customers can manage their personal information, such as name and addresses.For B2B customers, this page also includes company information. | Membership level, loyalty point balance, customer metafields. |
+| **New pages** | Apps can create new pages using full-page extensions, to support use cases that aren't suited to native pages. | Wishlist, subscriptions, rewards, offers. |
+
+Order index
+
+![The Order index page showing three orders that contain various plants. One order is in the the Confirmed status, one in the Delivered status, and one is in the Out for delivery status.](https://shopify.dev/assets/assets/images/apps/customer-accounts/how-it-works/order-index-CqqZGrPq.png)
+
+Order status
+
+![The Order Status page showing the plants that are included in the order, the total cost of $1,220, the Delivered status, and order details such as customer contact information, shipping and billing address, and payment information.](https://shopify.dev/assets/assets/images/apps/customer-accounts/how-it-works/order-status-BDU5sgj4.png)
+
+Profile
+
+![The Profile page. The page shows the customer’s name, email, phone number, addresses, and saved payment methods.](https://shopify.dev/assets/assets/images/apps/customer-accounts/how-it-works/profile-Dka84usX.png)
+
+***
+
+## Get started
+
+[Build a customer accounts experience\
+\
+](https://shopify.dev/docs/apps/build/customer-accounts/start-building)
+
+[Set up your development environment to begin developing a customer account UI extension.](https://shopify.dev/docs/apps/build/customer-accounts/start-building)
+
+***
+
+## Product roadmap
+
+We’ll continue adding API capabilities to help you access the right functionality in extensions. We’ll also continue adding UI components that offer performant patterns on our design best practices. We release new components and APIs into the unstable API version first, and promote to the next stable release based on Shopify’s API version release schedule.
+
+| Feature | Shipped |
+| - | - |
+| Developers can preview and manage customer account UI extensions in the checkout editor | June 2024 |
+| Extension API calls to the [Customer Account API](https://shopify.dev/docs/api/customer) to retrieve order data are supported on the pre-authenticated state of the **Order status** page | June 2024 |
+| Write to metafields with [Customer Account API](https://shopify.dev/docs/apps/build/customer-accounts/metafields) | June 2024 |
+| Updated Order Status API to determine the customer [authentication state](https://shopify.dev/docs/api/customer-account-ui-extensions/unstable/apis/order-status-api/authentication-state) on the Order status page | June 2024 |
+| [Protected customer data requirements](https://shopify.dev/docs/apps/launch/protected-customer-data) apply to customer account extensions | August 2024 |
+| Merchants can edit header navigation menus in customer accounts | |
+| APIs to read and manage return requests | |
+| APIs to read and manage subscriptions | |
+
+***
+
+## Developer tools and resources
+
+[Targets overview\
+\
+](https://shopify.dev/docs/api/customer-account-ui-extensions/extension-targets-overview)
+
+[Explore all extension targets available for customer accounts UI extensions.](https://shopify.dev/docs/api/customer-account-ui-extensions/extension-targets-overview)
+
+[Polaris web components\
+\
+](https://shopify.dev/docs/api/customer-account-ui-extensions/polaris-web-components)
+
+[Explore the components you can use to build customer account UI extensions.](https://shopify.dev/docs/api/customer-account-ui-extensions/polaris-web-components)
+
+[Figma UI kit\
+\
+](https://www.figma.com/community/file/1554582792754361051)
+
+[Figma components for checkout and account UI extensions.](https://www.figma.com/community/file/1554582792754361051)
+
+[Account screens\
+\
+](https://www.figma.com/community/file/1304882873974540289/account-screens)
+
+[Figma screens with extension targets, breakpoints, and example designs.](https://www.figma.com/community/file/1304882873974540289/account-screens)
+
+STORAGE
+
+Note
+
+If you're building an app that directs customer to the pre-authenticated **Order status** page, then you need to [obtain level 2 permission for protected customer data](https://shopify.dev/docs/apps/launch/protected-customer-data). If you're sending transactional SMS on behalf of merchants then you should include the customer’s order number alongside any links to the Order Status Page.
+
+After the customer logs in, they are fully authenticated and able to access all customer account pages. Using customer account UI extensions, apps can extend the functionality of existing customer account pages, as well as, create new pages (full-page extensions). Customer account UI extensions can be built using checkout components and customer account components.
+
+***
+
+* [How it works](https://shopify.dev/docs/apps/build/customer-accounts.md#how-it-works)
+* [Get started](https://shopify.dev/docs/apps/build/customer-accounts.md#get-started)
+* [Product roadmap](https://shopify.dev/docs/apps/build/customer-accounts.md#product-roadmap)
+* [Developer tools and resources](https://shopify.dev/docs/apps/build/customer-accounts.md#developer-tools-and-resources)

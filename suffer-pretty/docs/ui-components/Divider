@@ -1,0 +1,80 @@
+---
+title: Divider
+description: >-
+  Use this to create a clear visual separation between different elements in
+  your user interface.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/structure/divider
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/structure/divider.md
+---
+
+# Divider
+
+Use this to create a clear visual separation between different elements in your user interface.
+
+## DividerProps
+
+* direction
+
+  'inline' | 'block'
+
+  Default: 'inline'
+
+  Specify the direction of the divider.
+
+### Examples
+
+* #### Simple Divider example
+
+  ##### React
+
+  ```tsx
+  import React from 'react';
+  import {
+    render,
+    Divider,
+    BlockStack,
+  } from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return (
+      <BlockStack gap>
+        <>First text</>
+        <Divider />
+        <>Second Text</>
+      </BlockStack>
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {
+      extension,
+      Divider,
+    } from '@shopify/ui-extensions/admin';
+
+    export default extension(
+      'Playground',
+      (root) => {
+        const divier = root.createComponent(Divider);
+        const firstText = root.createText('First Text');
+        const secondText = root.createText('Second Text');
+
+        root.appendChild(firstText);
+        root.appendChild(divier);
+        root.appendChild(secondText);
+      },
+    );
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/divider-default.png)

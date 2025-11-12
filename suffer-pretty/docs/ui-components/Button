@@ -1,0 +1,523 @@
+---
+title: Button
+description: >-
+  Use this component when you want to provide users the ability to perform
+  specific actions, like saving data.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/actions/button
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/actions/button.md
+---
+
+# Button
+
+Use this component when you want to provide users the ability to perform specific actions, like saving data.
+
+## ButtonProps
+
+`ButtonBaseProps | ButtonAnchorProps`
+
+### ButtonAnchorProps
+
+* href
+
+  string
+
+  required
+
+  The URL to link to. If set, it will navigate to the location specified by `href` after executing the `onClick` callback.
+
+* accessibilityLabel
+
+  string
+
+  A label that describes the purpose or contents of the Button. It will be read to users using assistive technologies such as screen readers.
+
+  Use this when using only an icon or the button text is not enough context for users using assistive technologies.
+
+* disabled
+
+  boolean
+
+  Disables the button, disallowing any interaction.
+
+* download
+
+  boolean | string
+
+  Tells browsers to download the linked resource instead of navigating to it. Optionally accepts filename value to rename file.
+
+* id
+
+  string
+
+  A unique identifier for the button.
+
+* lang
+
+  string
+
+  Alias for `language`
+
+* language
+
+  string
+
+  Indicate the text language. Useful when the text is in a different language than the rest of the page. It will allow assistive technologies such as screen readers to invoke the correct pronunciation. [Reference of values](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) ("subtag" label)
+
+* onBlur
+
+  () => void
+
+  Callback when focus is removed.
+
+* onClick
+
+  () => void
+
+  Callback when a link is pressed. If `href` is set, it will execute the callback and then navigate to the location specified by `href`.
+
+* onFocus
+
+  () => void
+
+  Callback when input is focused.
+
+* onPress
+
+  () => void
+
+  Alias for `onClick` Callback when a link is pressed. If `href` is set, it will execute the callback and then navigate to the location specified by `href`.
+
+* target
+
+  '\_blank' | '\_self'
+
+  Default: '\_self'
+
+  Specifies where to display the linked URL
+
+* to
+
+  string
+
+  Alias for `href` If set, it will navigate to the location specified by `to` after executing the `onClick` callback.
+
+* tone
+
+  'default' | 'critical'
+
+  Sets the color treatment of the Button.
+
+* variant
+
+  'primary' | 'secondary' | 'tertiary'
+
+  Changes the visual appearance of the Button.
+
+### ButtonBaseProps
+
+* accessibilityLabel
+
+  string
+
+  A label that describes the purpose or contents of the Button. It will be read to users using assistive technologies such as screen readers.
+
+  Use this when using only an icon or the button text is not enough context for users using assistive technologies.
+
+* accessibilityRole
+
+  Extract\<AccessibilityRole, 'submit' | 'button' | 'reset'>
+
+  Sets the semantic meaning of the component’s content. When set, the role will be used by assistive technologies to help users navigate the page.
+
+* disabled
+
+  boolean
+
+  Disables the button, disallowing any interaction.
+
+* id
+
+  string
+
+  A unique identifier for the button.
+
+* lang
+
+  string
+
+  Alias for `language`
+
+* language
+
+  string
+
+  Indicate the text language. Useful when the text is in a different language than the rest of the page. It will allow assistive technologies such as screen readers to invoke the correct pronunciation. [Reference of values](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) ("subtag" label)
+
+* onBlur
+
+  () => void
+
+  Callback when focus is removed.
+
+* onClick
+
+  () => void
+
+  Callback when a link is pressed. If `href` is set, it will execute the callback and then navigate to the location specified by `href`.
+
+* onFocus
+
+  () => void
+
+  Callback when input is focused.
+
+* onPress
+
+  () => void
+
+  Alias for `onClick` Callback when a button is pressed. If `href` is set, it will execute the callback and then navigate to the location specified by `href`.
+
+* tone
+
+  'default' | 'critical'
+
+  Sets the color treatment of the Button.
+
+* variant
+
+  'primary' | 'secondary' | 'tertiary'
+
+  Changes the visual appearance of the Button.
+
+### ButtonBaseProps
+
+* accessibilityLabel
+
+  A label that describes the purpose or contents of the Button. It will be read to users using assistive technologies such as screen readers. Use this when using only an icon or the button text is not enough context for users using assistive technologies.
+
+  ```ts
+  string
+  ```
+
+* accessibilityRole
+
+  Sets the semantic meaning of the component’s content. When set, the role will be used by assistive technologies to help users navigate the page.
+
+  ```ts
+  Extract<AccessibilityRole, 'submit' | 'button' | 'reset'>
+  ```
+
+* disabled
+
+  Disables the button, disallowing any interaction.
+
+  ```ts
+  boolean
+  ```
+
+* id
+
+  A unique identifier for the button.
+
+  ```ts
+  string
+  ```
+
+* lang
+
+  Alias for \`language\`
+
+  ```ts
+  string
+  ```
+
+* language
+
+  Indicate the text language. Useful when the text is in a different language than the rest of the page. It will allow assistive technologies such as screen readers to invoke the correct pronunciation. \[Reference of values]\(https://www\.iana.org/assignments/language-subtag-registry/language-subtag-registry) ("subtag" label)
+
+  ```ts
+  string
+  ```
+
+* onBlur
+
+  Callback when focus is removed.
+
+  ```ts
+  () => void
+  ```
+
+* onClick
+
+  Callback when a link is pressed. If \`href\` is set, it will execute the callback and then navigate to the location specified by \`href\`.
+
+  ```ts
+  () => void
+  ```
+
+* onFocus
+
+  Callback when input is focused.
+
+  ```ts
+  () => void
+  ```
+
+* onPress
+
+  Alias for \`onClick\` Callback when a button is pressed. If \`href\` is set, it will execute the callback and then navigate to the location specified by \`href\`.
+
+  ```ts
+  () => void
+  ```
+
+* tone
+
+  Sets the color treatment of the Button.
+
+  ```ts
+  'default' | 'critical'
+  ```
+
+* variant
+
+  Changes the visual appearance of the Button.
+
+  ```ts
+  'primary' | 'secondary' | 'tertiary'
+  ```
+
+```ts
+interface ButtonBaseProps extends CommonProps {
+  /**
+   * Sets the semantic meaning of the component’s content. When set,
+   * the role will be used by assistive technologies to help users
+   * navigate the page.
+   */
+  accessibilityRole?: Extract<AccessibilityRole, 'submit' | 'button' | 'reset'>;
+}
+```
+
+### AccessibilityRole
+
+```ts
+'main' | 'header' | 'footer' | 'section' | 'aside' | 'navigation' | 'ordered-list' | 'list-item' | 'list-item-separator' | 'unordered-list' | 'separator' | 'status' | 'alert' | 'generic'
+```
+
+### ButtonAnchorProps
+
+* accessibilityLabel
+
+  A label that describes the purpose or contents of the Button. It will be read to users using assistive technologies such as screen readers. Use this when using only an icon or the button text is not enough context for users using assistive technologies.
+
+  ```ts
+  string
+  ```
+
+* disabled
+
+  Disables the button, disallowing any interaction.
+
+  ```ts
+  boolean
+  ```
+
+* download
+
+  Tells browsers to download the linked resource instead of navigating to it. Optionally accepts filename value to rename file.
+
+  ```ts
+  boolean | string
+  ```
+
+* href
+
+  The URL to link to. If set, it will navigate to the location specified by \`href\` after executing the \`onClick\` callback.
+
+  ```ts
+  string
+  ```
+
+* id
+
+  A unique identifier for the button.
+
+  ```ts
+  string
+  ```
+
+* lang
+
+  Alias for \`language\`
+
+  ```ts
+  string
+  ```
+
+* language
+
+  Indicate the text language. Useful when the text is in a different language than the rest of the page. It will allow assistive technologies such as screen readers to invoke the correct pronunciation. \[Reference of values]\(https://www\.iana.org/assignments/language-subtag-registry/language-subtag-registry) ("subtag" label)
+
+  ```ts
+  string
+  ```
+
+* onBlur
+
+  Callback when focus is removed.
+
+  ```ts
+  () => void
+  ```
+
+* onClick
+
+  Callback when a link is pressed. If \`href\` is set, it will execute the callback and then navigate to the location specified by \`href\`.
+
+  ```ts
+  () => void
+  ```
+
+* onFocus
+
+  Callback when input is focused.
+
+  ```ts
+  () => void
+  ```
+
+* onPress
+
+  Alias for \`onClick\` Callback when a link is pressed. If \`href\` is set, it will execute the callback and then navigate to the location specified by \`href\`.
+
+  ```ts
+  () => void
+  ```
+
+* target
+
+  Specifies where to display the linked URL
+
+  ```ts
+  '_blank' | '_self'
+  ```
+
+* to
+
+  Alias for \`href\` If set, it will navigate to the location specified by \`to\` after executing the \`onClick\` callback.
+
+  ```ts
+  string
+  ```
+
+* tone
+
+  Sets the color treatment of the Button.
+
+  ```ts
+  'default' | 'critical'
+  ```
+
+* variant
+
+  Changes the visual appearance of the Button.
+
+  ```ts
+  'primary' | 'secondary' | 'tertiary'
+  ```
+
+```ts
+interface ButtonAnchorProps extends CommonProps {
+  /**
+   * The URL to link to.
+   * If set, it will navigate to the location specified by `href` after executing the `onClick` callback.
+   */
+  href: AnchorProps['href'];
+
+  /**
+   * Alias for `href`
+   * If set, it will navigate to the location specified by `to` after executing the `onClick` callback.
+   */
+  to?: AnchorProps['href'];
+
+  /**
+   * Tells browsers to download the linked resource instead of navigating to it.
+   * Optionally accepts filename value to rename file.
+   */
+  download?: boolean | string;
+
+  /**
+   * Specifies where to display the linked URL
+   * @default '_self'
+   */
+  target?: '_blank' | '_self';
+
+  /**
+   * Callback when a link is pressed. If `href` is set,
+   * it will execute the callback and then navigate to the location specified by `href`.
+   */
+  onClick?: AnchorProps['onClick'];
+
+  /**
+   * Alias for `onClick`
+   * Callback when a link is pressed. If `href` is set,
+   * it will execute the callback and then navigate to the location specified by `href`.
+   */
+  onPress?: AnchorProps['onClick'];
+}
+```
+
+### Examples
+
+* #### Add a simple button to your app.
+
+  ##### React
+
+  ```tsx
+  import {render, Button} from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return (
+      <Button
+        onPress={() => {
+          console.log('onPress event');
+        }}
+      >
+        Click here
+      </Button>
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {extend, Button} from '@shopify/ui-extensions/admin';
+
+  extend('Playground', (root) => {
+    const button = root.createComponent(
+      Button,
+      {onPress: () => console.log('onPress event')},
+      'Click here',
+    );
+
+    root.appendChild(button);
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/button-default.png)
+
+## Related
+
+[- Pressable](https://shopify.dev/docs/api/admin-extensions/components/actions/pressable)
+
+[- Link](https://shopify.dev/docs/api/admin-extensions/components/actions/link)

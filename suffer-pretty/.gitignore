@@ -1,0 +1,77 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Editor Files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+vendor/
+bower_components/
+
+# Build Output
+dist/
+build/
+out/
+.cache/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+
+# Archive Files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Personal Notes (optional - remove if you want to track)
+NOTES.md
+TODO.md
+scratch/
+drafts/
+
+# System Files
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Optional: Ignore compiled assets if adding any
+*.min.js
+*.min.css
