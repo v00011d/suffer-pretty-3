@@ -1,0 +1,376 @@
+<footer class="site-footer" data-section-id="{{ section.id }}" data-section-type="footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      {%- comment -%} About/Brand Section {%- endcomment -%}
+      <div class="footer-column footer-brand">
+        <h3 class="footer-heading">{{ section.settings.brand_heading }}</h3>
+        <p class="footer-text">{{ section.settings.brand_description }}</p>
+        {%- if section.settings.show_email -%}
+          <p class="footer-email">
+            <a href="mailto:voidinkcreation@proton.me">voidinkcreation@proton.me</a>
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Quick Links {%- endcomment -%}
+      <div class="footer-column">
+        <h3 class="footer-heading">Quick Links</h3>
+        <ul class="footer-menu">
+          {%- for link in section.settings.footer_menu.links -%}
+            <li class="footer-menu-item">
+              <a href="{{ link.url }}" class="footer-link">{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- comment -%} Services Section {%- endcomment -%}
+      <div class="footer-column">
+        <h3 class="footer-heading">Services</h3>
+        <ul class="footer-menu">
+          <li class="footer-menu-item">
+            <a href="/pages/tattoo-booking" class="footer-link">Tattoo Booking</a>
+          </li>
+          <li class="footer-menu-item">
+            <a href="/pages/mural-booking" class="footer-link">Mural Commissions</a>
+          </li>
+          <li class="footer-menu-item">
+            <a href="/collections/art" class="footer-link">Original Art</a>
+          </li>
+          <li class="footer-menu-item">
+            <a href="/collections/products" class="footer-link">Merchandise</a>
+          </li>
+        </ul>
+      </div>
+
+      {%- comment -%} Social Media Section {%- endcomment -%}
+      <div class="footer-column">
+        <h3 class="footer-heading">Connect</h3>
+        <div class="footer-social">
+          {%- if section.settings.social_instagram != blank -%}
+            <a href="{{ section.settings.social_instagram }}" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="18" cy="6" r="1" fill="currentColor"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_facebook != blank -%}
+            <a href="{{ section.settings.social_facebook }}" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_twitter != blank -%}
+            <a href="{{ section.settings.social_twitter }}" class="social-icon" aria-label="Twitter" target="_blank" rel="noopener">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23 3A10.9 10.9 0 0 1 19.5 4.3A4.48 4.48 0 0 0 22.5 1.5A10.66 10.66 0 0 1 19 3.5A4.48 4.48 0 0 0 11.5 7A12.94 12.94 0 0 1 2 2.5A4.48 4.48 0 0 0 3.5 9A4.48 4.48 0 0 1 1.5 8.5V8.7A4.48 4.48 0 0 0 5 13A4.48 4.48 0 0 1 3 13.5A4.48 4.48 0 0 0 7 17A10.66 10.66 0 0 1 1 19A12.94 12.94 0 0 0 8 21C16 21 20.5 13.5 20.5 7V6A10.66 10.66 0 0 0 23 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_tiktok != blank -%}
+            <a href="{{ section.settings.social_tiktok }}" class="social-icon" aria-label="TikTok" target="_blank" rel="noopener">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V6C15 4.34315 16.3431 3 18 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 12V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.show_newsletter -%}
+          <div class="footer-newsletter">
+            <h4 class="newsletter-heading">Stay Updated</h4>
+            <form method="post" action="/contact#contact_form" class="newsletter-form">
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <input type="email"
+                     name="contact[email]"
+                     placeholder="Enter your email"
+                     class="newsletter-input"
+                     required>
+              <button type="submit" class="newsletter-submit">Subscribe</button>
+            </form>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Footer Bottom {%- endcomment -%}
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+        {%- if section.settings.show_artist_name -%}
+          <span class="artist-name">Artist: Void</span>
+        {%- endif -%}
+      </p>
+      <div class="footer-payment-icons">
+        {%- for type in shop.enabled_payment_types -%}
+          {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .site-footer {
+    background-color: var(--color-background-dark);
+    border-top: 1px solid var(--color-border);
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+  }
+
+  .footer-container {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    color: var(--color-foreground);
+  }
+
+  .footer-text {
+    color: var(--color-foreground-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .footer-email a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer-email a:hover {
+    opacity: 0.8;
+  }
+
+  .footer-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer-menu-item {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-link {
+    color: var(--color-foreground-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--color-accent);
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .social-icon {
+    color: var(--color-foreground);
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .social-icon:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .footer-newsletter {
+    margin-top: 1rem;
+  }
+
+  .newsletter-heading {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--color-foreground);
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .newsletter-input {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: var(--color-input-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+  }
+
+  .newsletter-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .newsletter-submit {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-accent);
+    border: none;
+    color: var(--color-background);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+
+  .newsletter-submit:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-copyright {
+    color: var(--color-foreground-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .artist-name {
+    margin-left: 1rem;
+    color: var(--color-accent);
+  }
+
+  .footer-payment-icons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .payment-icon {
+    height: 24px;
+    width: auto;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  .payment-icon:hover {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_heading",
+      "label": "Brand Heading",
+      "default": "Suffer Pretty"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_description",
+      "label": "Brand Description",
+      "default": "Dark angel aesthetic. Tattoos, murals, and art by Void."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Show Email Address",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer Menu"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_twitter",
+      "label": "Twitter URL"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Signup",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Footer Bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_artist_name",
+      "label": "Show Artist Name (Void)",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

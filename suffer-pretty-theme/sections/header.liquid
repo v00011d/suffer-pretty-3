@@ -1,0 +1,400 @@
+<header class="site-header" data-section-id="{{ section.id }}" data-section-type="header">
+  <div class="header-container">
+    <div class="header-logo">
+      <a href="/" class="logo-link">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 200 }}"
+               alt="{{ shop.name }}"
+               class="logo-image"
+               width="200"
+               height="auto">
+        {%- else -%}
+          <span class="logo-text">SUFFER PRETTY</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
+    <button type="button" class="mobile-menu-toggle" aria-label="Open navigation menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    {%- comment -%} Main Navigation {%- endcomment -%}
+    <nav class="header-navigation" role="navigation">
+      <ul class="nav-menu">
+        {%- for link in section.settings.menu.links -%}
+          <li class="nav-item">
+            <a href="{{ link.url }}"
+               class="nav-link{% if link.active %} active{% endif %}">
+              {{ link.title }}
+            </a>
+            {%- if link.links.size > 0 -%}
+              <ul class="nav-submenu">
+                {%- for child_link in link.links -%}
+                  <li class="nav-subitem">
+                    <a href="{{ child_link.url }}" class="nav-sublink">
+                      {{ child_link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- comment -%} Header Icons {%- endcomment -%}
+    <div class="header-icons">
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{{ routes.account_url }}" class="header-icon" aria-label="Account">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 20C20 16.13 16.42 13 12 13C7.58 13 4 16.13 4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      <a href="{{ routes.search_url }}" class="header-icon" aria-label="Search">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="header-icon cart-icon" aria-label="Cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 2L7.17 4H3V6H21V4H16.83L15 2H9Z" fill="currentColor"/>
+          <path d="M21 6H3L5 20H19L21 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {%- if cart.item_count > 0 -%}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+
+  {%- comment -%} Mobile Menu Overlay {%- endcomment -%}
+  <div class="mobile-menu-overlay"></div>
+  <div class="mobile-menu">
+    <button type="button" class="mobile-menu-close" aria-label="Close navigation menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <nav class="mobile-navigation">
+      <ul class="mobile-nav-menu">
+        {%- for link in section.settings.menu.links -%}
+          <li class="mobile-nav-item">
+            <a href="{{ link.url }}" class="mobile-nav-link">
+              {{ link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+{% stylesheet %}
+  .site-header {
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1rem 0;
+  }
+
+  .header-container {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-logo {
+    flex: 0 0 auto;
+  }
+
+  .logo-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--color-foreground);
+    text-transform: uppercase;
+  }
+
+  .logo-image {
+    display: block;
+    max-width: 200px;
+    height: auto;
+  }
+
+  .header-navigation {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-menu {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-link {
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-accent);
+  }
+
+  .nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    padding: 1rem;
+    list-style: none;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    min-width: 200px;
+  }
+
+  .nav-item:hover .nav-submenu {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-subitem {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-sublink {
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav-sublink:hover {
+    color: var(--color-accent);
+  }
+
+  .header-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .header-icon {
+    color: var(--color-foreground);
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .header-icon:hover {
+    color: var(--color-accent);
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--color-accent);
+    color: var(--color-background);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .hamburger-line {
+    width: 25px;
+    height: 2px;
+    background-color: var(--color-foreground);
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 998;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 400px;
+    height: 100%;
+    background-color: var(--color-background);
+    z-index: 999;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+
+  .mobile-menu.active {
+    right: 0;
+  }
+
+  .mobile-menu-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .mobile-nav-menu {
+    list-style: none;
+    margin: 3rem 0 0 0;
+    padding: 0;
+  }
+
+  .mobile-nav-item {
+    margin-bottom: 1.5rem;
+  }
+
+  .mobile-nav-link {
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media screen and (max-width: 768px) {
+    .header-navigation {
+      display: none;
+    }
+
+    .mobile-menu-toggle {
+      display: flex;
+    }
+
+    .mobile-menu-overlay.active {
+      display: block;
+    }
+
+    .mobile-menu {
+      display: block;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class HeaderMenu {
+    constructor() {
+      this.menuToggle = document.querySelector('.mobile-menu-toggle');
+      this.menuClose = document.querySelector('.mobile-menu-close');
+      this.mobileMenu = document.querySelector('.mobile-menu');
+      this.menuOverlay = document.querySelector('.mobile-menu-overlay');
+
+      this.init();
+    }
+
+    init() {
+      if (this.menuToggle) {
+        this.menuToggle.addEventListener('click', () => this.openMenu());
+      }
+
+      if (this.menuClose) {
+        this.menuClose.addEventListener('click', () => this.closeMenu());
+      }
+
+      if (this.menuOverlay) {
+        this.menuOverlay.addEventListener('click', () => this.closeMenu());
+      }
+    }
+
+    openMenu() {
+      this.mobileMenu.classList.add('active');
+      this.menuOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    closeMenu() {
+      this.mobileMenu.classList.remove('active');
+      this.menuOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new HeaderMenu());
+  } else {
+    new HeaderMenu();
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

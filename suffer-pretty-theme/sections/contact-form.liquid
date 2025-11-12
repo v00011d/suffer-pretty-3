@@ -1,0 +1,185 @@
+<section class="contact-section" data-section-id="{{ section.id }}">
+  <div class="section-container">
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <h2 class="contact-heading">Get in Touch</h2>
+        <div class="info-item">
+          <h3 class="info-title">Email</h3>
+          <p class="info-text">
+            <a href="mailto:voidinkcreation@proton.me">voidinkcreation@proton.me</a>
+          </p>
+        </div>
+        {%- if section.settings.business_hours != blank -%}
+          <div class="info-item">
+            <h3 class="info-title">Business Hours</h3>
+            <div class="info-text">{{ section.settings.business_hours }}</div>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.address != blank -%}
+          <div class="info-item">
+            <h3 class="info-title">Location</h3>
+            <p class="info-text">{{ section.settings.address }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <form method="post" action="/contact#contact_form" class="contact-form">
+        <div class="form-group">
+          <label for="contact_name" class="form-label">Name *</label>
+          <input type="text" id="contact_name" name="contact[name]" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="contact_email" class="form-label">Email *</label>
+          <input type="email" id="contact_email" name="contact[email]" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="contact_subject" class="form-label">Subject *</label>
+          <input type="text" id="contact_subject" name="contact[subject]" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="contact_message" class="form-label">Message *</label>
+          <textarea id="contact_message" name="contact[body]" class="form-textarea" rows="6" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .contact-section {
+    padding: 4rem 0;
+  }
+
+  .contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+  }
+
+  .contact-info {
+    background-color: var(--color-background-dark);
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .contact-heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .info-item {
+    margin-bottom: 2rem;
+  }
+
+  .info-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .info-text {
+    color: var(--color-foreground);
+    line-height: 1.6;
+  }
+
+  .info-text a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .contact-form {
+    background-color: var(--color-background-dark);
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    display: block;
+    color: var(--color-foreground);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: var(--color-input-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    font-size: 1rem;
+    font-family: inherit;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .form-textarea {
+    resize: vertical;
+  }
+
+  .form-submit {
+    padding: 1rem 2.5rem;
+    background-color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+    color: var(--color-background);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .form-submit:hover {
+    background-color: transparent;
+    color: var(--color-accent);
+  }
+
+  @media screen and (max-width: 768px) {
+    .contact-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "business_hours",
+      "label": "Business Hours",
+      "default": "Monday - Friday: 11am - 11pm\nSaturday - Sunday: By appointment"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form"
+    }
+  ]
+}
+{% endschema %}

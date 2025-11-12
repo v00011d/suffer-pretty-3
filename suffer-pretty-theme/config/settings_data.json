@@ -1,0 +1,41 @@
+{
+  "current": {
+    "color_background": "#0a0a0a",
+    "color_foreground": "#e0e0e0",
+    "color_accent": "#8b7355",
+    "color_border": "#2a2a2a",
+    "type_header_font": "assistant_n4",
+    "type_body_font": "assistant_n4",
+    "font_size_base": 16,
+    "page_width": 1400,
+    "page_margin": 2,
+    "logo_width": 200,
+    "main_menu": "main-menu",
+    "footer_brand_heading": "Suffer Pretty",
+    "footer_brand_description": "Dark angel aesthetic. Tattoos, murals, and art by Void.",
+    "footer_show_email": true,
+    "footer_show_newsletter": true,
+    "cart_type": "drawer",
+    "product_show_vendor": false,
+    "product_show_sku": false,
+    "product_enable_zoom": true,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    }
+  },
+  "presets": {
+    "Default": {
+      "color_background": "#0a0a0a",
+      "color_foreground": "#e0e0e0",
+      "color_accent": "#8b7355",
+      "color_border": "#2a2a2a"
+    }
+  }
+}

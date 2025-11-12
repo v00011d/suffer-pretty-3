@@ -1,0 +1,163 @@
+<div class="product-card">
+  <a href="{{ product.url }}" class="product-link">
+    <div class="product-image-wrapper">
+      {%- if product.featured_media -%}
+        <img src="{{ product.featured_media | image_url: width: 600 }}"
+             alt="{{ product.featured_media.alt | default: product.title | escape }}"
+             class="product-image"
+             loading="lazy">
+      {%- else -%}
+        <div class="product-placeholder">
+          <span>[No Image]</span>
+        </div>
+      {%- endif -%}
+
+      {%- if product.compare_at_price > product.price -%}
+        <span class="product-badge sale-badge">Sale</span>
+      {%- endif -%}
+      {%- unless product.available -%}
+        <span class="product-badge sold-out-badge">Sold Out</span>
+      {%- endunless -%}
+    </div>
+
+    <div class="product-info">
+      <h3 class="product-title">{{ product.title }}</h3>
+
+      <div class="product-price">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="price-compare">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="price-current {% if product.compare_at_price > product.price %}price-sale{% endif %}">
+          {{ product.price | money }}
+        </span>
+      </div>
+
+      {%- if product.available -%}
+        <button type="button" class="quick-add-button" data-product-id="{{ product.id }}">
+          Quick Add
+        </button>
+      {%- endif -%}
+    </div>
+  </a>
+</div>
+
+<style>
+  .product-card {
+    background-color: var(--color-background-dark);
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-image-wrapper {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #1a1a1a;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.1);
+  }
+
+  .product-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: var(--color-foreground-muted);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 1;
+  }
+
+  .sale-badge {
+    background-color: #c41e3a;
+    color: white;
+  }
+
+  .sold-out-badge {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--color-foreground);
+  }
+
+  .product-info {
+    padding: 1.25rem;
+  }
+
+  .product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .product-price {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .price-compare {
+    color: var(--color-foreground-muted);
+    text-decoration: line-through;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .price-current {
+    color: var(--color-foreground);
+    font-weight: 600;
+  }
+
+  .price-sale {
+    color: var(--color-accent);
+  }
+
+  .quick-add-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  .quick-add-button:hover {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+</style>

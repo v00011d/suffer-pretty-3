@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "page-header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "Mural Booking"
+      }
+    },
+    "booking-form": {
+      "type": "booking-form",
+      "settings": {
+        "form_type": "mural"
+      }
+    },
+    "portfolio-gallery": {
+      "type": "portfolio-gallery",
+      "settings": {
+        "heading": "Mural Portfolio",
+        "gallery_type": "murals"
+      }
+    }
+  },
+  "order": [
+    "page-header",
+    "booking-form",
+    "portfolio-gallery"
+  ]
+}

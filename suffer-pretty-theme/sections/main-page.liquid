@@ -1,0 +1,79 @@
+<section class="page-section" data-section-id="{{ section.id }}">
+  <div class="section-container">
+    <div class="page-content">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .page-section {
+    padding: 3rem 0;
+  }
+
+  .page-content {
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--color-foreground);
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+
+  .page-content h2,
+  .page-content h3,
+  .page-content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-foreground);
+  }
+
+  .page-content h2 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .page-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .page-content p {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-content ul,
+  .page-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+  }
+
+  .page-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-content a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .page-content a:hover {
+    text-decoration: none;
+  }
+
+  .page-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 2rem 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page",
+  "presets": [
+    {
+      "name": "Page"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,125 @@
+<style>
+  :root {
+    /* Colors */
+    --color-background: #0a0a0a;
+    --color-background-dark: #121212;
+    --color-foreground: #e0e0e0;
+    --color-foreground-muted: #a0a0a0;
+    --color-accent: #8b7355;
+    --color-accent-hover: #9d8566;
+    --color-border: #2a2a2a;
+    --color-input-background: #1a1a1a;
+
+    /* Spacing */
+    --page-width: 1400px;
+    --page-margin: clamp(1rem, 5vw, 3rem);
+
+    /* Typography */
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+    /* Transitions */
+    --transition-speed: 0.3s;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  .skip-to-content-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem;
+    background-color: var(--color-accent);
+    color: var(--color-background);
+    text-decoration: none;
+  }
+
+  .skip-to-content-link:focus {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .section-container {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-hover);
+  }
+
+  /* Selection Styling */
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  ::-moz-selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+</style>

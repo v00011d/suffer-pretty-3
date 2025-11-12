@@ -1,0 +1,273 @@
+<section class="product-section" data-section-id="{{ section.id }}">
+  <div class="section-container">
+    <div class="product-wrapper">
+      <div class="product-gallery">
+        {%- if product.featured_media -%}
+          <div class="product-main-image">
+            <img src="{{ product.featured_media | image_url: width: 800 }}"
+                 alt="{{ product.featured_media.alt | escape }}"
+                 class="main-image">
+          </div>
+        {%- endif -%}
+
+        {%- if product.media.size > 1 -%}
+          <div class="product-thumbnails">
+            {%- for media in product.media limit: 6 -%}
+              <button type="button" class="thumbnail-button" data-media-id="{{ media.id }}">
+                <img src="{{ media | image_url: width: 200 }}"
+                     alt="{{ media.alt | escape }}"
+                     class="thumbnail-image">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-info">
+        <h1 class="product-title">{{ product.title }}</h1>
+
+        <div class="product-price">
+          {%- if product.compare_at_price > product.price -%}
+            <span class="price-compare">{{ product.compare_at_price | money }}</span>
+          {%- endif -%}
+          <span class="price-current">{{ product.price | money }}</span>
+        </div>
+
+        {%- if product.description != blank -%}
+          <div class="product-description">
+            {{ product.description }}
+          </div>
+        {%- endif -%}
+
+        <form method="post" action="/cart/add" class="product-form">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="product-option">
+                <label class="option-label">{{ option.name }}</label>
+                <div class="option-values">
+                  {%- for value in option.values -%}
+                    <input type="radio"
+                           name="options[{{ option.name }}]"
+                           value="{{ value }}"
+                           id="option-{{ option.position }}-{{ forloop.index }}"
+                           {% if option.selected_value == value %}checked{% endif %}>
+                    <label for="option-{{ option.position }}-{{ forloop.index }}" class="option-value">
+                      {{ value }}
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <div class="product-quantity">
+            <label for="quantity" class="quantity-label">Quantity</label>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
+          </div>
+
+          <button type="submit" class="add-to-cart-button" {% unless product.available %}disabled{% endunless %}>
+            {%- if product.available -%}
+              Add to Cart
+            {%- else -%}
+              Sold Out
+            {%- endif -%}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-section {
+    padding: 3rem 0;
+  }
+
+  .product-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .product-gallery {
+    position: sticky;
+    top: 100px;
+  }
+
+  .product-main-image {
+    margin-bottom: 1rem;
+  }
+
+  .main-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .product-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .thumbnail-button {
+    border: 2px solid var(--color-border);
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+
+  .thumbnail-button:hover {
+    border-color: var(--color-accent);
+  }
+
+  .thumbnail-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .product-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .price-compare {
+    color: var(--color-foreground-muted);
+    text-decoration: line-through;
+    margin-right: 0.5rem;
+  }
+
+  .price-current {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .product-description {
+    color: var(--color-foreground);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .product-option {
+    margin-bottom: 1.5rem;
+  }
+
+  .option-label {
+    display: block;
+    color: var(--color-foreground);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  .option-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .option-values input[type="radio"] {
+    display: none;
+  }
+
+  .option-value {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .option-values input[type="radio"]:checked + .option-value {
+    border-color: var(--color-accent);
+    background-color: rgba(139, 115, 85, 0.1);
+  }
+
+  .option-value:hover {
+    border-color: var(--color-accent);
+  }
+
+  .product-quantity {
+    margin-bottom: 1.5rem;
+  }
+
+  .quantity-label {
+    display: block;
+    color: var(--color-foreground);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  .quantity-input {
+    width: 100px;
+    padding: 0.75rem;
+    background-color: var(--color-input-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    font-size: 1rem;
+  }
+
+  .add-to-cart-button {
+    width: 100%;
+    padding: 1.25rem;
+    background-color: var(--color-accent);
+    border: 2px solid var(--color-accent);
+    color: var(--color-background);
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .add-to-cart-button:hover:not(:disabled) {
+    background-color: transparent;
+    color: var(--color-accent);
+  }
+
+  .add-to-cart-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media screen and (max-width: 768px) {
+    .product-wrapper {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .product-gallery {
+      position: static;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product",
+  "presets": [
+    {
+      "name": "Product"
+    }
+  ]
+}
+{% endschema %}

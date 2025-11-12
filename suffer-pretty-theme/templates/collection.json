@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "collection-header": {
+      "type": "collection-header",
+      "settings": {}
+    },
+    "product-grid": {
+      "type": "product-grid",
+      "settings": {
+        "products_per_row": 3,
+        "show_filters": true
+      }
+    }
+  },
+  "order": [
+    "collection-header",
+    "product-grid"
+  ]
+}

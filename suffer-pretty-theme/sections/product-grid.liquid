@@ -1,0 +1,177 @@
+<section class="product-grid-section" data-section-id="{{ section.id }}">
+  <div class="section-container">
+    {%- if section.settings.show_filters -%}
+      <div class="collection-toolbar">
+        <div class="filter-wrapper">
+          {%- comment -%} Filters can be expanded in future {%- endcomment -%}
+        </div>
+        <div class="sort-wrapper">
+          <label for="sort-by" class="sort-label">Sort by:</label>
+          <select id="sort-by" class="sort-select">
+            <option value="manual">Featured</option>
+            <option value="best-selling">Best selling</option>
+            <option value="title-ascending">Alphabetically, A-Z</option>
+            <option value="title-descending">Alphabetically, Z-A</option>
+            <option value="price-ascending">Price, low to high</option>
+            <option value="price-descending">Price, high to low</option>
+            <option value="created-descending">Date, new to old</option>
+            <option value="created-ascending">Date, old to new</option>
+          </select>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="product-grid" data-products-per-row="{{ section.settings.products_per_row }}">
+      {%- for product in collection.products -%}
+        {%- render 'product-card', product: product -%}
+      {%- else -%}
+        <p class="empty-collection">No products found in this collection.</p>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      <div class="pagination">
+        {%- if paginate.previous -%}
+          <a href="{{ paginate.previous.url }}" class="pagination-link">← Previous</a>
+        {%- endif -%}
+        {%- for part in paginate.parts -%}
+          {%- if part.is_link -%}
+            <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+          {%- else -%}
+            <span class="pagination-current">{{ part.title }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if paginate.next -%}
+          <a href="{{ paginate.next.url }}" class="pagination-link">Next →</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-grid-section {
+    padding: 3rem 0;
+  }
+
+  .collection-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sort-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sort-label {
+    color: var(--color-foreground);
+    font-size: 0.95rem;
+  }
+
+  .sort-select {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-input-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .product-grid[data-products-per-row="4"] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .empty-collection {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-foreground-muted);
+    padding: 3rem;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+  }
+
+  .pagination-link,
+  .pagination-current {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .pagination-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .pagination-current {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .product-grid,
+    .product-grid[data-products-per-row="4"] {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .product-grid,
+    .product-grid[data-products-per-row="4"] {
+      grid-template-columns: 1fr;
+    }
+
+    .collection-toolbar {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Products per Row",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show Filters & Sort",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "page-header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "Catalog"
+      }
+    },
+    "category-grid": {
+      "type": "category-grid",
+      "settings": {}
+    }
+  },
+  "order": [
+    "page-header",
+    "category-grid"
+  ]
+}
