@@ -1,0 +1,474 @@
+{% doc %}
+  @prompt
+    i want a long section split in 2 
+    for my paintings and my merchandize basically, i think you can remove the header and the description, can you enclose the two section with a border for each , like not only i want to see a split in the middle but i want to see 2 floating sections aswell , can you add me more function in the buttons ,like when the mouse go over them, can the text for each of them enlight in white and get a tiny bit bigger , 
+    and can i get a transparency function aswell for the button section, actually can the whole entire section enlight and enlarge a tiny bit instead of the buttons 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-split-section-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.gap_between_columns }}px;
+    width: 100%;
+    padding: {{ block.settings.outer_padding }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-split-section__column-{{ ai_gen_id }} {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: {{ block.settings.content_alignment }};
+    align-items: center;
+    padding: {{ block.settings.padding_desktop }}px;
+    position: relative;
+    overflow: hidden;
+    min-height: {{ block.settings.section_height }}px;
+    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    {% if block.settings.enable_shadow %}
+      box-shadow: {{ block.settings.shadow_horizontal }}px {{ block.settings.shadow_vertical }}px {{ block.settings.shadow_blur }}px {{ block.settings.shadow_color }};
+    {% endif %}
+  }
+
+  .ai-split-section__column-{{ ai_gen_id }}:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+    {% if block.settings.enable_shadow %}
+      box-shadow: {{ block.settings.shadow_horizontal }}px {{ block.settings.shadow_vertical | times: 1.5 }}px {{ block.settings.shadow_blur | times: 1.5 }}px {{ block.settings.shadow_color }};
+    {% endif %}
+  }
+
+  .ai-split-section__column-{{ ai_gen_id }}:first-child {
+    background-color: {{ block.settings.left_bg_color }};
+  }
+
+  .ai-split-section__column-{{ ai_gen_id }}:last-child {
+    background-color: {{ block.settings.right_bg_color }};
+  }
+
+  .ai-split-section__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-split-section__column-{{ ai_gen_id }}:hover .ai-split-section__image-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .ai-split-section__image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-split-section__image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+    opacity: 0.3;
+  }
+
+  .ai-split-section__content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .ai-split-section__button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 14px 32px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    opacity: {{ block.settings.button_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+  }
+
+  .ai-split-section__column-{{ ai_gen_id }}:hover .ai-split-section__button-{{ ai_gen_id }} {
+    color: #ffffff;
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-split-section-{{ ai_gen_id }} {
+      flex-direction: column;
+      padding: {{ block.settings.outer_padding_mobile }}px;
+    }
+
+    .ai-split-section__column-{{ ai_gen_id }} {
+      min-height: {{ block.settings.mobile_column_height }}px;
+      padding: {{ block.settings.padding_mobile }}px;
+    }
+
+    .ai-split-section__column-{{ ai_gen_id }}:hover {
+      transform: scale(1.01);
+    }
+  }
+{% endstyle %}
+
+<div class="ai-split-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <a href="{{ block.settings.left_button_link }}" class="ai-split-section__column-{{ ai_gen_id }}">
+    {% if block.settings.left_image %}
+      <img
+        src="{{ block.settings.left_image | image_url: width: 1500 }}"
+        alt="{{ block.settings.left_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.left_image.width }}"
+        height="{{ block.settings.left_image.height }}"
+        class="ai-split-section__image-{{ ai_gen_id }}"
+      >
+    {% else %}
+      <div class="ai-split-section__image-placeholder-{{ ai_gen_id }}">
+        {{ 'image' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+
+    <div class="ai-split-section__content-{{ ai_gen_id }}">
+      {% if block.settings.left_button_text != blank %}
+        <span class="ai-split-section__button-{{ ai_gen_id }}">
+          {{ block.settings.left_button_text }}
+        </span>
+      {% endif %}
+    </div>
+  </a>
+
+  <a href="{{ block.settings.right_button_link }}" class="ai-split-section__column-{{ ai_gen_id }}">
+    {% if block.settings.right_image %}
+      <img
+        src="{{ block.settings.right_image | image_url: width: 1500 }}"
+        alt="{{ block.settings.right_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.right_image.width }}"
+        height="{{ block.settings.right_image.height }}"
+        class="ai-split-section__image-{{ ai_gen_id }}"
+      >
+    {% else %}
+      <div class="ai-split-section__image-placeholder-{{ ai_gen_id }}">
+        {{ 'image' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+
+    <div class="ai-split-section__content-{{ ai_gen_id }}">
+      {% if block.settings.right_button_text != blank %}
+        <span class="ai-split-section__button-{{ ai_gen_id }}">
+          {{ block.settings.right_button_text }}
+        </span>
+      {% endif %}
+    </div>
+  </a>
+</div>
+
+{% schema %}
+{
+  "name": "Split section",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Desktop height",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "mobile_column_height",
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Mobile column height",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "gap_between_columns",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between columns",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "outer_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Outer padding desktop",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "outer_padding_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Outer padding mobile",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_desktop",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Inner padding desktop",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_mobile",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Inner padding mobile",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Border and shadow"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shadow",
+      "label": "Enable shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "shadow_horizontal",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow horizontal",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "shadow_vertical",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Shadow vertical",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Shadow blur",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "default": "#00000026"
+    },
+    {
+      "type": "header",
+      "content": "Left column"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "left_bg_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "text",
+      "id": "left_button_text",
+      "label": "Button text",
+      "default": "View paintings"
+    },
+    {
+      "type": "url",
+      "id": "left_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Right column"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "right_bg_color",
+      "label": "Background color",
+      "default": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "right_button_text",
+      "label": "Button text",
+      "default": "Shop merch"
+    },
+    {
+      "type": "url",
+      "id": "right_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split section"
+    }
+  ]
+}
+{% endschema %}

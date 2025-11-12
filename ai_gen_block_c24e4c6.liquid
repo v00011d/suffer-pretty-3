@@ -1,0 +1,972 @@
+{% doc %}
+  @prompt
+    make me a tattoo form to book tattoo appointment with all these box to fill out : 
+    Name (first name) (last name) 
+    phone number: (fill box)
+    email: (fill box)
+    
+    set price:(1 hour 200)(2 hour 400) 
+     (half day 600 ) ( full day 900) , can you add , 
+    describe your idea :
+    (box to fill)
+    upload reference image 
+    (box to fill) 
+    , can you create a calender that i can update manually regarding my available dates and time , why did you delete everything else lmao , like god damn, and can you make the calendar all year round , and make it like super efficient , honestly forget about the '' your available date ''
+    instead put this :
+    
+    After submitting your project, i will review and send you a confirmation email with further information. Usually it takes 1 to 5 days, check your email regularly.
+    
+    and add this too :
+    
+    When the project is confirmed i require a non-refundable deposit between 60-200 CAD by E-Transfer. The link will be sent through email thank you 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-tattoo-booking-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .ai-tattoo-booking__container-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    padding: 40px;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-tattoo-booking__heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 24px;
+    font-size: {{ block.settings.heading_size }}px;
+    text-align: center;
+  }
+
+  .ai-tattoo-booking__subheading-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    margin: 0 0 32px;
+    text-align: center;
+    font-size: {{ block.settings.text_size }}px;
+  }
+
+  .ai-tattoo-booking__layout-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .ai-tattoo-booking__form-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .ai-tattoo-booking__row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .ai-tattoo-booking__field-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ai-tattoo-booking__label-{{ ai_gen_id }} {
+    color: {{ block.settings.label_color }};
+    font-size: {{ block.settings.label_size }}px;
+    font-weight: 500;
+  }
+
+  .ai-tattoo-booking__input-{{ ai_gen_id }} {
+    padding: 12px 16px;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_background }};
+    color: {{ block.settings.input_text_color }};
+    font-size: 14px;
+  }
+
+  .ai-tattoo-booking__input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_border_color }};
+  }
+
+  .ai-tattoo-booking__textarea-{{ ai_gen_id }} {
+    padding: 12px 16px;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_background }};
+    color: {{ block.settings.input_text_color }};
+    font-size: 14px;
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .ai-tattoo-booking__textarea-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_border_color }};
+  }
+
+  .ai-tattoo-booking__file-input-{{ ai_gen_id }} {
+    padding: 12px 16px;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_background }};
+    color: {{ block.settings.input_text_color }};
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .ai-tattoo-booking__file-input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_border_color }};
+  }
+
+  .ai-tattoo-booking__file-input-{{ ai_gen_id }}::file-selector-button {
+    padding: 8px 16px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 12px;
+    font-size: 14px;
+  }
+
+  .ai-tattoo-booking__radio-group-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ai-tattoo-booking__radio-option-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_background }};
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ai-tattoo-booking__radio-option-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.input_hover_background }};
+  }
+
+  .ai-tattoo-booking__radio-option-{{ ai_gen_id }} input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .ai-tattoo-booking__radio-label-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    cursor: pointer;
+    flex-grow: 1;
+  }
+
+  .ai-tattoo-booking__radio-price-{{ ai_gen_id }} {
+    color: {{ block.settings.price_color }};
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .ai-tattoo-booking__calendar-sidebar-{{ ai_gen_id }} {
+    position: sticky;
+    top: 20px;
+    background-color: {{ block.settings.calendar_bg }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 24px;
+  }
+
+  .ai-tattoo-booking__calendar-header-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .ai-tattoo-booking__calendar-title-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .ai-tattoo-booking__calendar-nav-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ai-tattoo-booking__calendar-nav-btn-{{ ai_gen_id }} {
+    background: none;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-tattoo-booking__calendar-nav-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.input_hover_background }};
+  }
+
+  .ai-tattoo-booking__month-year-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 16px;
+    color: {{ block.settings.text_color }};
+    font-weight: 500;
+  }
+
+  .ai-tattoo-booking__calendar-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .ai-tattoo-booking__calendar-day-header-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: {{ block.settings.label_color }};
+    padding: 8px 4px;
+  }
+
+  .ai-tattoo-booking__calendar-day-{{ ai_gen_id }} {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: {{ block.settings.text_color }};
+    transition: all 0.2s ease;
+  }
+
+  .ai-tattoo-booking__calendar-day-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.input_hover_background }};
+  }
+
+  .ai-tattoo-booking__calendar-day--available-{{ ai_gen_id }} {
+    background-color: {{ block.settings.available_day_bg }};
+    color: {{ block.settings.available_day_text }};
+    font-weight: 600;
+  }
+
+  .ai-tattoo-booking__calendar-day--available-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.available_day_hover }};
+  }
+
+  .ai-tattoo-booking__calendar-day--unavailable-{{ ai_gen_id }} {
+    color: {{ block.settings.unavailable_day_text }};
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  .ai-tattoo-booking__calendar-day--empty-{{ ai_gen_id }} {
+    cursor: default;
+  }
+
+  .ai-tattoo-booking__info-box-{{ ai_gen_id }} {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: {{ block.settings.info_box_bg }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    border-left: 4px solid {{ block.settings.info_box_accent }};
+  }
+
+  .ai-tattoo-booking__info-title-{{ ai_gen_id }} {
+    font-size: 16px;
+    font-weight: 600;
+    color: {{ block.settings.heading_color }};
+    margin-bottom: 12px;
+  }
+
+  .ai-tattoo-booking__info-text-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .ai-tattoo-booking__info-text-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-tattoo-booking__button-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 8px;
+  }
+
+  .ai-tattoo-booking__button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  .ai-tattoo-booking__success-{{ ai_gen_id }} {
+    color: {{ block.settings.success_color }};
+    padding: 12px;
+    background-color: {{ block.settings.success_bg_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .ai-tattoo-booking__error-{{ ai_gen_id }} {
+    color: {{ block.settings.error_color }};
+    padding: 12px;
+    background-color: {{ block.settings.error_bg_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    margin-top: 16px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-tattoo-booking__container-{{ ai_gen_id }} {
+      padding: 24px;
+    }
+
+    .ai-tattoo-booking__layout-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-tattoo-booking__calendar-sidebar-{{ ai_gen_id }} {
+      position: static;
+      order: -1;
+    }
+
+    .ai-tattoo-booking__row-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<tattoo-booking-{{ ai_gen_id }} class="ai-tattoo-booking-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-tattoo-booking__container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-tattoo-booking__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    {% if block.settings.subheading != blank %}
+      <div class="ai-tattoo-booking__subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>
+    {% endif %}
+
+    <div class="ai-tattoo-booking__layout-{{ ai_gen_id }}">
+      <div>
+        {% form 'contact' %}
+          <input type="hidden" name="contact[form_type]" value="tattoo_appointment">
+          <input type="hidden" name="contact[selected_date]" id="selected-date-{{ ai_gen_id }}">
+          
+          <div class="ai-tattoo-booking__form-{{ ai_gen_id }}">
+            <div class="ai-tattoo-booking__row-{{ ai_gen_id }}">
+              <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+                <label class="ai-tattoo-booking__label-{{ ai_gen_id }}" for="ai-tattoo-first-name-{{ ai_gen_id }}">
+                  First name
+                </label>
+                <input
+                  type="text"
+                  id="ai-tattoo-first-name-{{ ai_gen_id }}"
+                  name="contact[first_name]"
+                  class="ai-tattoo-booking__input-{{ ai_gen_id }}"
+                  required
+                  aria-required="true"
+                >
+              </div>
+
+              <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+                <label class="ai-tattoo-booking__label-{{ ai_gen_id }}" for="ai-tattoo-last-name-{{ ai_gen_id }}">
+                  Last name
+                </label>
+                <input
+                  type="text"
+                  id="ai-tattoo-last-name-{{ ai_gen_id }}"
+                  name="contact[last_name]"
+                  class="ai-tattoo-booking__input-{{ ai_gen_id }}"
+                  required
+                  aria-required="true"
+                >
+              </div>
+            </div>
+
+            <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+              <label class="ai-tattoo-booking__label-{{ ai_gen_id }}" for="ai-tattoo-phone-{{ ai_gen_id }}">
+                Phone number
+              </label>
+              <input
+                type="tel"
+                id="ai-tattoo-phone-{{ ai_gen_id }}"
+                name="contact[phone]"
+                class="ai-tattoo-booking__input-{{ ai_gen_id }}"
+                required
+                aria-required="true"
+              >
+            </div>
+
+            <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+              <label class="ai-tattoo-booking__label-{{ ai_gen_id }}" for="ai-tattoo-email-{{ ai_gen_id }}">
+                Email
+              </label>
+              <input
+                type="email"
+                id="ai-tattoo-email-{{ ai_gen_id }}"
+                name="contact[email]"
+                class="ai-tattoo-booking__input-{{ ai_gen_id }}"
+                required
+                aria-required="true"
+                {% if form.errors %}
+                  aria-invalid="true"
+                  aria-describedby="ai-tattoo-booking-error-{{ ai_gen_id }}"
+                {% endif %}
+                {% if form.posted_successfully? %}
+                  aria-describedby="ai-tattoo-booking-success-{{ ai_gen_id }}"
+                {% endif %}
+              >
+            </div>
+
+            <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+              <label class="ai-tattoo-booking__label-{{ ai_gen_id }}" for="ai-tattoo-description-{{ ai_gen_id }}">
+                Describe your idea
+              </label>
+              <textarea
+                id="ai-tattoo-description-{{ ai_gen_id }}"
+                name="contact[description]"
+                class="ai-tattoo-booking__textarea-{{ ai_gen_id }}"
+                placeholder="Tell us about your tattoo idea, placement, size, style, etc."
+              ></textarea>
+            </div>
+
+            <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+              <label class="ai-tattoo-booking__label-{{ ai_gen_id }}" for="ai-tattoo-reference-{{ ai_gen_id }}">
+                Upload reference image
+              </label>
+              <input
+                type="file"
+                id="ai-tattoo-reference-{{ ai_gen_id }}"
+                name="contact[reference_image]"
+                class="ai-tattoo-booking__file-input-{{ ai_gen_id }}"
+                accept="image/*"
+              >
+            </div>
+
+            <div class="ai-tattoo-booking__field-{{ ai_gen_id }}">
+              <label class="ai-tattoo-booking__label-{{ ai_gen_id }}">
+                Set price
+              </label>
+              <div class="ai-tattoo-booking__radio-group-{{ ai_gen_id }}">
+                <label class="ai-tattoo-booking__radio-option-{{ ai_gen_id }}">
+                  <input type="radio" name="contact[session_duration]" value="1 hour - $200" required>
+                  <span class="ai-tattoo-booking__radio-label-{{ ai_gen_id }}">1 hour</span>
+                  <span class="ai-tattoo-booking__radio-price-{{ ai_gen_id }}">$200</span>
+                </label>
+
+                <label class="ai-tattoo-booking__radio-option-{{ ai_gen_id }}">
+                  <input type="radio" name="contact[session_duration]" value="2 hours - $400">
+                  <span class="ai-tattoo-booking__radio-label-{{ ai_gen_id }}">2 hours</span>
+                  <span class="ai-tattoo-booking__radio-price-{{ ai_gen_id }}">$400</span>
+                </label>
+
+                <label class="ai-tattoo-booking__radio-option-{{ ai_gen_id }}">
+                  <input type="radio" name="contact[session_duration]" value="Half day - $600">
+                  <span class="ai-tattoo-booking__radio-label-{{ ai_gen_id }}">Half day</span>
+                  <span class="ai-tattoo-booking__radio-price-{{ ai_gen_id }}">$600</span>
+                </label>
+
+                <label class="ai-tattoo-booking__radio-option-{{ ai_gen_id }}">
+                  <input type="radio" name="contact[session_duration]" value="Full day - $900">
+                  <span class="ai-tattoo-booking__radio-label-{{ ai_gen_id }}">Full day</span>
+                  <span class="ai-tattoo-booking__radio-price-{{ ai_gen_id }}">$900</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="ai-tattoo-booking__button-{{ ai_gen_id }}">
+              {{ block.settings.button_text }}
+            </button>
+
+            {% if form.posted_successfully? %}
+              <div id="ai-tattoo-booking-success-{{ ai_gen_id }}" class="ai-tattoo-booking__success-{{ ai_gen_id }}">
+                {{ block.settings.success_message }}
+              </div>
+            {% endif %}
+
+            {% if form.errors %}
+              <div id="ai-tattoo-booking-error-{{ ai_gen_id }}" class="ai-tattoo-booking__error-{{ ai_gen_id }}">
+                {% for field in form.errors %}
+                  <div>{{ field }}: {{ form.errors.messages[field] }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endform %}
+      </div>
+
+      <div class="ai-tattoo-booking__calendar-sidebar-{{ ai_gen_id }}">
+        <div class="ai-tattoo-booking__calendar-header-{{ ai_gen_id }}">
+          <div class="ai-tattoo-booking__calendar-title-{{ ai_gen_id }}">Available Dates</div>
+          <div class="ai-tattoo-booking__calendar-nav-{{ ai_gen_id }}">
+            <button class="ai-tattoo-booking__calendar-nav-btn-{{ ai_gen_id }}" data-action="prev">‹</button>
+            <button class="ai-tattoo-booking__calendar-nav-btn-{{ ai_gen_id }}" data-action="next">›</button>
+          </div>
+        </div>
+        <div class="ai-tattoo-booking__month-year-{{ ai_gen_id }}" data-month-year></div>
+        <div class="ai-tattoo-booking__calendar-grid-{{ ai_gen_id }}" data-calendar-grid></div>
+        
+        <div class="ai-tattoo-booking__info-box-{{ ai_gen_id }}">
+          <div class="ai-tattoo-booking__info-title-{{ ai_gen_id }}">{{ block.settings.info_title_1 }}</div>
+          <div class="ai-tattoo-booking__info-text-{{ ai_gen_id }}">{{ block.settings.info_text_1 }}</div>
+        </div>
+
+        <div class="ai-tattoo-booking__info-box-{{ ai_gen_id }}">
+          <div class="ai-tattoo-booking__info-title-{{ ai_gen_id }}">{{ block.settings.info_title_2 }}</div>
+          <div class="ai-tattoo-booking__info-text-{{ ai_gen_id }}">{{ block.settings.info_text_2 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</tattoo-booking-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class TattooBooking{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.currentDate = new Date();
+      this.availableDates = {{ block.settings.available_dates | split: ',' | json }}.map(d => d.trim()).filter(d => d);
+    }
+
+    connectedCallback() {
+      this.calendarGrid = this.querySelector('[data-calendar-grid]');
+      this.monthYearDisplay = this.querySelector('[data-month-year]');
+      this.prevBtn = this.querySelector('[data-action="prev"]');
+      this.nextBtn = this.querySelector('[data-action="next"]');
+      this.selectedDateInput = this.querySelector('#selected-date-{{ ai_gen_id }}');
+
+      this.prevBtn.addEventListener('click', () => this.changeMonth(-1));
+      this.nextBtn.addEventListener('click', () => this.changeMonth(1));
+
+      this.renderCalendar();
+    }
+
+    changeMonth(delta) {
+      this.currentDate.setMonth(this.currentDate.getMonth() + delta);
+      this.renderCalendar();
+    }
+
+    isDateAvailable(dateStr) {
+      return this.availableDates.some(availDate => {
+        const normalized = availDate.toLowerCase().replace(/\s+/g, '');
+        const checkDate = dateStr.toLowerCase().replace(/\s+/g, '');
+        return normalized.includes(checkDate) || checkDate.includes(normalized);
+      });
+    }
+
+    renderCalendar() {
+      const year = this.currentDate.getFullYear();
+      const month = this.currentDate.getMonth();
+      
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      this.monthYearDisplay.textContent = monthNames[month] + ' ' + year;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let html = '';
+      const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      dayHeaders.forEach(day => {
+        html += '<div class="ai-tattoo-booking__calendar-day-header-{{ ai_gen_id }}">' + day + '</div>';
+      });
+
+      for (let i = 0; i < firstDay; i++) {
+        html += '<div class="ai-tattoo-booking__calendar-day-{{ ai_gen_id }} ai-tattoo-booking__calendar-day--empty-{{ ai_gen_id }}"></div>';
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = monthNames[month] + ' ' + day + ', ' + year;
+        const shortDate = (month + 1) + '/' + day + '/' + year;
+        const isAvailable = this.isDateAvailable(dateStr) || this.isDateAvailable(shortDate);
+        
+        const availableClass = isAvailable 
+          ? 'ai-tattoo-booking__calendar-day--available-{{ ai_gen_id }}'
+          : 'ai-tattoo-booking__calendar-day--unavailable-{{ ai_gen_id }}';
+        
+        html += '<div class="ai-tattoo-booking__calendar-day-{{ ai_gen_id }} ' + availableClass + '" data-date="' + dateStr + '" data-available="' + isAvailable + '">' + day + '</div>';
+      }
+
+      this.calendarGrid.innerHTML = html;
+
+      this.querySelectorAll('.ai-tattoo-booking__calendar-day--available-{{ ai_gen_id }}').forEach(dayEl => {
+        dayEl.addEventListener('click', (e) => {
+          const selectedDate = e.target.getAttribute('data-date');
+          this.selectedDateInput.value = selectedDate;
+          
+          this.querySelectorAll('.ai-tattoo-booking__calendar-day-{{ ai_gen_id }}').forEach(d => {
+            d.style.outline = 'none';
+          });
+          e.target.style.outline = '2px solid {{ block.settings.button_color }}';
+        });
+      });
+    }
+  }
+
+  customElements.define('tattoo-booking-{{ ai_gen_id }}', TattooBooking{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Tattoo booking form",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Book Your Tattoo Appointment"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Fill out the form and select an available date"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Submit Booking Request"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you! We'll contact you soon to confirm your appointment."
+    },
+    {
+      "type": "header",
+      "content": "Information boxes"
+    },
+    {
+      "type": "text",
+      "id": "info_title_1",
+      "label": "Info box 1 title",
+      "default": "Review Process"
+    },
+    {
+      "type": "textarea",
+      "id": "info_text_1",
+      "label": "Info box 1 text",
+      "default": "After submitting your project, I will review and send you a confirmation email with further information. Usually it takes 1 to 5 days, check your email regularly."
+    },
+    {
+      "type": "text",
+      "id": "info_title_2",
+      "label": "Info box 2 title",
+      "default": "Deposit Required"
+    },
+    {
+      "type": "textarea",
+      "id": "info_text_2",
+      "label": "Info box 2 text",
+      "default": "When the project is confirmed I require a non-refundable deposit between 60-200 CAD by E-Transfer. The link will be sent through email thank you."
+    },
+    {
+      "type": "header",
+      "content": "Available dates"
+    },
+    {
+      "type": "textarea",
+      "id": "available_dates",
+      "label": "Available dates",
+      "info": "Enter dates separated by commas. Format: January 15, 2025 or 1/15/2025",
+      "default": "January 15, 2025, January 22, 2025, February 5, 2025, February 12, 2025"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Info boxes"
+    },
+    {
+      "type": "color",
+      "id": "info_box_bg",
+      "label": "Background",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "info_box_accent",
+      "label": "Accent border",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Calendar"
+    },
+    {
+      "type": "color",
+      "id": "calendar_bg",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "available_day_bg",
+      "label": "Available day background",
+      "default": "#d4f4e8"
+    },
+    {
+      "type": "color",
+      "id": "available_day_text",
+      "label": "Available day text",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "available_day_hover",
+      "label": "Available day hover",
+      "default": "#b3e8d6"
+    },
+    {
+      "type": "color",
+      "id": "unavailable_day_text",
+      "label": "Unavailable day text",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Input fields"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Border",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "input_focus_border_color",
+      "label": "Focus border",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "input_hover_background",
+      "label": "Hover background",
+      "default": "#fafafa"
+    },
+    {
+      "type": "range",
+      "id": "input_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Hover background",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success text",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "success_bg_color",
+      "label": "Success background",
+      "default": "#d4f4e8"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error text",
+      "default": "#D82C0D"
+    },
+    {
+      "type": "color",
+      "id": "error_bg_color",
+      "label": "Error background",
+      "default": "#ffd4cc"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Label size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Container border radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Calendar border radius",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tattoo booking form"
+    }
+  ]
+}
+{% endschema %}
