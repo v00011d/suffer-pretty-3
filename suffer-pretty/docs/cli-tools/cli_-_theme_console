@@ -1,0 +1,95 @@
+---
+title: theme console
+description: >-
+  Starts the Shopify Liquid REPL (read-eval-print loop) tool. This tool provides
+  an interactive terminal interface for evaluating Liquid code and exploring
+  Liquid objects, filters, and tags using real store data.
+
+    You can also provide context to the console using a URL, as some Liquid objects are context-specific
+api_name: shopify-cli
+source_url:
+  html: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-console'
+  md: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-console.md'
+---
+
+# theme consolecommand
+
+Starts the Shopify Liquid REPL (read-eval-print loop) tool. This tool provides an interactive terminal interface for evaluating Liquid code and exploring Liquid objects, filters, and tags using real store data.
+
+You can also provide context to the console using a URL, as some Liquid objects are context-specific
+
+## Flags
+
+The following flags are available for the `theme console` command:
+
+* \--no-color
+
+  env: SHOPIFY\_FLAG\_NO\_COLOR
+
+  Disable color output.
+
+* \--password \<value>
+
+  string
+
+  env: SHOPIFY\_CLI\_THEME\_TOKEN
+
+  Password generated from the Theme Access app.
+
+* \--path \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_PATH
+
+  The path where you want to run the command. Defaults to the current working directory.
+
+* \--store-password \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_STORE\_PASSWORD
+
+  The password for storefronts with password protection.
+
+* \--url \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_URL
+
+  The url to be used as context
+
+* \--verbose
+
+  env: SHOPIFY\_FLAG\_VERBOSE
+
+  Increase the verbosity of the output.
+
+* -e, --environment \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_ENVIRONMENT
+
+  The environment to apply to the current command.
+
+* -s, --store \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_STORE
+
+  Store URL. It can be the store prefix (example) or the full myshopify.com URL (example.myshopify.com, <https://example.myshopify.com>).
+
+### Examples
+
+* #### theme console
+
+  ##### theme console
+
+  ```bash
+  shopify theme console
+
+  shopify theme console --url /products/classic-leather-jacket
+  ```

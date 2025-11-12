@@ -1,0 +1,123 @@
+---
+title: Paragraph
+description: Use this to display a block of text similar to the `<p>` tag in HTML.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/titles-and-text/paragraph
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/titles-and-text/paragraph.md
+---
+
+# Paragraph
+
+Use this to display a block of text similar to the `<p>` tag in HTML.
+
+## ParagraphProps
+
+* children
+
+  any
+
+* fontSize
+
+  SizeScale
+
+  Size of the typography's font.
+
+* fontStyle
+
+  FontStyle
+
+  Use to emphasize a word or a group of words.
+
+* fontWeight
+
+  FontWeight
+
+  Sets the weight of the font.
+
+* id
+
+  string
+
+  A unique identifier for the element.
+
+* textOverflow
+
+  TextOverflow
+
+  Set how hidden overflow content is signaled to users.
+
+### SizeScale
+
+```ts
+'small-300' | 'small-200' | 'small-100' | 'base' | 'large-100' | 'large-200' | 'large-300'
+```
+
+### FontStyle
+
+```ts
+'italic' | 'normal'
+```
+
+### FontWeight
+
+```ts
+'light-300' | 'light-200' | 'light-100' | 'light' | 'base' | 'normal' | 'bold' | 'bold-100' | 'bold-200' | 'bold-300'
+```
+
+### TextOverflow
+
+```ts
+'ellipsis'
+```
+
+### Examples
+
+* #### Simple Paragraph example
+
+  ##### React
+
+  ```tsx
+  import {
+      render,
+      BlockStack,
+      Paragraph,
+  } from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+      return (
+          <BlockStack inlineAlignment='center' gap>
+              <Paragraph fontWeight='bold'>Name:</Paragraph>
+              <Paragraph>Jane Doe</Paragraph>
+          </BlockStack>
+      )
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {extend, Paragraph, BlockStack} from '@shopify/ui-extensions/admin';
+
+  extend('Playground', (root) => {
+    const paragraph = root.createComponent(BlockStack, {inlineAlignment: 'center', gap: true}, [
+      root.createComponent(Paragraph, {fontWeight: 'bold'}, 'Name:'),
+      root.createComponent(Paragraph, {}, 'Jane Doe'),
+    ]);
+
+    root.appendChild(paragraph);
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/paragraph-default.png)
+
+## Related
+
+[- Heading](https://shopify.dev/docs/api/admin-extensions/components/titles-and-text/heading)

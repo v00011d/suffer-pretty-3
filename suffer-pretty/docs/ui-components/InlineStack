@@ -1,0 +1,293 @@
+---
+title: InlineStack
+description: >-
+  Use this to organize layout elements along the horizontal axis of the page.
+  It's great for horizontal alignment.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/structure/inlinestack
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/structure/inlinestack.md
+---
+
+# Inline​Stack
+
+Use this to organize layout elements along the horizontal axis of the page. It's great for horizontal alignment.
+
+## InlineStackProps
+
+* accessibilityLabel
+
+  string
+
+  A label that describes the purpose or contents of the element. When set, it will be announced to users using assistive technologies and will provide them with more context. When set, any children or `label` supplied will not be announced to screen readers.
+
+* accessibilityRole
+
+  AccessibilityRole
+
+  Default: 'generic'
+
+  Sets the semantic meaning of the component’s content. When set, the role will be used by assistive technologies to help users navigate the page.
+
+* blockAlignment
+
+  CrossAxisAlignment
+
+  Default: 'start'
+
+  Position children along the cross axis
+
+* blockGap
+
+  SpacingKeyword | boolean
+
+  Adjust spacing between elements in the block axis.
+
+  Alias for `rowGap`
+
+* blockSize
+
+  number | \`${number}%\`
+
+  Adjust the block size.
+
+  * `number`: size in pixels.
+  * `` `${number}%` ``: size in percentages of the available space.
+
+* columnGap
+
+  SpacingKeyword | boolean
+
+  Adjust spacing between children in the inline axis
+
+* gap
+
+  MaybeTwoBoxEdgesShorthandProperty\<SpacingKeyword | boolean>
+
+  Adjust spacing between children
+
+* id
+
+  string
+
+  A unique identifier for the element.
+
+* inlineAlignment
+
+  MainAxisAlignment
+
+  Default: 'start'
+
+  Position children along the main axis
+
+* inlineGap
+
+  SpacingKeyword | boolean
+
+  Adjust spacing between elements in the inline axis.
+
+  Alias for `columnGap`
+
+* inlineSize
+
+  number | \`${number}%\`
+
+  Adjust the inline size.
+
+  * `number`: size in pixels.
+  * `` `${number}%` ``: size in percentages of the available space.
+
+* maxBlockSize
+
+  number | \`${number}%\`
+
+  Adjust the maximum block size.
+
+  * `number`: size in pixels.
+  * `` `${number}%` ``: size in percentages of the available space.
+
+* maxInlineSize
+
+  number | \`${number}%\`
+
+  Adjust the maximum inline size.
+
+  * `number`: size in pixels.
+  * `` `${number}%` ``: size in percentages of the available space.
+
+* minBlockSize
+
+  number | \`${number}%\`
+
+  Adjust the minimum block size.
+
+  * `number`: size in pixels.
+  * `` `${number}%` ``: size in percentages of the available space.
+
+* minInlineSize
+
+  number | \`${number}%\`
+
+  Adjust the minimum inline size.
+
+  * `number`: size in pixels.
+  * `` `${number}%` ``: size in percentages of the available space.
+
+* padding
+
+  MaybeAllBoxEdgesShorthandProperty\<SpacingKeyword | boolean>
+
+  Adjust the padding.
+
+  To shorten the code, it is possible to specify all the padding for all edges of the box in one property.
+
+  * `base` means block-start, inline-end, block-end and inline-start paddings are `base`.
+  * `base none` means block-start and block-end paddings are `base`, inline-start and inline-end paddings are `none`.
+  * `base none large` means block-start padding is `base`, inline-end padding is `none`, block-end padding is `large` and inline-start padding is `none`.
+  * `base none large small` means block-start padding is `base`, inline-end padding is `none`, block-end padding is `large` and inline-start padding is `small`.
+  * `true` applies a default padding that is appropriate for the component.
+
+  Learn more about the 1-to-4-value syntax at <https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties#edges_of_a_box>
+
+* paddingBlock
+
+  MaybeTwoBoxEdgesShorthandProperty\<SpacingKeyword | boolean>
+
+  Adjust the block-padding.
+
+  * `base none` means block-start padding is `base`, block-end padding is `none`.
+
+* paddingBlockEnd
+
+  SpacingKeyword | boolean
+
+  Adjust the block-end padding.
+
+* paddingBlockStart
+
+  SpacingKeyword | boolean
+
+  Adjust the block-start padding.
+
+* paddingInline
+
+  MaybeTwoBoxEdgesShorthandProperty\<SpacingKeyword | boolean>
+
+  Adjust the inline padding.
+
+  * `base none` means inline-start padding is `base`, inline-end padding is `none`.
+
+* paddingInlineEnd
+
+  SpacingKeyword | boolean
+
+  Adjust the inline-end padding.
+
+* paddingInlineStart
+
+  SpacingKeyword | boolean
+
+  Adjust the inline-start padding.
+
+* rowGap
+
+  SpacingKeyword | boolean
+
+  Adjust spacing between children in the block axis
+
+### AccessibilityRole
+
+```ts
+'main' | 'header' | 'footer' | 'section' | 'aside' | 'navigation' | 'ordered-list' | 'list-item' | 'list-item-separator' | 'unordered-list' | 'separator' | 'status' | 'alert' | 'generic'
+```
+
+### CrossAxisAlignment
+
+```ts
+'start' | 'center' | 'end' | 'baseline'
+```
+
+### SpacingKeyword
+
+```ts
+'none' | 'small' | 'base' | 'large'
+```
+
+### MaybeTwoBoxEdgesShorthandProperty
+
+```ts
+T | `${T} ${T}`
+```
+
+### MainAxisAlignment
+
+```ts
+'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'
+```
+
+### MaybeAllBoxEdgesShorthandProperty
+
+```ts
+T | `${T} ${T}` | `${T} ${T} ${T}` | `${T} ${T} ${T} ${T}`
+```
+
+### Examples
+
+* #### Laying out elements in a row
+
+  ##### React
+
+  ```tsx
+  import React from 'react';
+  import {
+    render,
+    InlineStack,
+  } from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return (
+      <InlineStack gap>
+        <>Child 1</>
+        <>Child 2</>
+        <>Child 3</>
+        <>Child 4</>
+      </InlineStack>
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {extension, InlineStack} from '@shopify/ui-extensions/admin';
+
+  export default extension('Playground', (root) => {
+    const inlineStack = root.createComponent(
+      InlineStack,
+      {
+        gap: true,
+      },
+      [
+        root.createText('Child 1'),
+        root.createText('Child 2'),
+        root.createText('Child 3'),
+        root.createText('Child 4'),
+      ],
+    );
+
+    root.appendChild(inlineStack);
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/inlinestack-default.png)
+
+## Related
+
+[- BlockStack](https://shopify.dev/docs/api/admin-extensions/components/structure/BlockStack)

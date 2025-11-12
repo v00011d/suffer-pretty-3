@@ -1,0 +1,76 @@
+---
+title: AdminBlock
+description: >-
+  This component is similar to the AdminBlock, providing a deeper integration
+  with the container your UI is rendered into. However, this only applies to
+  Block Extensions which render inline on a resource page.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/other/adminblock
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/other/adminblock.md
+---
+
+# Admin​Block
+
+This component is similar to the AdminBlock, providing a deeper integration with the container your UI is rendered into. However, this only applies to Block Extensions which render inline on a resource page.
+
+## AdminBlockProps
+
+* collapsedSummary
+
+  string
+
+  The summary to display when the app block is collapsed. Summary longer than 30 characters will be truncated.
+
+* title
+
+  string
+
+  The title to display at the top of the app block. If not provided, the name of the extension will be used. Titles longer than 40 characters will be truncated.
+
+### Examples
+
+* #### Simple AdminBlock implementation
+
+  ##### React
+
+  ```tsx
+  import React from 'react';
+  import {reactExtension, AdminBlock} from '@shopify/ui-extensions-react/admin';
+
+  function App() {
+    return (
+      <AdminBlock title="My App Block">
+        Block content
+      </AdminBlock>
+    );
+  }
+
+  export default reactExtension('Playground', () => <App />);
+  ```
+
+  ##### JS
+
+  ```js
+  import {extension, AdminBlock, Button} from '@shopify/ui-extensions/admin';
+
+  export default extension('Playground', (root) => {
+    const adminBlock = root.createComponent(AdminBlock, {
+      title: 'My App Block',
+    }, '5 items active');
+
+    root.appendChild(adminBlock);
+    root.mount();
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/adminblock-default.png)
+
+## Related
+
+[- Adminaction](https://shopify.dev/docs/api/admin-extensions/components/other/adminaction)

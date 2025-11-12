@@ -1,0 +1,115 @@
+---
+title: ProgressIndicator
+description: >-
+  Use this component to notify merchants that their action is being processed or
+  loaded.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/media/progressindicator
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/media/progressindicator.md
+---
+
+# Progress​Indicator
+
+Use this component to notify merchants that their action is being processed or loaded.
+
+## ProgressIndicatorProps
+
+* size
+
+  SizeScale
+
+  required
+
+  The size of the component.
+
+* accessibilityLabel
+
+  string
+
+  A label that describes the purpose or contents of the element. When set, it will be announced to users using assistive technologies and will provide them with more context. When set, any children or `label` supplied will not be announced to screen readers.
+
+* id
+
+  string
+
+  A unique identifier for the element.
+
+* tone
+
+  'inherit' | 'default'
+
+  Default: 'default'
+
+  Set the color of the progress indicator.
+
+  * `inherit` will take the color value from its parent, giving the progress indicator a monochrome appearance.
+
+* variant
+
+  "spinner"
+
+  Default: 'spinner'
+
+  Style of the progress indicator
+
+### SizeScale
+
+```ts
+'small-300' | 'small-200' | 'small-100' | 'base' | 'large-100' | 'large-200' | 'large-300'
+```
+
+### Examples
+
+* #### Simple spinner example
+
+  ##### React
+
+  ```tsx
+  import {
+    reactExtension,
+    ProgressIndicator,
+  } from '@shopify/ui-extensions-react/admin';
+
+  reactExtension('Playground', () => <App />);
+
+  function App() {
+    return (
+      <ProgressIndicator size="small-200" />
+    );
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {
+    extension,
+    ProgressIndicator,
+  } from '@shopify/ui-extensions/admin';
+
+  export default extension(
+    'Playground',
+    (root) => {
+      const progressIndicator = root.createComponent(
+        ProgressIndicator,
+        {
+          size: 'small-200',
+        },
+      );
+
+      root.appendChild(progressIndicator);
+    },
+  );
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/progressindicator-default.png)
+
+## Related
+
+[- Button](https://shopify.dev/docs/api/admin-extensions/components/actions/button)

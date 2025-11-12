@@ -1,0 +1,23 @@
+---
+title: Overview
+description: You can enable certain Shopify features or add functionality to a theme.
+source_url:
+  html: 'https://shopify.dev/docs/storefronts/themes/theme-features'
+  md: 'https://shopify.dev/docs/storefronts/themes/theme-features.md'
+---
+
+# Overview
+
+You can enable certain Shopify features or add functionality to a theme. If you're building a theme for a client, or for your own store, then you can pick and choose from these features. If you're building a theme for the Shopify Theme Store, then some of these features [need to be included](https://shopify.dev/docs/storefronts/themes/store/requirements#features) in your theme.
+
+Features fall into the following categories:
+
+* [Product merchandising](https://shopify.dev/docs/storefronts/themes/product-merchandising)
+* [Pricing and payments](https://shopify.dev/docs/storefronts/themes/pricing-payments)
+* [Delivery and fulfillment](https://shopify.dev/docs/storefronts/themes/delivery-fulfillment)
+* [Customer engagement](https://shopify.dev/docs/storefronts/themes/customer-engagement)
+* [Shopify Markets](https://shopify.dev/docs/storefronts/themes/markets)
+* [Site navigation and search](https://shopify.dev/docs/storefronts/themes/navigation-search)
+* [Trust and security](https://shopify.dev/docs/storefronts/themes/trust-security)
+
+***

@@ -1,0 +1,417 @@
+---
+title: Admin UI extensions
+description: >-
+  Admin UI extensions make it possible to surface contextual app functionality
+  within the Shopify Admin interface.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: 'https://shopify.dev/docs/api/admin-extensions/2025-07'
+  md: 'https://shopify.dev/docs/api/admin-extensions/2025-07.md'
+---
+
+# Admin UI extensions
+
+Admin UI extensions make it possible to surface contextual app functionality within the Shopify Admin interface.
+
+## Overview
+
+Extend the Shopify Admin with UI Extensions.
+
+[Tutorial - Get started building your first admin extension](https://shopify.dev/docs/apps/admin/admin-actions-and-blocks/build-an-admin-action)
+
+[Component APIs - See all available components](https://shopify.dev/docs/api/admin-extensions/components)
+
+[Reference - View a list of available extension targets](https://shopify.dev/docs/api/admin-extensions/current/extension-targets)
+
+[App authentication - Make authenticated requests to your app's backend](#app-authentication)
+
+[Using Forms - Use the Form component to integrate with the contextual save bar of the resource page](#using-forms)
+
+[Direct API access - Access the Shopify GraphQL API directly](#direct-api-access)
+
+[Custom protocols - Easily construct URLs to navigate to common locations](#custom-protocols)
+
+[UI reference - Figma UI Kit](https://www.figma.com/community/file/1265417558571498993)
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/action-extension-example.gif)
+
+## Getting Started
+
+Use the Shopify CLI to [generate a new extension](https://shopify.dev/apps/tools/cli/commands#generate-extension) within your app.
+
+If you already have a Shopify app, you can skip right to the last command shown here.
+
+### Examples
+
+* #### Generate an extension
+
+  ##### CLI
+
+  ```bash
+  # create an app if you don't already have one:
+  npm init @shopify/app@latest --name my-app
+
+  # navigate to your app's root directory:
+  cd my-app
+
+  # generate a new extension:
+  npm run generate extension
+  # follow the steps to create a new
+  # extension in ./extensions.
+  ```
+
+## App Authentication
+
+Admin UI extensions can also make authenticated calls to your app's backend. When you use `fetch()` to make a request to your app's configured auth domain or any of its subdomains, an `Authorization` header is automatically added with a Shopify [OpenID Connect ID Token](https://shopify.dev/docs/api/app-bridge-library/reference/id-token). There's no need to manually manage ID tokens.
+
+Relative URLs passed to `fetch()` are resolved against your app's `app_url`. This means if your app's backend is on the same domain as your `app_url`, you can make requests to it using `fetch('/path')`.
+
+If you need to make requests to a different domain, you can use the [`auth.idToken()` method](https://shopify.dev/docs/api/admin-extensions/api/standard-api#standardapi-propertydetail-auth) to retrieve the ID token and manually add it to your request headers.
+
+### Examples
+
+* #### Make requests to your app's backend
+
+  ##### Get Product Data
+
+  ```tsx
+  import {reactExtension, useApi, Text} from '@shopify/ui-extensions-react/admin';
+  import {useEffect, useState} from 'react';
+
+  // Get product info from app backend
+  async function getProductInfo(id) {
+    const res = await fetch(`/api/products/${id}`);
+    return res.json();
+  }
+
+  const TARGET = 'admin.product-details.block.render';
+
+  export default reactExtension(TARGET, () => <App />);
+
+  function App() {
+    // Contextual "input" data passed to this extension:
+    const {data} = useApi(TARGET);
+    const productId = data.selected?.[0]?.id;
+
+    const [productInfo, setProductInfo] = useState();
+    useEffect(() => {
+      getProductInfo(productId).then(setProductInfo);
+    }, [productId]);
+
+    return <Text>Info: {productInfo?.title}</Text>;
+  }
+  ```
+
+  ##### Get Data from a different domain
+
+  ```tsx
+  import {reactExtension, useApi, Text} from '@shopify/ui-extensions-react/admin';
+  import {useEffect, useState} from 'react';
+
+  // Get product info from a different app backend
+  async function getProductInfo(id, auth) {
+    const token = await auth.idToken();
+    const res = await fetch(`https://app.example.com/api/products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.json();
+  }
+
+  const TARGET = 'admin.product-details.block.render';
+
+  export default reactExtension(TARGET, () => <App />);
+
+  function App() {
+    // Contextual "input" data passed to this extension:
+    const {data, auth} = useApi(TARGET);
+    const productId = data.selected?.[0]?.id;
+
+    const [productInfo, setProductInfo] = useState();
+    useEffect(() => {
+      getProductInfo(productId, auth).then(setProductInfo);
+    }, [productId, auth]);
+
+    return <Text>Info: {productInfo?.title}</Text>;
+  }
+  ```
+
+## Using Forms
+
+When building a Block extension you may use the [Form component](https://shopify.dev/docs/api/admin-extensions/latest/components/forms/form) to integrate with the contextual save bar of the resource page. The Form component provides a way to manage form state and submit data to your app's backend or directly to Shopify using Direct API access.
+
+Whenever an input field is changed, the Form component will automatically update the dirty state of the resource page. When the form is submitted or reset the relevant callback in the form component will get triggered.
+
+Using this, you can control what defines a component to be dirty by utilizing the Input's defaultValue property.
+
+Rules:
+
+* When the defaultValue is set, the component will be considered dirty if the value of the input is different from the defaultValue.You may update the defaultValue when the form is submitted to reset the dirty state of the form.
+
+* When the defaultValue is not set, the component will be considered dirty if the value of the input is different from the initial value or from the last dynamic update to the input's value that wasn't triggered by user input.
+
+### Examples
+
+* #### Trigger the Form's dirty state
+
+  ##### Using \`defaultValue\`
+
+  ```tsx
+  import {useState} from 'react';
+  import {
+    reactExtension,
+    AdminBlock,
+    BlockStack,
+    TextField,
+    NumberField,
+    Form,
+  } from '@shopify/ui-extensions-react/admin';
+
+  const TARGET = 'admin.product-details.block.render';
+
+  export default reactExtension(TARGET, () => <App />);
+
+  const defaultValues = {
+    text: 'default value',
+    number: 50,
+  };
+
+  function App() {
+    const [textValue, setTextValue] = useState('');
+    const [numberValue, setNumberValue] = useState('');
+
+    return (
+      <AdminBlock title="My Block Extension">
+        <Form
+          onSubmit={() => console.log('submit', {textValue, numberValue})}
+          onReset={() => console.log('automatically reset values')}
+        >
+          <BlockStack>
+            <TextField
+              label="Default Value"
+              defaultValue={defaultValues.text}
+              value={textValue}
+              onChange={setTextValue}
+            />
+            <NumberField
+              label="Percentage field"
+              defaultValue={defaultValues.number}
+              value={numberValue}
+              onChange={setNumberValue}
+            />
+          </BlockStack>
+        </Form>
+      </AdminBlock>
+    );
+  }
+  ```
+
+  ##### Using implicit default
+
+  ```tsx
+  import {useState} from 'react';
+  import {
+    reactExtension,
+    AdminBlock,
+    BlockStack,
+    TextField,
+    NumberField,
+    Form,
+  } from '@shopify/ui-extensions-react/admin';
+
+  const TARGET = 'admin.product-details.block.render';
+
+  export default reactExtension(TARGET, async () => {
+    const data = await fetch('/data.json');
+    const {text, number} = await data.json();
+    return <App text={text} number={number} />;
+  });
+
+  function App({text, number}) {
+    // The initial values set in the form fields will be the default values
+    const [textValue, setTextValue] = useState(text);
+    const [numberValue, setNumberValue] = useState(number);
+
+    return (
+      <AdminBlock title="My Block Extension">
+        <Form
+          onSubmit={() => console.log('submit', {textValue, numberValue})}
+          onReset={() => console.log('automatically reset values')}
+        >
+          <BlockStack>
+            <TextField
+              label="Default Value"
+              value={textValue}
+              onChange={setTextValue}
+            />
+            <NumberField
+              label="Percentage field"
+              value={numberValue}
+              onChange={setNumberValue}
+            />
+          </BlockStack>
+        </Form>
+      </AdminBlock>
+    );
+  }
+  ```
+
+## Direct API access
+
+You can make Shopify Admin API requests directly from your extension using the [query API](https://shopify.dev/docs/api/admin-extensions/api/standard-api#standardapi-propertydetail-query) or the standard [web fetch API](https://developer.mozilla.org/en-US/docs/Web/API/fetch)!
+
+Any `fetch()` calls from your extension to Shopify's Admin GraphQL API are automatically authenticated by default. These calls are fast too, because Shopify handles requests directly.
+
+Direct API requests use [online access](https://shopify.dev/docs/apps/build/authentication-authorization/access-token-types/online-access-tokens) mode by default. If you want to use [offline access](https://shopify.dev/docs/apps/build/authentication-authorization/access-token-types/offline-access-tokens) mode, you can set the `direct_api_mode` property to `offline` in your [app TOML file](https://shopify.dev/docs/apps/tools/cli/configuration#admin).
+
+Note: Direct API can't be used to manage storefront access tokens.
+
+[Note - Direct API can't be used to manage storefront access tokens.](https://shopify.dev/docs/api/admin-extensions#direct-api-access)
+
+[Developer guide - Learn more about access scopes](https://shopify.dev/docs/api/usage/access-scopes)
+
+### Examples
+
+* #### Query Shopify data
+
+  ##### Fetch Product data
+
+  ```tsx
+  import {reactExtension, useApi, Text} from '@shopify/ui-extensions-react/admin';
+  import {useEffect, useState} from 'react';
+
+  async function getProduct(id) {
+    const res = await fetch('shopify:admin/api/graphql.json', {
+      method: 'POST',
+      body: JSON.stringify({
+        query: `
+          query GetProduct($id: ID!) {
+            product(id: $id) {
+              title
+            }
+          }
+        `,
+        variables: {id},
+      }),
+    });
+    return res.json();
+  }
+
+  const TARGET = 'admin.product-details.block.render';
+
+  export default reactExtension(TARGET, () => <App />);
+
+  function App() {
+    // Contextual "input" data passed to this extension:
+    const {data} = useApi(TARGET);
+
+    const [product, setProduct] = useState();
+    useEffect(() => {
+      const productId = data.selected?.[0]?.id;
+      getProduct(productId).then(({data}) => setProduct(data.product));
+    }, [data]);
+
+    return <Text strong>The selected product title is {product?.title}</Text>;
+  }
+  ```
+
+  ##### Query Product data
+
+  ```tsx
+  import {reactExtension, useApi, Text} from '@shopify/ui-extensions-react/admin';
+  import {useEffect, useState} from 'react';
+
+  const TARGET = 'admin.product-details.block.render';
+
+  export default reactExtension(TARGET, () => <App />);
+
+  function App() {
+    // Contextual "input" data passed to this extension:
+    const {data, query} = useApi(TARGET);
+
+    const [product, setProduct] = useState();
+    useEffect(() => {
+      const productId = data.selected?.[0]?.id;
+      query(
+        `query GetProduct($id: ID!) {
+            product(id: $id) {
+              title
+            }
+          }
+        `,
+        {variables: {id: productId}},
+      ).then(({data}) => setProduct(data.product));
+    }, [data]);
+
+    return <Text strong>The selected product title is {product?.title}</Text>;
+  }
+  ```
+
+## Custom Protocols
+
+Custom protocols make it easier to navigate to common locations, and construct URLs.
+
+Shopify Protocol
+
+Use the `shopify:admin` protocol when you want to construct a URL with a root of the Shopify Admin.
+
+App Protocol
+
+Use the `app:` protocol to construct a URL for your app. Shopify will handle constructing the base URL for your app. This works for both embedded and non-embedded apps.
+
+Extension Protocol
+
+Triggers an action extension from a block extension using the `extension:` protocol. The `extensionTarget` is the target of the action extension. The handle is the handle of the action extension that will be opened.
+
+Relative Urls
+
+Relative urls are relative to your app and are useful when you want to link to a route within your app. This works for both embedded and non-embedded apps.
+
+### Examples
+
+* #### shopify:admin
+
+  ##### Link to Product Page
+
+  ```tsx
+  <Link to="shopify:admin/products/1234567890" />;
+  ```
+
+  ##### Fetch data
+
+  ```ts
+  fetch('shopify:admin/api/graphql.json', {
+    method: 'POST',
+    body: JSON.stringify(simpleProductQuery),
+  });
+  ```
+
+## Deploying
+
+Use the Shopify CLI to [deploy your app and its extensions](https://shopify.dev/docs/apps/deployment/extension).
+
+### Examples
+
+* #### Deploy an extension
+
+  ##### CLI
+
+  ```bash
+  # navigate to your app's root directory:
+  cd my-app
+
+  # deploy your app and its extensions:
+  npm run deploy
+
+  # follow the steps to deploy
+  ```
+
+## Security
+
+UI Extensions run on a different origin than the Shopify Admin. For network calls to succeed, your server must support [cross-origin resource sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) for the origin `https://extensions.shopifycdn.com`.
+
+If you have a custom [`Access-Control-Allow-Origin` header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) set, you must include `https://extensions.shopifycdn.com` in the list of allowed origins.
+
+If you are using the [Shopify App Remix Template](https://github.com/Shopify/shopify-app-template-remix), this is done automatically for you.

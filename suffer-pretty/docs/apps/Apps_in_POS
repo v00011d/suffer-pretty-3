@@ -1,0 +1,108 @@
+---
+title: Apps in POS
+description: >-
+  Learn about the ways that you can integrate your app into Shopify Point of
+  Sale (POS) to enable merchants to sell products in person, manage inventory,
+  and deliver omnichannel experiences.
+source_url:
+  html: 'https://shopify.dev/docs/apps/build/pos'
+  md: 'https://shopify.dev/docs/apps/build/pos.md'
+---
+
+ExpandOn this page
+
+* [Use cases](https://shopify.dev/docs/apps/build/pos.md#use-cases)
+* [POS UI extensions](https://shopify.dev/docs/apps/build/pos.md#pos-ui-extensions)
+* [App Bridge](https://shopify.dev/docs/apps/build/pos.md#app-bridge)
+* [Developer tools and resources](https://shopify.dev/docs/apps/build/pos.md#developer-tools-and-resources)
+* [Next steps](https://shopify.dev/docs/apps/build/pos.md#next-steps)
+
+# Apps in POS
+
+Shopify Point of Sale (POS) [is an app](https://apps.shopify.com/shopify-pos) that enables merchants to sell products in person, manage inventory, and deliver omnichannel experiences.
+
+Integrating your app with Shopify POS lets you add custom functionality directly into the point-of-sale interface. You can build discount apps, loyalty programs, inventory management tools, or custom workflows that work within the POS app.
+
+This guide explains the technologies that you can use to integrate your app with Shopify POS.
+
+***
+
+## Use cases
+
+You can build POS apps for a wide range of merchant needs using either [POS UI extensions](#pos-ui-extensions) or [App Bridge](#app-bridge):
+
+* Discount and promotion apps: Apply multiple discounts, loyalty rewards, and special offers.
+* Subscription apps: Enable merchants to sell subscribe & save subscriptions in-store.
+* Inventory management tools: Receive transfers, conduct stocktakes, and manage product information.
+* Customer relationship apps: Access customer profiles, purchase history, and communication tools.
+* Payment and checkout enhancements: Provide custom payment flows, gift card management, and receipt customization.
+* Analytics and reporting: Offer real-time sales data, staff performance metrics, and business insights.
+
+***
+
+## POS UI extensions
+
+Tip
+
+We recommend building with POS UI extensions for most apps.
+
+[POS UI extensions](https://shopify.dev/docs/api/pos-ui-extensions) enable you to customize Shopify's POS interface by rendering native UI components in the POS app.
+
+Apps built with POS UI extensions provide:
+
+* **Native performance**: Extensions render as native components for faster load times.
+* **Consistent design**: Automatically match Shopify's design system and receive updates.
+* **Guided development**: Use pre-built components and defined extension targets.
+* **Cross-platform compatibility**: Offer an identical experience across iOS and Android platforms.
+
+For example, you can add a clickable tile to the POS home screen that launches your app's features:
+
+![The Shopify POS home screen showing various tiles including first time customer, Local delivery, Pickup, Purchase orders, Transfers, and Add tile, with a New order section on the right side.](https://shopify.dev/assets/assets/images/apps/pos/pos-home-screen-CJpfShT6.gif)
+
+***
+
+## App Bridge
+
+Tip
+
+Choose App Bridge when you need complete control over the user interface, unique workflows that don't fit within pre-built extension targets, or when migrating an existing web application to Shopify POS.
+
+[App Bridge](https://shopify.dev/docs/api/app-bridge) provides a way to extend Shopify POS by embedding web applications directly into the POS interface.
+
+POS apps built with App Bridge provide:
+
+* **Complete UI control**: Build fully custom interfaces without design system constraints.
+* **Web application rendering**: Your app renders as an embedded web application within the POS interface.
+* **Tile-based integration**: Embed your app as tiles within the POS interface with full web capabilities.
+* **Unlimited customization**: Create unique user experiences tailored to specific workflows.
+
+***
+
+## Developer tools and resources
+
+[POS UI extensions reference\
+\
+](https://shopify.dev/docs/api/pos-ui-extensions)
+
+[Integrate with merchant workflows and offer enhanced functionality that feels native to the POS experience.](https://shopify.dev/docs/api/pos-ui-extensions)
+
+[App Bridge reference\
+\
+](https://shopify.dev/docs/api/app-home)
+
+[Learn about the JavaScript SDK for embedded apps, which provides access to data and UI rendering within the Shopify admin.](https://shopify.dev/docs/api/app-home)
+
+***
+
+## Next steps
+
+* [Build a discount extension](https://shopify.dev/docs/apps/build/pos/build-discount-extension) that applies discounts to items in a cart.
+* [Build a print UI extension](https://shopify.dev/docs/apps/build/pos/build-print-extension) that generates, previews, and prints custom documents.
+
+***
+
+* [Use cases](https://shopify.dev/docs/apps/build/pos.md#use-cases)
+* [POS UI extensions](https://shopify.dev/docs/apps/build/pos.md#pos-ui-extensions)
+* [App Bridge](https://shopify.dev/docs/apps/build/pos.md#app-bridge)
+* [Developer tools and resources](https://shopify.dev/docs/apps/build/pos.md#developer-tools-and-resources)
+* [Next steps](https://shopify.dev/docs/apps/build/pos.md#next-steps)

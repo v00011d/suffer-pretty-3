@@ -1,0 +1,75 @@
+---
+title: theme metafields pull
+description: |-
+  Retrieves metafields from Shopify Admin.
+
+  If the metafields file already exists, it will be overwritten.
+api_name: shopify-cli
+source_url:
+  html: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-metafields-pull'
+  md: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-metafields-pull.md'
+---
+
+# theme metafields pullcommand
+
+Retrieves metafields from Shopify Admin.
+
+If the metafields file already exists, it will be overwritten.
+
+## Flags
+
+The following flags are available for the `theme metafields pull` command:
+
+* \--no-color
+
+  env: SHOPIFY\_FLAG\_NO\_COLOR
+
+  Disable color output.
+
+* \--password \<value>
+
+  string
+
+  env: SHOPIFY\_CLI\_THEME\_TOKEN
+
+  Password generated from the Theme Access app.
+
+* \--path \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_PATH
+
+  The path where you want to run the command. Defaults to the current working directory.
+
+* \--verbose
+
+  env: SHOPIFY\_FLAG\_VERBOSE
+
+  Increase the verbosity of the output.
+
+* -e, --environment \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_ENVIRONMENT
+
+  The environment to apply to the current command.
+
+* -s, --store \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_STORE
+
+  Store URL. It can be the store prefix (example) or the full myshopify.com URL (example.myshopify.com, <https://example.myshopify.com>).
+
+### Examples
+
+* #### theme metafields pull
+
+  ##### theme metafields pull
+
+  ```bash
+  shopify theme metafields pull [flags]
+  ```

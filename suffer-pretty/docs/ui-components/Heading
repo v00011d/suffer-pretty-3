@@ -1,0 +1,75 @@
+---
+title: Heading
+description: Use this to display a title. It's similar to the h1-h6 tags in HTML
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/titles-and-text/heading
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/titles-and-text/heading.md
+---
+
+# Heading
+
+Use this to display a title. It's similar to the h1-h6 tags in HTML
+
+## HeadingProps
+
+* id
+
+  string
+
+  A unique identifier for the field.
+
+* size
+
+  Level
+
+  The visual size of the heading.
+
+  There are no guarantee that the level set will render the same level in the HTML `<h*>` element. The heading level that gets rendered is determined by the parent `HeadingGroup` or `Section` component.
+
+### Level
+
+```ts
+1 | 2 | 3 | 4 | 5 | 6
+```
+
+### Examples
+
+* #### Simple Heading example
+
+  ##### React
+
+  ```tsx
+  import {render, Heading} from '@shopify/ui-extensions-react/admin';
+
+  render('Playground', () => <App />);
+
+  function App() {
+    return <Heading>Store name</Heading>;
+  }
+  ```
+
+  ##### JS
+
+  ```js
+  import {extend, Heading} from '@shopify/ui-extensions/admin';
+
+  extend('Playground', (root) => {
+    const heading = root.createComponent(Heading, undefined, 'Headings are cool');
+
+    root.appendChild(heading);
+  });
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/heading-default.png)
+
+## Related
+
+[- Text](https://shopify.dev/docs/api/admin-extensions/components/titles-and-text/text)
+
+[- HeadingGroup](https://shopify.dev/docs/api/admin-extensions/components/titles-and-text/headinggroup)

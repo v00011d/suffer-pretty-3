@@ -1,0 +1,112 @@
+---
+title: theme check
+description: >-
+  Calls and runs [Theme Check](/docs/themes/tools/theme-check) to analyze your
+  theme code for errors and to ensure that it follows theme and Liquid best
+  practices. [Learn more about the checks that Theme Check
+  runs.](/docs/themes/tools/theme-check/checks)
+api_name: shopify-cli
+source_url:
+  html: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-check'
+  md: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-check.md'
+---
+
+# theme checkcommand
+
+Calls and runs [Theme Check](https://shopify.dev/docs/themes/tools/theme-check) to analyze your theme code for errors and to ensure that it follows theme and Liquid best practices. [Learn more about the checks that Theme Check runs.](https://shopify.dev/docs/themes/tools/theme-check/checks)
+
+## Flags
+
+The following flags are available for the `theme check` command:
+
+* \--fail-level \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_FAIL\_LEVEL
+
+  Minimum severity for exit with error code
+
+* \--init
+
+  env: SHOPIFY\_FLAG\_INIT
+
+  Generate a .theme-check.yml file
+
+* \--list
+
+  env: SHOPIFY\_FLAG\_LIST
+
+  List enabled checks
+
+* \--no-color
+
+  env: SHOPIFY\_FLAG\_NO\_COLOR
+
+  Disable color output.
+
+* \--path \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_PATH
+
+  The path where you want to run the command. Defaults to the current working directory.
+
+* \--print
+
+  env: SHOPIFY\_FLAG\_PRINT
+
+  Output active config to STDOUT
+
+* \--verbose
+
+  env: SHOPIFY\_FLAG\_VERBOSE
+
+  Increase the verbosity of the output.
+
+* -a, --auto-correct
+
+  env: SHOPIFY\_FLAG\_AUTO\_CORRECT
+
+  Automatically fix offenses
+
+* -C, --config \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_CONFIG
+
+  Use the config provided, overriding .theme-check.yml if present Supports all theme-check: config values, e.g., theme-check:theme-app-extension, theme-check:recommended, theme-check:all For backwards compatibility, :theme\_app\_extension is also supported
+
+* -e, --environment \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_ENVIRONMENT
+
+  The environment to apply to the current command.
+
+* -o, --output \<value>
+
+  string
+
+  env: SHOPIFY\_FLAG\_OUTPUT
+
+  The output format to use
+
+* -v, --version
+
+  env: SHOPIFY\_FLAG\_VERSION
+
+  Print Theme Check version
+
+### Examples
+
+* #### theme check
+
+  ##### theme check
+
+  ```bash
+  shopify theme check [flags]
+  ```

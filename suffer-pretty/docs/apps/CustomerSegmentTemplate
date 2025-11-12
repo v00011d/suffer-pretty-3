@@ -1,0 +1,116 @@
+---
+title: CustomerSegmentTemplate
+description: >-
+  CustomerSegmentTemplate is used to configure a template rendered in the
+  **Customers** section of the Shopify admin. Templates can be applied in the
+  [customer segment
+  editor](https://help.shopify.com/en/manual/customers/customer-segmentation/customer-segments)
+  and used to create segments.
+api_version: 2025-07
+api_name: admin-extensions
+source_url:
+  html: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/other/customersegmenttemplate
+  md: >-
+    https://shopify.dev/docs/api/admin-extensions/2025-07/components/other/customersegmenttemplate.md
+---
+
+# Customer​Segment​Template
+
+Requires use of the [admin.customers.segmentation-templates.render](https://shopify.dev/docs/api/admin-extensions/api/extension-targets#extensiontargets-propertydetail-admincustomerssegmentationtemplatesrender) target.
+
+CustomerSegmentTemplate is used to configure a template rendered in the **Customers** section of the Shopify admin. Templates can be applied in the [customer segment editor](https://help.shopify.com/en/manual/customers/customer-segmentation/customer-segments) and used to create segments.
+
+## CustomerSegmentTemplateProps
+
+* description
+
+  string | string\[]
+
+  required
+
+  The localized description of the template. An array can be used for multiple paragraphs.
+
+* query
+
+  string
+
+  required
+
+  The code snippet to render in the template with syntax highlighting. The `query` is not validated in the template.
+
+* title
+
+  string
+
+  required
+
+  The localized title of the template.
+
+* createdOn
+
+  string
+
+  ISO 8601-encoded date and time string. A "New" badge will be rendered for templates introduced in the last month.
+
+* dependencies
+
+  { standardMetafields?: "facts.birth\_date"\[]; customMetafields?: string\[]; }
+
+  The list of customer standard metafields or custom metafields used in the template's query.
+
+* queryToInsert
+
+  string
+
+  The code snippet to insert in the segment editor. If missing, `query` will be used. The `queryToInsert` is not validated in the template.
+
+### Examples
+
+* #### Simple CustomerSegmentTemplate implementation
+
+  ##### React
+
+  ```tsx
+  import React from 'react';
+  import {reactExtension, CustomerSegmentTemplate} from '@shopify/ui-extensions/admin';
+
+  function App() {
+    return (
+      <CustomerSegmentTemplate
+          title="My Customer Segment Template"
+          description="Description of the segment"
+          query="number_of_orders > 0"
+          createdOn={new Date('2023-01-15').toISOString()}
+      />
+    );
+  }
+
+  export default reactExtension('Playground', () => <App />);
+  ```
+
+  ##### JS
+
+  ```js
+  import {extension, CustomerSegmentTemplate} from '@shopify/ui-extensions/admin';
+
+  export default extension(
+    'admin.customers.segmentation-templates.render',
+    (root, {i18n}) => {
+      const template = root.createComponent(CustomerSegmentTemplate, {
+        title: i18n.translate('template.title'),
+        description: i18n.translate('template.description'),
+        query: "number_of_orders > 0'",
+        createdOn: new Date('2023-01-15').toISOString(),
+      });
+
+      root.appendChild(template);
+
+      root.mount();
+    },
+  );
+  ```
+
+## Preview
+
+![](https://shopify.dev/images/templated-apis-screenshots/admin-extensions/2025-07/customersegmenttemplate-default.png)

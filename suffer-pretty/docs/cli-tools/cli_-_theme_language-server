@@ -1,0 +1,38 @@
+---
+title: theme language-server
+description: 'Starts the [Language Server](/docs/themes/tools/cli/language-server).'
+api_name: shopify-cli
+source_url:
+  html: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-language-server'
+  md: 'https://shopify.dev/docs/api/shopify-cli/theme/theme-language-server.md'
+---
+
+# theme language-servercommand
+
+Starts the [Language Server](https://shopify.dev/docs/themes/tools/cli/language-server).
+
+## Flags
+
+The following flags are available for the `theme language-server` command:
+
+* \--no-color
+
+  env: SHOPIFY\_FLAG\_NO\_COLOR
+
+  Disable color output.
+
+* \--verbose
+
+  env: SHOPIFY\_FLAG\_VERBOSE
+
+  Increase the verbosity of the output.
+
+### Examples
+
+* #### theme language-server
+
+  ##### theme language-server
+
+  ```bash
+  shopify theme language-server [flags]
+  ```
