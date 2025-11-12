@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "y2k_product_main": {
+      "type": "y2k-product-main",
+      "settings": {
+      }
+    },
+    "y2k_related_products": {
+      "type": "y2k-window-grid",
+      "settings": {
+        "title": "You Might Also Like",
+        "subtitle": "More sick pieces",
+        "products_to_show": 4
+      }
+    }
+  },
+  "order": [
+    "y2k_product_main",
+    "y2k_related_products"
+  ]
+}
