@@ -1,0 +1,1097 @@
+{% liquid
+  assign max_items = section.settings.max_products
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  data-testid="product-list"
+  class="
+    section
+    section--{{ section.settings.section_width }}
+    color-{{ section.settings.color_scheme }}
+    section-resource-list
+    spacing-style
+    gap-style
+    product-list-enhanced
+  "
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    {% render 'gap-style', value: section.settings.gap %}
+  "
+>
+  <div class="section-resource-list__header">
+    {%- content_for 'block', type: '_product-list-content', id: 'static-header' -%}
+  </div>
+
+  {% capture list_items %}
+    {% if section.settings.collection != blank and shop.products_count != 0 %}
+      {% paginate section.settings.collection.products by max_items %}
+        {% for product in section.settings.collection.products limit: max_items %}
+          <div
+            class="resource-list__item product-item-animated"
+            data-product-index="{{ forloop.index }}"
+            style="--animation-order: {{ forloop.index }};"
+          >
+            {% # theme-check-disable UniqueStaticBlockId %}
+              <div class="product-card-enhanced">
+                <a href="{{ product.url }}" class="product-link-enhanced">
+                  <!-- Image Container with Hover Effects -->
+                  <div class="product-image-container" data-tilt>
+                    <div class="product-images-wrapper">
+                      {% if product.featured_media %}
+                        <img
+                          src="{{ product.featured_media | image_url: width: 600 }}"
+                          alt="{{ product.featured_media.alt | default: product.title | escape }}"
+                          class="product-image primary-image"
+                          loading="lazy"
+                        >
+                        {% if product.media[1] %}
+                          <img
+                            src="{{ product.media[1] | image_url: width: 600 }}"
+                            alt="{{ product.media[1].alt | default: product.title | escape }}"
+                            class="product-image secondary-image"
+                            loading="lazy"
+                          >
+                        {% endif %}
+                      {% else %}
+                        <div class="product-placeholder">
+                          <span>[No Image]</span>
+                        </div>
+                      {% endif %}
+                    </div>
+
+                    <!-- Animated Badges -->
+                    <div class="product-badges">
+                      {% if product.compare_at_price > product.price %}
+                        <span class="product-badge sale-badge animated-badge">
+                          <span class="badge-text">Sale</span>
+                          <span class="badge-glow"></span>
+                        </span>
+                      {% endif %}
+
+                      {% unless product.available %}
+                        <span class="product-badge sold-out-badge">Sold Out</span>
+                      {% endunless %}
+
+                      {% comment %} Check if product is new (created within last 30 days) {% endcomment %}
+                      {% assign days_since_creation = 'now' | date: '%s' | minus: product.created_at | date: '%s' | divided_by: 86400 %}
+                      {% if days_since_creation < 30 %}
+                        <span class="product-badge new-badge animated-badge">
+                          <span class="badge-text">New</span>
+                          <span class="badge-glow"></span>
+                        </span>
+                      {% endif %}
+                    </div>
+
+                    <!-- Wishlist Heart -->
+                    <button
+                      class="wishlist-toggle"
+                      data-product-id="{{ product.id }}"
+                      aria-label="Add to wishlist"
+                      type="button"
+                    >
+                      <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                      </svg>
+                    </button>
+
+                    <!-- Quick View Button -->
+                    {% if product.available %}
+                      <div class="quick-actions">
+                        <button
+                          class="quick-view-btn"
+                          data-product-id="{{ product.id }}"
+                          aria-label="Quick view"
+                          type="button"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                          </svg>
+                          Quick View
+                        </button>
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <!-- Product Info -->
+                  <div class="product-info-enhanced">
+                    <h3 class="product-title-enhanced">{{ product.title }}</h3>
+
+                    <!-- Color Swatches (if variants exist) -->
+                    {% if product.has_only_default_variant == false %}
+                      {% assign color_option = nil %}
+                      {% for option in product.options_with_values %}
+                        {% assign option_name_downcase = option.name | downcase %}
+                        {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
+                          {% assign color_option = option %}
+                          {% break %}
+                        {% endif %}
+                      {% endfor %}
+
+                      {% if color_option %}
+                        <div class="color-swatches">
+                          {% for value in color_option.values limit: 5 %}
+                            <span
+                              class="color-swatch"
+                              style="background-color: {{ value | handle }};"
+                              title="{{ value }}"
+                            ></span>
+                          {% endfor %}
+                          {% if color_option.values.size > 5 %}
+                            <span class="color-swatch-more">+{{ color_option.values.size | minus: 5 }}</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endif %}
+
+                    <!-- Price -->
+                    <div class="product-price-enhanced">
+                      {% if product.compare_at_price > product.price %}
+                        <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                      {% endif %}
+                      <span class="price-current {% if product.compare_at_price > product.price %}price-sale{% endif %}">
+                        {{ product.price | money }}
+                      </span>
+                      {% if product.compare_at_price > product.price %}
+                        {% assign savings = product.compare_at_price | minus: product.price %}
+                        {% assign savings_percent = savings | times: 100 | divided_by: product.compare_at_price %}
+                        <span class="savings-badge">Save {{ savings_percent }}%</span>
+                      {% endif %}
+                    </div>
+
+                    <!-- Quick Add Button -->
+                    {% if product.available %}
+                      <button
+                        type="button"
+                        class="quick-add-button-enhanced"
+                        data-product-id="{{ product.id }}"
+                      >
+                        <span class="button-text">Quick Add</span>
+                        <span class="button-ripple"></span>
+                      </button>
+                    {% else %}
+                      <button class="quick-add-button-enhanced disabled" disabled>
+                        Out of Stock
+                      </button>
+                    {% endif %}
+                  </div>
+                </a>
+              </div>
+            {% # theme-check-enable UniqueStaticBlockId %}
+          </div>
+
+          {% unless forloop.last %}
+            <!--@list/split-->
+          {% endunless %}
+        {% endfor %}
+      {% endpaginate %}
+    {% else %}
+      {% for i in (1..max_items) %}
+        <div
+          class="resource-list__item product-item-animated skeleton-loader"
+          style="--animation-order: {{ forloop.index }};"
+        >
+          <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-content">
+              <div class="skeleton-title"></div>
+              <div class="skeleton-price"></div>
+              <div class="skeleton-button"></div>
+            </div>
+          </div>
+        </div>
+
+        {% unless forloop.last %}
+          <!--@list/split-->
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  {% endcapture %}
+
+  {% liquid
+    # Create an array from the list items to be used for different layout types
+    assign list_items_array = list_items | strip | split: '<!--@list/split-->'
+  %}
+
+  {% render 'resource-list',
+    list_items: list_items,
+    list_items_array: list_items_array,
+    settings: section.settings,
+    slide_count: max_items,
+    content_type: 'products',
+    test_id: 'resource-list-grid'
+  %}
+
+  <div
+    class="section-resource-list__content"
+    style="--horizontal-alignment: {{ section.settings.horizontal_alignment }};"
+  >
+    {%- content_for 'blocks' -%}
+  </div>
+</div>
+
+<!-- Enhanced Styles -->
+{% stylesheet %}
+  /* ===========================
+     SCROLL ANIMATIONS
+     =========================== */
+  .product-item-animated {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: calc(var(--animation-order) * 0.1s);
+  }
+
+  .product-item-animated.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===========================
+     ENHANCED PRODUCT CARD
+     =========================== */
+  .product-card-enhanced {
+    position: relative;
+    background-color: var(--color-background-dark, #121212);
+    border: 1px solid var(--color-border, #2a2a2a);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card-enhanced:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(139, 115, 85, 0.2);
+    border-color: var(--color-accent, #8b7355);
+  }
+
+  .product-link-enhanced {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* ===========================
+     3D HOVER EFFECT & IMAGES
+     =========================== */
+  .product-image-container {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card-enhanced:hover .product-image-container {
+    transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
+  }
+
+  .product-images-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease, opacity 0.4s ease;
+  }
+
+  .primary-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .secondary-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  .product-card-enhanced:hover .primary-image {
+    opacity: 0;
+  }
+
+  .product-card-enhanced:hover .secondary-image {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .product-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: var(--color-foreground-muted, #a0a0a0);
+  }
+
+  /* ===========================
+     ANIMATED BADGES
+     =========================== */
+  .product-badges {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+
+  .product-badge {
+    position: relative;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  .animated-badge {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .sale-badge {
+    background-color: #c41e3a;
+    color: white;
+  }
+
+  .new-badge {
+    background-color: var(--color-accent, #8b7355);
+    color: var(--color-background, #0a0a0a);
+  }
+
+  .sold-out-badge {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: var(--color-foreground, #e0e0e0);
+  }
+
+  .badge-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shine 3s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes shine {
+    0% {
+      left: -100%;
+    }
+    50%, 100% {
+      left: 100%;
+    }
+  }
+
+  /* ===========================
+     WISHLIST HEART
+     =========================== */
+  .wishlist-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+
+  .product-card-enhanced:hover .wishlist-toggle {
+    opacity: 1;
+  }
+
+  .wishlist-toggle:hover {
+    background-color: var(--color-accent, #8b7355);
+    transform: scale(1.1);
+  }
+
+  .wishlist-toggle.active {
+    opacity: 1;
+  }
+
+  .wishlist-toggle.active .heart-icon {
+    fill: #c41e3a;
+    stroke: #c41e3a;
+    animation: heartBeat 0.5s ease;
+  }
+
+  .heart-icon {
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-foreground, #e0e0e0);
+    transition: all 0.3s ease;
+  }
+
+  @keyframes heartBeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.3);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+
+  /* ===========================
+     QUICK ACTIONS
+     =========================== */
+  .quick-actions {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+
+  .product-card-enhanced:hover .quick-actions {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .quick-view-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--color-accent, #8b7355);
+    color: var(--color-accent, #8b7355);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .quick-view-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .quick-view-btn:hover {
+    background-color: var(--color-accent, #8b7355);
+    color: var(--color-background, #0a0a0a);
+  }
+
+  /* ===========================
+     PRODUCT INFO
+     =========================== */
+  .product-info-enhanced {
+    padding: 1.25rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .product-title-enhanced {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-foreground, #e0e0e0);
+    line-height: 1.3;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ===========================
+     COLOR SWATCHES
+     =========================== */
+  .color-swatches {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.25rem 0;
+  }
+
+  .color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border, #2a2a2a);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .color-swatch:hover {
+    transform: scale(1.2);
+    border-color: var(--color-accent, #8b7355);
+  }
+
+  .color-swatch-more {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted, #a0a0a0);
+    font-weight: 500;
+  }
+
+  /* ===========================
+     PRICE
+     =========================== */
+  .product-price-enhanced {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+  }
+
+  .price-compare {
+    color: var(--color-foreground-muted, #a0a0a0);
+    text-decoration: line-through;
+    font-size: 0.95rem;
+  }
+
+  .price-current {
+    color: var(--color-foreground, #e0e0e0);
+    font-weight: 700;
+  }
+
+  .price-sale {
+    color: var(--color-accent, #8b7355);
+  }
+
+  .savings-badge {
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(196, 30, 58, 0.2);
+    color: #c41e3a;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+
+  /* ===========================
+     QUICK ADD BUTTON
+     =========================== */
+  .quick-add-button-enhanced {
+    position: relative;
+    width: 100%;
+    padding: 0.875rem;
+    background-color: transparent;
+    border: 2px solid var(--color-accent, #8b7355);
+    color: var(--color-accent, #8b7355);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-top: auto;
+  }
+
+  .quick-add-button-enhanced:hover {
+    background-color: var(--color-accent, #8b7355);
+    color: var(--color-background, #0a0a0a);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+  }
+
+  .quick-add-button-enhanced.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .button-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .quick-add-button-enhanced.ripple-active .button-ripple {
+    animation: ripple 0.6s ease-out;
+  }
+
+  @keyframes ripple {
+    to {
+      width: 300px;
+      height: 300px;
+      opacity: 0;
+    }
+  }
+
+  /* ===========================
+     SKELETON LOADER
+     =========================== */
+  .skeleton-loader {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .skeleton-card {
+    background-color: var(--color-background-dark, #121212);
+    border: 1px solid var(--color-border, #2a2a2a);
+    overflow: hidden;
+  }
+
+  .skeleton-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skeleton-title {
+    height: 20px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  .skeleton-price {
+    height: 24px;
+    width: 60%;
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  .skeleton-button {
+    height: 44px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* ===========================
+     RESPONSIVE
+     =========================== */
+  @media screen and (max-width: 768px) {
+    .product-card-enhanced:hover {
+      transform: translateY(-4px);
+    }
+
+    .wishlist-toggle {
+      opacity: 1;
+    }
+
+    .quick-actions {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+{% endstylesheet %}
+
+<!-- Enhanced JavaScript -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Scroll Animation Observer
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.product-item-animated').forEach(item => {
+      observer.observe(item);
+    });
+
+    // Wishlist Toggle
+    document.querySelectorAll('.wishlist-toggle').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.classList.toggle('active');
+
+        // Store in localStorage
+        const productId = this.dataset.productId;
+        let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+        if (this.classList.contains('active')) {
+          if (!wishlist.includes(productId)) {
+            wishlist.push(productId);
+          }
+        } else {
+          wishlist = wishlist.filter(id => id !== productId);
+        }
+
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      });
+    });
+
+    // Load wishlist state from localStorage
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    wishlist.forEach(productId => {
+      const button = document.querySelector(`.wishlist-toggle[data-product-id="${productId}"]`);
+      if (button) {
+        button.classList.add('active');
+      }
+    });
+
+    // Quick Add Button Ripple Effect
+    document.querySelectorAll('.quick-add-button-enhanced').forEach(button => {
+      button.addEventListener('click', function(e) {
+        if (this.classList.contains('disabled')) return;
+
+        this.classList.add('ripple-active');
+        setTimeout(() => {
+          this.classList.remove('ripple-active');
+        }, 600);
+
+        // Add your quick-add logic here
+        console.log('Quick add clicked for product:', this.dataset.productId);
+      });
+    });
+
+    // Quick View (you can implement modal logic here)
+    document.querySelectorAll('.quick-view-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const productId = this.dataset.productId;
+        console.log('Quick view clicked for product:', productId);
+
+        // Implement your quick view modal here
+        // You might want to fetch product details via AJAX and display in a modal
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "t:names.product_list",
+  "class": "ui-test-product-list",
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "_divider"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:settings.collection"
+    },
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "t:settings.layout_type",
+      "options": [
+        {
+          "value": "grid",
+          "label": "t:options.grid"
+        },
+        {
+          "value": "carousel",
+          "label": "t:options.carousel"
+        },
+        {
+          "value": "editorial",
+          "label": "t:options.editorial"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_on_mobile",
+      "label": "t:settings.carousel_on_mobile",
+      "default": false,
+      "visible_if": "{{ section.settings.layout_type != 'carousel' }}"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "t:settings.product_count",
+      "min": 1,
+      "max": 16,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:settings.columns",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ section.settings.layout_type != 'editorial' }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "t:settings.mobile_columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:options.one_number"
+        },
+        {
+          "value": "2",
+          "label": "t:options.two_number"
+        }
+      ],
+      "default": "2",
+      "visible_if": "{{ section.settings.layout_type == 'grid' and section.settings.carousel_on_mobile == false }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_card_size",
+      "label": "t:settings.mobile_columns",
+      "options": [
+        {
+          "value": "60cqw",
+          "label": "t:options.one_number"
+        },
+        {
+          "value": "44cqw",
+          "label": "t:options.two_number"
+        }
+      ],
+      "default": "60cqw",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "t:settings.horizontal_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
+    },
+    {
+      "type": "range",
+      "id": "rows_gap",
+      "label": "t:settings.vertical_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ section.settings.layout_type == 'grid'}}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.carousel_navigation",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "t:options.arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "t:options.chevrons"
+        },
+        {
+          "value": "arrows_large",
+          "label": "t:options.arrows_large"
+        },
+        {
+          "value": "chevron_large",
+          "label": "t:options.chevron_large"
+        },
+        {
+          "value": "none",
+          "label": "t:options.none"
+        }
+      ],
+      "default": "arrow",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "t:settings.icon_background",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "circle",
+          "label": "t:options.circle"
+        },
+        {
+          "value": "square",
+          "label": "t:options.square"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.icons_style != 'none' and section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.section_layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "flex-end",
+          "label": "t:options.right"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:settings.gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.products_grid",
+      "category": "t:categories.products"
+    }
+  ]
+}
+{% endschema %}
